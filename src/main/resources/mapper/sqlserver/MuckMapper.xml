@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.car.mapper.sqlserver.MuckMapper">
+    <select id="selectMuck" resultType="java.util.Map">
+        SELECT
+        p.BeginTime,
+        p.CarNo,
+        p.EndTime,
+        p.LineName,
+        p.PermitNo,
+        t.carType,
+        t.Capacity,
+        t.ExpiryTime,
+        t.CompanyName,
+        t.DriverName,
+        t.DriverMobile
+        FROM
+        View_PermitTruck p
+        LEFT JOIN View_TruckInfo t ON p.carno = t.carno
+        WHERE
+        1=1
+        <if test="carNo != null and carNo != ''">
+            AND p.CarNo = #{carNo}
+        </if>
+        <if test="permitNo !=null and permitNo !=''">
+            AND p.permitNo = #{permitNo}
+        </if>
+        ORDER BY
+        p.EndTime DESC;
+    </select>
+    <select id="selectMuckByName" resultType="java.util.Map">
+        select
+        *
+        FROM
+        view_ProjectInfo p WHERE
+        1=1
+        <if test="projectName !=null and projectName !=''">
+            and p.ProjectName LIKE '%'+ #{projectName}+'%';
+        </if>
+    </select>
+    <select id="selectMuckByProject" resultType="java.util.Map">
+        SELECT
+        p.BeginTime,
+        p.EndTime,
+        p.LineName,
+        p.PermitNo,
+        p.ProjectId,
+        p.ProjectName ,
+        c.CarType,
+        c.Capacity,
+        c.ExpiryTime,
+        c.CompanyName,
+        c.CarNo,
+        c.DriverName,
+        c.DriverMobile
+        FROM
+        View_ProjectPermit p
+        LEFT JOIN View_PermitTruck t ON t.PermitNo= p.PermitNo
+        LEFT JOIN view_TruckInfo c ON c.CarNo= t.CarNo
+        WHERE
+        1=1
+        <if test="projectId !=null and projectId !=''">
+            and p.ProjectId= #{projectId}
+        </if>
+        ORDER BY
+        p.EndTime DESC;
+    </select>
+</mapper>

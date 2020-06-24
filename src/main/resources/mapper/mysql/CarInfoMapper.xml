@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.car.mapper.mysql.CarInfoMapper">
+    <select id="selectCar" resultType="java.util.Map">
+        SELECT * FROM car_info c LEFT JOIN device_info d ON d.carid =c.id WHERE
+        1=1
+        <if test="carnumber !=null and carnumber !=''">
+            AND c.carnumber LIKE CONCAT('%',#{carnumber},'%')
+        </if>
+        <if test="terminalId !=null and terminalId !=''">
+            AND c.terminal_id = #{terminalId}
+        </if>
+        <if test="sim !=null and sim!=''">
+            AND d.terminal=#{sim}
+        </if>
+        ;
+    </select>
+    <select id="selectCarByDeptName" resultType="java.util.Map">
+        SELECT * FROM car_info c LEFT JOIN sys_auth_dept d ON d.deptid=c.deptid WHERE
+        d.deptname LIKE CONCAT('%',#{deptname},'%');
+    </select>
+
+    <select id="selectCarDetail" resultType="java.util.Map">
+        SELECT
+        *
+        FROM
+        car_info c
+        LEFT JOIN sys_auth_dept a ON a.deptid = c.deptid
+        LEFT JOIN device_info d ON d.carid = c.id
+        LEFT JOIN device_last_position l ON l.carid=c.id
+        WHERE
+        1 = 1
+        <if test="deptid !=null and deptid !=''">
+            AND a.deptid = #{deptid}
+        </if>
+        <if test="carnumber !=null and carnumber!=''">
+            AND c.carnumber= #{carnumber}
+        </if>
+        <if test="terminalid !=null and terminalid!=''">
+            AND c.terminal_id=#{terminalid}
+        </if>
+        <if test="status !=null and status == 'X'.toString()">
+            AND l.carstatus IN (1,2,8)
+        </if>
+        <if test="status !=null and status == 'A'.toString()">
+            AND l.carstatus IN (3,4,5,6,7)
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,22 @@
+package com.example.car.mapper.mysql;
+
+import io.lettuce.core.dynamic.annotation.Param;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * 车辆信息表 Mapper
+ *
+ * @author 冷酷的苹果
+ * @date 2020-06-18 08:54:02
+ */
+public interface CarInfoMapper {
+    List<Map<String, Object>> selectCar(@Param("carnumber") String carnumber, @Param("terminalId") String terminalId,
+                                        @Param("sim") String sim);
+
+    List<Map<String, Object>> selectCarByDeptName(@Param("deptname") String deptname);
+
+    List<Map<String, Object>> selectCarDetail(@Param("deptid") String deptid, @Param("carnumber") String carnumber,
+                                              @Param("terminalid") String terminalid, @Param("status") String status);
+}
