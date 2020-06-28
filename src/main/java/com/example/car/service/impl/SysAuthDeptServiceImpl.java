@@ -28,6 +28,12 @@ public class SysAuthDeptServiceImpl implements ISysAuthDeptService {
     @Override
     public Body selectSysAuthDept(String name) {
         List<Map<String, Object>> list = this.sysAuthDeptMapper.selectSysAuthDept(name);
+        if (list.size()>0){
+            for (Map<String, Object> map : list) {
+                map.put("deptid",map.get("deptid")+"");
+                map.put("parentid",map.get("parentid")+"");
+            }
+        }
         return Body.newInstance(list);
     }
 }

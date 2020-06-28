@@ -12,6 +12,7 @@ package com.example.car.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.example.car.common.utils.Distance;
 import com.example.car.common.utils.HttpUtils;
 import com.example.car.common.utils.Md5Util;
 import com.example.car.common.utils.json.Body;
@@ -73,7 +74,7 @@ public class APIManage {
                                 String endTime) {
         List<Map<String, Object>> processingOne = new ArrayList<>();
         List<Map<String, Object>> processingTwo = new ArrayList<>();
-        String address = url + "cmsapi/queryAlarmList";
+        String address = url + "cmsapi/getAlarmList";
         String sign = Md5Util.MD5EncodeUtf8(username + "12345620180908180001");
         System.out.println(sign);
         Map<String, String> map = new HashMap<>();
@@ -202,6 +203,33 @@ public class APIManage {
             status.put("GPS2", "4");
         }
         return Body.newInstance(status);
+    }
+
+    /**
+     * @Description: 查询首页指定范围的车辆位置信息
+     * @Param: [json, lat, lng, distance]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/6/28 10:43
+     */
+    @RequestMapping("selectHome")
+    public Body selectHome(String json, Double lat, Double lng, Double distance) {
+        List<Map<String, Object>> maps = new ArrayList<>();
+        String address = url + "cmsapi/getTerminalGpsStatus";
+        String result = HttpUtils.doJsonPost(address, json);
+        JSONObject jsonObject = new JSONObject();
+        List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
+        if (resultData.size() > 0) {
+            for (Map<String, Object> resultDatum : resultData) {
+                Double latCar = (Double) resultDatum.get("lat");
+                Double lngCar = (Double) resultDatum.get("lng");
+                boolean isIn = Distance.coordinateToDistance(lat, lng, latCar, lngCar, distance);
+                if (isIn) {
+                    maps.add(resultDatum);
+                }
+            }
+        }
+        return Body.newInstance(maps);
     }
 
 }

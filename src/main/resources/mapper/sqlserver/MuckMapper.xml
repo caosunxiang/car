@@ -29,14 +29,33 @@
         p.EndTime DESC;
     </select>
     <select id="selectMuckByName" resultType="java.util.Map">
-        select
+        SELECT
         *
         FROM
-        view_ProjectInfo p WHERE
-        1=1
+        (
+        SELECT
+        p.ProjectId,
+        p.PermitNo,
+        p.LineName,
+        p.ProjectName,
+        pt.EndTime
+        FROM
+        View_ProjectPermit p
+        LEFT JOIN View_PermitTruck pt ON p.PermitNo = pt.PermitNo
+        WHERE
+        1 = 1
         <if test="projectName !=null and projectName !=''">
             and p.ProjectName LIKE '%'+ #{projectName}+'%';
         </if>
+        GROUP BY
+        p.ProjectId,
+        p.PermitNo,
+        p.LineName,
+        p.ProjectName,
+        pt.EndTime
+        ) a
+        ORDER BY
+        a.EndTime DESC
     </select>
     <select id="selectMuckByProject" resultType="java.util.Map">
         SELECT
@@ -65,4 +84,6 @@
         ORDER BY
         p.EndTime DESC;
     </select>
+
+
 </mapper>
