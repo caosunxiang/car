@@ -68,6 +68,6 @@ public class MuckController {
     */
     @RequestMapping("selectMuckByProject")
     public Body selectMuckByProject(String projectId,String time) {
-        return this.muckService.selectMuckByProject(projectId,projectId);
+        return this.muckService.selectMuckByProject(projectId,time);
     }
 }
