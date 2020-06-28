@@ -9,5 +9,5 @@ import com.example.car.common.utils.json.Body;
  * @date 2020-06-18 10:52:07
  */
 public interface IDeviceAlarmService {
-    Body selectAlarmByLevel(String level);
+    Body selectAlarm(String number,String startTime,String endTime);
 }

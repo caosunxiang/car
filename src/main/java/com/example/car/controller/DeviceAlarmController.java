@@ -24,8 +24,8 @@ public class DeviceAlarmController {
 
     private final IDeviceAlarmService deviceAlarmService;
 
-    @RequestMapping("selectAlarmByLevel")
-    public Body selectAlarmByLevel(String level) {
-        return this.deviceAlarmService.selectAlarmByLevel(level);
+    @RequestMapping("selectAlarm")
+    public Body selectAlarm(String number,String startTime,String endTime) {
+        return this.deviceAlarmService.selectAlarm(number,startTime,endTime);
     }
 }

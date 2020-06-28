@@ -16,7 +16,11 @@ import com.example.car.common.utils.Distance;
 import com.example.car.common.utils.HttpUtils;
 import com.example.car.common.utils.Md5Util;
 import com.example.car.common.utils.json.Body;
+import com.example.car.entity.CarInfo;
+import com.example.car.mapper.mysql.CarInfoMapper;
+import com.example.car.mapper.mysql.CarPictureMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +48,11 @@ public class APIManage {
     private final static String username = "admin";
     private final static String tradeno = "20180908180001";
     private final static String url = "http://101.132.236.6:8088/";
+    @Autowired
+    private  CarPictureMapper carPictureMapper;
+    @Autowired
+    private CarInfoMapper carInfoMapper;
+
 
     /**
      * @Description: 接口转发
@@ -217,14 +226,17 @@ public class APIManage {
         List<Map<String, Object>> maps = new ArrayList<>();
         String address = url + "cmsapi/getTerminalGpsStatus";
         String result = HttpUtils.doJsonPost(address, json);
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = JSONObject.parseObject(result);
         List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
         if (resultData.size() > 0) {
             for (Map<String, Object> resultDatum : resultData) {
-                Double latCar = (Double) resultDatum.get("lat");
-                Double lngCar = (Double) resultDatum.get("lng");
+                Double latCar =  Double.valueOf(resultDatum.get("lat").toString());
+                Double lngCar =  Double.valueOf(resultDatum.get("lng").toString());
                 boolean isIn = Distance.coordinateToDistance(lat, lng, latCar, lngCar, distance);
-                if (isIn) {
+                if (!isIn) {
+                    CarInfo carInfo=carInfoMapper.selectCarOnly(resultDatum.get("carnumber").toString());
+                    String picture=carPictureMapper.selectCarPicture(carInfo.getCartype());
+                    resultDatum.put("picture",picture);
                     maps.add(resultDatum);
                 }
             }

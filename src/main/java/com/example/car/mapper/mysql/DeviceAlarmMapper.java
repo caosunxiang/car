@@ -12,5 +12,6 @@ import java.util.Map;
  * @date 2020-06-18 10:52:07
  */
 public interface DeviceAlarmMapper {
-    List<Map<String, Object>> selectAlarmByLevel(@Param("level") String level);
+    List<Map<String, Object>> selectAlarm(@Param("number") String number, @Param("startTime") String startTime,
+                                                 @Param("endTime") String endTime);
 }

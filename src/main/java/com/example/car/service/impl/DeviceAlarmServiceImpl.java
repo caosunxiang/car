@@ -26,8 +26,8 @@ public class DeviceAlarmServiceImpl implements IDeviceAlarmService {
 
 
     @Override
-    public Body selectAlarmByLevel(String level) {
-        List<Map<String, Object>> list = this.deviceAlarmMapper.selectAlarmByLevel(level);
+    public Body selectAlarm(String number,String startTime,String endTime) {
+        List<Map<String, Object>> list = this.deviceAlarmMapper.selectAlarm(number,startTime,endTime);
         return Body.newInstance(list);
     }
 }

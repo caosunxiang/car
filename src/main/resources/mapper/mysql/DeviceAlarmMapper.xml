@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.car.mapper.mysql.DeviceAlarmMapper">
-    <select id="selectAlarmByLevel" resultType="java.util.Map">
-        select * from device_alarm WHERE alarm_level=#{level}
+    <select id="selectAlarm" resultType="java.util.Map">
+   SELECT
+	car.id,
+	car.deptid,
+	car.carnumber,
+	alarm.alarm_number,
+	alarm.start_lat,
+	alarm.start_lon,
+	alarm.end_lat,
+	alarm.end_lon,
+	alarm.start_time,
+	alarm.end_time,
+	alarm.start_speed,
+	alarm.end_speed ,
+	setting.alarmname,
+	IFNULL(alarm.handle_by,'')handle_by
+FROM
+	car_info car
+	LEFT JOIN device_alarm alarm ON alarm.terminal_id = car.terminal_id
+	LEFT JOIN device_alarm_settings setting ON setting.alarmnumber = alarm.alarm_number
+WHERE
+1 = 1
+<if test="number!=null and number!=''">
+    AND car.carnumber  LIKE CONCAT('%',#{number},'%')
+</if>
+<if test="startTime!=null and endTime!=null and startTime!='' and endTime!=''">
+    AND alarm.start_time BETWEEN #{startTime}
+    AND #{endTime}
+</if>
+	;
     </select>
 </mapper>

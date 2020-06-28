@@ -1,5 +1,6 @@
 package com.example.car.mapper.mysql;
 
+import com.example.car.entity.CarInfo;
 import io.lettuce.core.dynamic.annotation.Param;
 
 import java.util.List;
@@ -13,10 +14,11 @@ import java.util.Map;
  */
 public interface CarInfoMapper {
     List<Map<String, Object>> selectCar(@Param("carnumber") String carnumber, @Param("terminalId") String terminalId,
-                                        @Param("sim") String sim);
+                            @Param("sim") String sim);
 
     List<Map<String, Object>> selectCarByDeptName(@Param("deptname") String deptname);
 
     List<Map<String, Object>> selectCarDetail(@Param("deptid") String deptid, @Param("carnumber") String carnumber,
                                               @Param("terminalid") String terminalid, @Param("status") String status);
+    CarInfo selectCarOnly(@Param("number") String number);
 }

@@ -46,4 +46,7 @@
             AND l.carstatus IN (3,4,5,6,7)
         </if>
     </select>
+    <select id="selectCarOnly" resultType="com.example.car.entity.CarInfo">
+select * from car_info where carnumber=#{number};
+    </select>
 </mapper>

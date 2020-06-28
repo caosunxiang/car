@@ -45,7 +45,10 @@
         WHERE
         1 = 1
         <if test="projectName !=null and projectName !=''">
-            and p.ProjectName LIKE '%'+ #{projectName}+'%';
+            and p.ProjectName LIKE '%'+ #{projectName}+'%'
+        </if>
+        <if test="time !=null and time !=''">
+            and pt.EndTime  &gt;=   #{time}
         </if>
         GROUP BY
         p.ProjectId,
@@ -71,15 +74,23 @@
         c.CompanyName,
         c.CarNo,
         c.DriverName,
-        c.DriverMobile
+        c.DriverMobile ,
+        i.place,
+        i.mucktype,
+        i.approvetime,
+        i.permittype
         FROM
         View_ProjectPermit p
         LEFT JOIN View_PermitTruck t ON t.PermitNo= p.PermitNo
         LEFT JOIN view_TruckInfo c ON c.CarNo= t.CarNo
+        LEFT JOIN View_PermitInfo i ON i.PermitNo = p.PermitNo
         WHERE
-        1=1
+        1 = 1
         <if test="projectId !=null and projectId !=''">
             and p.ProjectId= #{projectId}
+        </if>
+        <if test="time!=null and time!=''">
+            and t.EndTime  &gt;=   #{time}
         </if>
         ORDER BY
         p.EndTime DESC;

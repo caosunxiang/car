@@ -9,7 +9,7 @@ import java.util.Map;
 public interface MuckMapper {
     List<Map<String, String>> selectMuck(@Param("carNo") String carNo, @Param("permitNo") String permitNo);
 
-    List<Map<String, String>> selectMuckByName(@Param("projectName") String name);
+    List<Map<String, String>> selectMuckByName(@Param("projectName") String name,@Param("time")String time);
 
-    List<Map<String, String>> selectMuckByProject(@Param("projectId") String projectId);
+    List<Map<String, String>> selectMuckByProject(@Param("projectId") String projectId,@Param("time")String time);
 }

@@ -44,14 +44,14 @@ public class MuckServiceImpl implements MuckService {
     }
 
     @Override
-    public Body selectMuckByName(String name) {
-        List<Map<String,String>>list=this.muckMapper.selectMuckByName(name);
+    public Body selectMuckByName(String name,String time) {
+        List<Map<String,String>>list=this.muckMapper.selectMuckByName(name,time);
         return Body.newInstance(list);
     }
 
     @Override
-    public Body selectMuckByProject(String projectId) {
-        List<Map<String,String>>list=this.muckMapper.selectMuckByProject(projectId);
+    public Body selectMuckByProject(String projectId,String time) {
+        List<Map<String,String>>list=this.muckMapper.selectMuckByProject(projectId,time);
         return Body.newInstance(list);
     }
 }
