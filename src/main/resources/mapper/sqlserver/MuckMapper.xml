@@ -50,9 +50,12 @@
         <if test="time !=null and time !=''">
             and pt.EndTime  &gt;=   #{time}
         </if>
+        <if test="name !=null and name!=''">
+            and pt.CarNo LIKE '%'+ #{name}+'%'
+        </if>
         GROUP BY
-        p.ProjectId,
         p.PermitNo,
+        p.ProjectId,
         p.LineName,
         p.ProjectName,
         pt.EndTime

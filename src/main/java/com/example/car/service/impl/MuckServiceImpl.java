@@ -44,8 +44,8 @@ public class MuckServiceImpl implements MuckService {
     }
 
     @Override
-    public Body selectMuckByName(String name,String time) {
-        List<Map<String,String>>list=this.muckMapper.selectMuckByName(name,time);
+    public Body selectMuckByName(String projectName,String time,String name) {
+        List<Map<String,String>>list=this.muckMapper.selectMuckByName(projectName,time,name);
         return Body.newInstance(list);
     }
 
