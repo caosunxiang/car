@@ -17,8 +17,10 @@ import com.example.car.common.utils.HttpUtils;
 import com.example.car.common.utils.Md5Util;
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.CarInfo;
+import com.example.car.entity.SysAuthDept;
 import com.example.car.mapper.mysql.CarInfoMapper;
 import com.example.car.mapper.mysql.CarPictureMapper;
+import com.example.car.mapper.mysql.SysAuthDeptMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -52,7 +54,8 @@ public class APIManage {
     private  CarPictureMapper carPictureMapper;
     @Autowired
     private CarInfoMapper carInfoMapper;
-
+    @Autowired
+    private SysAuthDeptMapper sysAuthDeptMapper;
 
     /**
      * @Description: 接口转发
@@ -236,7 +239,10 @@ public class APIManage {
                 if (!isIn) {
                     CarInfo carInfo=carInfoMapper.selectCarOnly(resultDatum.get("carnumber").toString());
                     String picture=carPictureMapper.selectCarPicture(carInfo.getCartype());
+                    Long deptid=carInfo.getDeptid();
+                    SysAuthDept sysAuthDept=sysAuthDeptMapper.selectSysAuthDeptById(deptid);
                     resultDatum.put("picture",picture);
+                    resultDatum.put("dept",sysAuthDept.getDeptname());
                     maps.add(resultDatum);
                 }
             }

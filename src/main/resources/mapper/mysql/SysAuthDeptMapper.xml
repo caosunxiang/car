@@ -13,4 +13,7 @@
         AND dept.parentid =722445496500748288
         and dept.is_delete =0 GROUP BY dept.deptid;
     </select>
+    <select id="selectSysAuthDeptById" resultType="com.example.car.entity.SysAuthDept" >
+        select  * from  sys_auth_dept where deptid= #{id}
+    </select>
 </mapper>
