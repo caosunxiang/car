@@ -38,8 +38,9 @@ public class MuckServiceImpl implements MuckService {
 
 
     @Override
-    public Body selectMuck(String carNo, String permitNo) {
-        List<Map<String,String>>list=this.muckMapper.selectMuck(carNo,permitNo);
+    public Body selectMuck(String carNo, String permitNo,String
+                            time) {
+        List<Map<String,String>>list=this.muckMapper.selectMuck(carNo,permitNo,time);
         return Body.newInstance(list);
     }
 

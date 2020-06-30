@@ -25,7 +25,7 @@ public class SysAuthDeptController {
     private final ISysAuthDeptService sysAuthDeptService;
 
     @RequestMapping("selectSysAuthDept")
-    public Body selectSysAuthDept(String name) {
-        return this.sysAuthDeptService.selectSysAuthDept(name);
+    public Body selectSysAuthDept(String name,String number) {
+        return this.sysAuthDeptService.selectSysAuthDept(name,number);
     }
 }

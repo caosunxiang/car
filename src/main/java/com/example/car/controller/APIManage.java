@@ -45,7 +45,7 @@ import java.util.Map;
 @RestController
 public class APIManage {
 
-    private final static String username = "admin";
+    private final static String username = "yccgj";
     private final static String tradeno = "20180908180001";
     private final static String url = "http://101.132.236.6:8088/";
     @Autowired
@@ -84,7 +84,7 @@ public class APIManage {
         List<Map<String, Object>> processingOne = new ArrayList<>();
         List<Map<String, Object>> processingTwo = new ArrayList<>();
         String address = url + "cmsapi/getAlarmList";
-        String sign = Md5Util.MD5EncodeUtf8(username + "12345620180908180001");
+        String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
         System.out.println(sign);
         Map<String, String> map = new HashMap<>();
         map.put("currentPage", page);
@@ -132,7 +132,7 @@ public class APIManage {
     @RequestMapping("selectOrganization")
     public Body selectOrganization(String name, String startTime) {
         String address = url + "cmsapi/deptTree";
-        String sign = Md5Util.MD5EncodeUtf8(username + "12345620180908180001");
+        String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
         System.out.println(sign);
         Map<String, String> map = new HashMap<>();
         map.put("sign", sign);
@@ -158,7 +158,7 @@ public class APIManage {
     public Body selectGPSStatus(String terminal, String carnumber) {
         Map<String, String> status = new HashMap<>();
         String address = url + "cmsapi/getCarStatus";
-        String sign = Md5Util.MD5EncodeUtf8(username + "12345620180908180001");
+        String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
         System.out.println(sign);
         Map<String, String> map = new HashMap<>();
         map.put("sign", sign);

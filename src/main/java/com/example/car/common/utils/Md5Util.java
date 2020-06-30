@@ -91,7 +91,7 @@ public class Md5Util {
     }
 
     public static void main(String[] args) {
-        String result = MD5EncodeUtf8("admin12345620180908180001");
+        String result = MD5EncodeUtf8("yccgjadmin12320180908180001");
         System.out.println(result);
     }
 }

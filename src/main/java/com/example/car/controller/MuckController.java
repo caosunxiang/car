@@ -43,8 +43,8 @@ public class MuckController {
 * @Date: 2020/6/22 10:33
 */
     @RequestMapping("selectMuck")
-    public Body selectMuck(String carNo, String permitNo) {
-        return this.muckService.selectMuck(carNo, permitNo);
+    public Body selectMuck(String carNo, String permitNo,String time) {
+        return this.muckService.selectMuck(carNo, permitNo,time);
     }
 
     /** 

@@ -26,8 +26,8 @@ public class SysAuthDeptServiceImpl implements ISysAuthDeptService {
 
 
     @Override
-    public Body selectSysAuthDept(String name) {
-        List<Map<String, Object>> list = this.sysAuthDeptMapper.selectSysAuthDept(name);
+    public Body selectSysAuthDept(String name,String number) {
+        List<Map<String, Object>> list = this.sysAuthDeptMapper.selectSysAuthDept(name,number);
         if (list.size()>0){
             for (Map<String, Object> map : list) {
                 map.put("deptid",map.get("deptid")+"");

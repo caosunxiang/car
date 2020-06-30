@@ -22,6 +22,9 @@
         <if test="carNo != null and carNo != ''">
             AND p.CarNo = #{carNo}
         </if>
+        <if test="time !=null and time !=''">
+            and p.EndTime  &gt;=   #{time}
+        </if>
         <if test="permitNo !=null and permitNo !=''">
             AND p.permitNo = #{permitNo}
         </if>

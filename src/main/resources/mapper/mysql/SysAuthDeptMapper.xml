@@ -2,11 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.car.mapper.mysql.SysAuthDeptMapper">
     <select id="selectSysAuthDept" resultType="java.util.Map">
-        SELECT * from sys_auth_dept where
+        SELECT * from sys_auth_dept dept LEFT JOIN car_info car ON car.deptid=dept.deptid where
         1=1
         <if test="name !=null and name!=''">
-            and deptname LIKE CONCAT('%',#{name },'%')
+            and dept.deptname LIKE CONCAT('%',#{name },'%')
         </if>
-        and is_delete =0;
+        <if test="number !=null and number!=''">
+            AND car.carnumber LIKE CONCAT('%',#{number },'%')
+        </if>
+        AND dept.parentid =722445496500748288
+        and dept.is_delete =0 GROUP BY dept.deptid;
     </select>
 </mapper>

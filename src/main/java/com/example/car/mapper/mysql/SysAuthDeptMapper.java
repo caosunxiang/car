@@ -14,5 +14,5 @@ import java.util.Map;
  */
 public interface SysAuthDeptMapper {
 
-    List<Map<String, Object>> selectSysAuthDept(@Param("name") String name);
+    List<Map<String, Object>> selectSysAuthDept(@Param("name") String name,@Param("number")String number);
 }
