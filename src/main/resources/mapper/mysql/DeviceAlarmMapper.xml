@@ -21,6 +21,7 @@ FROM
 	car_info car
 	LEFT JOIN device_alarm alarm ON alarm.terminal_id = car.terminal_id
 	LEFT JOIN device_alarm_settings setting ON setting.alarmnumber = alarm.alarm_number
+	left join sys_auth_dept dept on dept.deptid=car.deptid
 WHERE
 1 = 1
 <if test="number!=null and number!=''">
@@ -30,6 +31,7 @@ WHERE
     AND alarm.start_time BETWEEN #{startTime}
     AND #{endTime}
 </if>
+and dept.deptid=#{id}
 	;
     </select>
 </mapper>

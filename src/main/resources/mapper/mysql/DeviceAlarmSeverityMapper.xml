@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.car.mapper.mysql.DeviceAlarmSeverityMapper">
+    <insert id="insertAlarmSeverity" >
+insert  into  device_alarm_severity
+(alarm_name,car_number,alarm_start_time,alarm_start_speed,alarm_lat,alarm_lng)
+values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLat},#{alarmLng});
+    </insert>
+
+    <select id="selectAlarmSeverity" resultType="com.example.car.entity.DeviceAlarmSeverity">
+select * from device_alarm_severity where
+    1=1
+    <if test="startTime !=null and endTime!=null">
+        AND alarm_start_time BETWEEN #{startTime}
+        AND #{endTime}
+    </if>
+    order by alarm_start_time desc ;
+    </select>
+</mapper>

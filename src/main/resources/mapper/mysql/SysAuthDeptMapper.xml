@@ -16,4 +16,7 @@
     <select id="selectSysAuthDeptById" resultType="com.example.car.entity.SysAuthDept" >
         select  * from  sys_auth_dept where deptid= #{id}
     </select>
+    <select id="selectSysAuthDeptByParent" resultType="com.example.car.entity.SysAuthDept">
+          select  * from  sys_auth_dept where parentid= #{id}
+    </select>
 </mapper>

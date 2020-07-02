@@ -12,15 +12,19 @@ package com.example.car.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.example.car.common.utils.DateUtil;
 import com.example.car.common.utils.Distance;
 import com.example.car.common.utils.HttpUtils;
 import com.example.car.common.utils.Md5Util;
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.CarInfo;
+import com.example.car.entity.DeviceAlarmSeverity;
 import com.example.car.entity.SysAuthDept;
 import com.example.car.mapper.mysql.CarInfoMapper;
 import com.example.car.mapper.mysql.CarPictureMapper;
+import com.example.car.mapper.mysql.DeviceAlarmSeverityMapper;
 import com.example.car.mapper.mysql.SysAuthDeptMapper;
+import com.example.car.mapper.sqlserver.MuckMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -28,10 +32,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -51,11 +53,15 @@ public class APIManage {
     private final static String tradeno = "20180908180001";
     private final static String url = "http://101.132.236.6:8088/";
     @Autowired
-    private  CarPictureMapper carPictureMapper;
+    private CarPictureMapper carPictureMapper;
     @Autowired
     private CarInfoMapper carInfoMapper;
     @Autowired
     private SysAuthDeptMapper sysAuthDeptMapper;
+    @Autowired
+    private MuckMapper muckMapper;
+    @Autowired
+    private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
 
     /**
      * @Description: 接口转发
@@ -233,16 +239,16 @@ public class APIManage {
         List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
         if (resultData.size() > 0) {
             for (Map<String, Object> resultDatum : resultData) {
-                Double latCar =  Double.valueOf(resultDatum.get("lat").toString());
-                Double lngCar =  Double.valueOf(resultDatum.get("lng").toString());
+                Double latCar = Double.valueOf(resultDatum.get("lat").toString());
+                Double lngCar = Double.valueOf(resultDatum.get("lng").toString());
                 boolean isIn = Distance.coordinateToDistance(lat, lng, latCar, lngCar, distance);
                 if (!isIn) {
-                    CarInfo carInfo=carInfoMapper.selectCarOnly(resultDatum.get("carnumber").toString());
-                    String picture=carPictureMapper.selectCarPicture(carInfo.getCartype());
-                    Long deptid=carInfo.getDeptid();
-                    SysAuthDept sysAuthDept=sysAuthDeptMapper.selectSysAuthDeptById(deptid);
-                    resultDatum.put("picture",picture);
-                    resultDatum.put("dept",sysAuthDept.getDeptname());
+                    CarInfo carInfo = carInfoMapper.selectCarOnly(resultDatum.get("carnumber").toString());
+                    String picture = carPictureMapper.selectCarPicture(carInfo.getCartype());
+                    Long deptid = carInfo.getDeptid();
+                    SysAuthDept sysAuthDept = sysAuthDeptMapper.selectSysAuthDeptById(deptid);
+                    resultDatum.put("picture", picture);
+                    resultDatum.put("dept", sysAuthDept.getDeptname());
                     maps.add(resultDatum);
                 }
             }
@@ -250,4 +256,339 @@ public class APIManage {
         return Body.newInstance(maps);
     }
 
+    /**
+     * @Description: 首页指定车牌查询
+     * @Param: [number]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/6/30 15:28
+     */
+    @RequestMapping("homeSelect")
+    public Body homeSelect(String number) {
+        String terminal = null;
+        Map<String, String> map = new HashMap<>();
+        map.put("carnumber", number);
+        map.put("tradeno", tradeno);
+        map.put("username", username);
+        String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
+        System.out.println(sign);
+        map.put("sign", sign);
+        String json = JSON.toJSONString(map);
+        String address = url + "cmsapi/getTerminalList";
+        String result = HttpUtils.doJsonPost(address, json);
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
+        if (resultData.size() > 0) {
+            terminal = resultData.get(0).get("terminal").toString();
+        }
+        System.out.println(terminal);
+        Map<String, String> map1 = new HashMap<>();
+        map1.put("terminal", terminal);
+        map1.put("tradeno", tradeno);
+        map1.put("username", username);
+        String sign1 = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
+        System.out.println(sign1);
+        map1.put("sign", sign1);
+        String json1 = JSON.toJSONString(map1);
+        String address1 = url + "cmsapi/getTerminalGpsStatus";
+        String result1 = HttpUtils.doJsonPost(address1, json1);
+        JSONObject jsonObject1 = JSONObject.parseObject(result1);
+        List<Map<String, Object>> resultData1 = (List<Map<String, Object>>) jsonObject1.get("resultData");
+        if (jsonObject1.get("errCode").equals(500)) {
+            return Body.newInstance(jsonObject1.get("resultMsg"));
+        }
+        if (resultData1.size() > 0) {
+            for (Map<String, Object> stringObjectMap : resultData1) {
+                CarInfo carInfo = carInfoMapper.selectCarOnly(stringObjectMap.get("carnumber").toString());
+                Long deptid = carInfo.getDeptid();
+                SysAuthDept sysAuthDept = sysAuthDeptMapper.selectSysAuthDeptById(deptid);
+                stringObjectMap.put("dept", sysAuthDept.getDeptname());
+            }
+        }
+        return Body.newInstance(resultData1);
+    }
+
+    /**
+     * @Description: 添加严重报警
+     * @Param: [json]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/7/1 18:01
+     */
+    @RequestMapping("decideSeverity")
+    public Body decideSeverity(String json) {
+        DeviceAlarmSeverity deviceAlarmSeverity = new DeviceAlarmSeverity();
+        String address = url + "cmsapi/getTerminalGpsStatus";
+        String result = HttpUtils.doJsonPost(address, json);
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
+        if (resultData.size() > 0) {
+            for (Map<String, Object> resultDatum : resultData) {
+                CarInfo carInfo = carInfoMapper.selectCarOnly(resultDatum.get("carnumber").toString());
+                List<Map<String, String>> list = muckMapper.selectMuck(carInfo.getCarnumber(), null,
+                        DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN));
+                if (list.size() <= 0 && !StringUtils.isEmpty(resultDatum.get("speed"))) {//准运证数量小于等于0 并且处于运动状态
+                    deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
+                    deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
+                    deviceAlarmSeverity.setAlarmName("无准运证行驶");
+                    deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
+                    deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
+                    deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
+                            DateUtil.FULL_TIME_SPLIT_PATTERN));
+                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity);
+                    continue;
+                } else if (list.size() > 0 && !StringUtils.isEmpty(resultDatum.get("speed"))) {//车辆有准运证
+                    int type = 0;
+                    for (Map<String, String> map : list) {//判断是不是在准允时间内
+                        if (map.get("PermitType").equals("日间准运") && type == 0) {
+                            type = 1;
+                        } else if (map.get("PermitType").equals("夜间准运") && type == 0) {
+                            type = 2;
+                        } else {
+                            type = 3;
+                        }
+                        if (type == 1) {//白天准允时间
+                            SimpleDateFormat df = new SimpleDateFormat("HH:mm");//设置日期格式
+                            Date now = null;
+                            Date beginTime = null;
+                            Date endTime = null;
+                            try {
+                                now = df.parse(df.format(new Date()));
+                                beginTime = df.parse("06:00");
+                                endTime = df.parse("19:00");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            Boolean flag = belongCalendar(now, beginTime, endTime);
+                            if (!flag) {
+                                deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
+                                deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
+                                deviceAlarmSeverity.setAlarmName("超时运输");
+                                deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
+                                deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
+                                deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
+                                        DateUtil.FULL_TIME_SPLIT_PATTERN));
+                                deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity);
+                            }
+                        } else if (type == 2) {//夜间准运时间
+                            SimpleDateFormat df = new SimpleDateFormat("HH:mm");//设置日期格式
+                            Date now = null;
+                            Date beginTime = null;
+                            Date endTime = null;
+                            try {
+                                now = df.parse(df.format(new Date()));
+                                beginTime = df.parse("18:00");
+                                endTime = df.parse("24:00");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            Boolean flag = belongCalendar(now, beginTime, endTime);
+                            SimpleDateFormat df1 = new SimpleDateFormat("HH:mm");//设置日期格式
+                            Date now1 = null;
+                            Date beginTime1 = null;
+                            Date endTime1 = null;
+                            try {
+                                now1 = df1.parse(df.format(new Date()));
+                                beginTime1 = df1.parse("00:00");
+                                endTime1 = df1.parse("07:00");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            Boolean flag1 = belongCalendar(now1, beginTime1, endTime1);
+                            if (flag || flag1) {
+                                //两个时间段 满足一个即可 满足无操作
+                            } else {
+                                deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
+                                deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
+                                deviceAlarmSeverity.setAlarmName("超时运输");
+                                deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
+                                deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
+                                deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
+                                        DateUtil.FULL_TIME_SPLIT_PATTERN));
+                                deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity);
+                            }
+                        }
+                    }
+                    if (!StringUtils.isEmpty(resultDatum.get("deviate")) && resultDatum.get("deviate").equals(1)) {
+                        //判断是不是按规定路线行驶
+                        deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
+                        deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
+                        deviceAlarmSeverity.setAlarmName("不按规定路线行驶");
+                        deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
+                        deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
+                        deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
+                                DateUtil.FULL_TIME_SPLIT_PATTERN));
+                        deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity);
+                        continue;
+                    }
+                }
+                if (!StringUtils.isEmpty(resultDatum.get("areaAlarmStatus")) && resultDatum.get("leaveArea").equals(0)) {//未在规定区域停车
+                    deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
+                    deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
+                    deviceAlarmSeverity.setAlarmName("未在规定区域停车");
+                    deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
+                    deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
+                    deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
+                            DateUtil.FULL_TIME_SPLIT_PATTERN));
+                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity);
+                    continue;
+                }
+                if (!StringUtils.isEmpty(resultDatum.get("gpsflag")) && resultDatum.get("gpsflag").equals(0)) {
+                    deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
+                    deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
+                    deviceAlarmSeverity.setAlarmName("GPS未开");
+                    deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
+                    deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
+                    deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
+                            DateUtil.FULL_TIME_SPLIT_PATTERN));
+                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity);
+                    continue;
+                }
+            }
+        }
+        return Body.newInstance("严重报警检查完毕");
+    }
+
+    /**
+     * @Description: 区域查车
+     * @Param: [lat1, lng1, lat2, lng2, startTime, endTime, terminals]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/7/2 9:32
+     */
+    @RequestMapping("areaSelect")
+    public Body areaSelect(Double lat1, Double lng1, Double lat2, Double lng2, String startTime, String endTime,
+                           String terminals) {
+        List<String> list = divide(terminals);
+        Map<String, String> carInArea = new HashMap<>();
+        for (String s : list) {
+            Map<String, String> map = new HashMap<>();
+            map.put("terminal", s);
+            map.put("tradeno", tradeno);
+            map.put("startTime", startTime);
+            map.put("endTime", endTime);
+            map.put("username", username);
+            String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
+            System.out.println(sign);
+            map.put("sign", sign);
+            String json = JSON.toJSONString(map);
+            String address = url + "cmsapi/getHistoryTrack";
+            String result = HttpUtils.doJsonPost(address, json);
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
+            if (resultData.size() > 0) {
+                for (Map<String, Object> resultDatum : resultData) {
+                    Double lng = (Double) resultDatum.get("lng");
+                    Double lat = (Double) resultDatum.get("lat");
+                    boolean isIn = isInArea(lat, lng, lat1, lat2, lng1, lng2);
+                    if (isIn) {
+                        String carnumber = resultDatum.get("carnumber").toString();
+                        carInArea.put("carnumber", carnumber);
+                        break;
+                    }
+                }
+            }
+        }
+        return Body.newInstance(carInArea);
+    }
+
+
+    /**
+     * 判断时间是否在时间段内
+     *
+     * @param nowTime
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    public static boolean belongCalendar(Date nowTime, Date beginTime, Date endTime) {
+        Calendar date = Calendar.getInstance();
+        date.setTime(nowTime);
+
+        Calendar begin = Calendar.getInstance();
+        begin.setTime(beginTime);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(endTime);
+
+        if (date.after(begin) && date.before(end)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     *      *
+     *      * @param latitue 待测点的纬度
+     *      * @param longitude 待测点的经度
+     *      * @param areaLatitude1 纬度范围限制1
+     *      * @param areaLatitude2 纬度范围限制2
+     *      * @param areaLongitude1 经度限制范围1
+     *      * @param areaLongitude2 经度范围限制2
+     *      * @return
+     *     
+     */
+    public static boolean isInArea(double latitue, double longitude, double areaLatitude1, double areaLatitude2,
+                                   double areaLongitude1, double areaLongitude2) {
+        if (isInRange(latitue, areaLatitude1, areaLatitude2)) {//如果在纬度的范围内
+            if (areaLongitude1 * areaLongitude2 > 0) {//如果都在东半球或者都在西半球
+                if (isInRange(longitude, areaLongitude1, areaLongitude2)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {//如果一个在东半球，一个在西半球
+                if (Math.abs(areaLongitude1) + Math.abs(areaLongitude2) < 180) {//如果跨越0度经线在半圆的范围内
+                    if (isInRange(longitude, areaLongitude1, areaLongitude2)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {//如果跨越180度经线在半圆范围内
+                    double left = Math.max(areaLongitude1, areaLongitude2);//东半球的经度范围left-180
+                    double right = Math.min(areaLongitude1, areaLongitude2);//西半球的经度范围right-（-180）
+                    if (isInRange(longitude, left, 180) || isInRange(longitude, right, -180)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        } else {
+            return false;
+        }
+    }
+
+
+    public static boolean isInRange(double point, double left, double right) {
+        if (point >= Math.min(left, right) && point <= Math.max(left, right)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public static List<String> divide(String msg) {
+        List<String> list = new ArrayList<String>();
+        msg = msg + ",";
+        char a[] = msg.toCharArray();
+        Integer c = 0;
+        Integer changeCount = 0;
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] == ',') {
+                String string = msg.substring(c, i);
+                c = i + 1;
+                System.out.println(string);
+                list.add(string);
+                changeCount++;
+            }
+        }
+        return list;
+    }
 }
