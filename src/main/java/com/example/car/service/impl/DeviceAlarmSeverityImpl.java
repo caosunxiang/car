@@ -39,8 +39,8 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
     private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
 
     @Override
-    public Body selectAlarmSeverity(String startTime, String endTime) {
-        List<DeviceAlarmSeverity> deviceAlarmSeverities=deviceAlarmSeverityMapper.selectAlarmSeverity(startTime,endTime);
+    public Body selectAlarmSeverity(String startTime,String number, String endTime) {
+        List<DeviceAlarmSeverity> deviceAlarmSeverities=deviceAlarmSeverityMapper.selectAlarmSeverity(startTime,number,endTime);
         return Body.newInstance(deviceAlarmSeverities);
     }
 }

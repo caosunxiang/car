@@ -20,10 +20,7 @@ import com.example.car.common.utils.json.Body;
 import com.example.car.entity.CarInfo;
 import com.example.car.entity.DeviceAlarmSeverity;
 import com.example.car.entity.SysAuthDept;
-import com.example.car.mapper.mysql.CarInfoMapper;
-import com.example.car.mapper.mysql.CarPictureMapper;
-import com.example.car.mapper.mysql.DeviceAlarmSeverityMapper;
-import com.example.car.mapper.mysql.SysAuthDeptMapper;
+import com.example.car.mapper.mysql.*;
 import com.example.car.mapper.sqlserver.MuckMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +59,8 @@ public class APIManage {
     private MuckMapper muckMapper;
     @Autowired
     private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
+    @Autowired
+    private DeviceAlarmMapper deviceAlarmMapper;
 
     /**
      * @Description: 接口转发
@@ -88,10 +87,8 @@ public class APIManage {
      * @Date: 2020/6/16 12:00
      */
     @RequestMapping("alertProcessing")
-    public Body alertProcessing(String carnumber, String startTime, String page, String size, Integer level,
+    public Body alertProcessing(String carnumber, String startTime, String page, String size,
                                 String endTime) {
-        List<Map<String, Object>> processingOne = new ArrayList<>();
-        List<Map<String, Object>> processingTwo = new ArrayList<>();
         String address = url + "cmsapi/getAlarmList";
         String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
         System.out.println(sign);
@@ -110,26 +107,29 @@ public class APIManage {
         JSONObject jsonObject = JSONObject.parseObject(result);
         Map<String, Object> resultData = (Map<String, Object>) jsonObject.get("resultData");
         List<Map<String, Object>> list = (List<Map<String, Object>>) resultData.get("list");
-        if (list.size() > 0 && !StringUtils.isEmpty(level)) {
-            for (Map<String, Object> stringObjectMap : list) {
-                if (!StringUtils.isEmpty(stringObjectMap.get("alarmNumber")) &&
-                        (int) stringObjectMap.get("alarmNumber") < 105 && level == 1) {
-                    processingOne.add(stringObjectMap);
-                } else {
-                    processingTwo.add(stringObjectMap);
-                }
-
-            }
-        } else {
-            return Body.newInstance(list);
-        }
-        if (level == 1) {
-            return Body.newInstance(processingOne);
-        } else {
-            return Body.newInstance(processingTwo);
-        }
-
+        return Body.newInstance(list);
     }
+
+    /**
+     * @Description: 查询所有的报警信息
+     * @Param: [startTime, endTime]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/7/2 15:17
+     */
+    @RequestMapping("selectAlarmAll")
+    public Body selectAlarmAll(String startTime, String endTime,String number) {
+        Long id=new Long("722445496500748288");
+        List<Map<String, Object>> list=new ArrayList<>();
+        List<SysAuthDept> deptList=sysAuthDeptMapper.selectSysAuthDeptByParent(id);
+        for (SysAuthDept sysAuthDept : deptList) {
+            list.addAll(this.deviceAlarmMapper.selectAlarm(number,startTime,endTime,sysAuthDept.getDeptid())) ;
+        }
+        List<Map<String, Object>> list1 = deviceAlarmSeverityMapper.selectAlarmSeverityAll(startTime, endTime,number);
+        list.addAll(list1);
+        return Body.newInstance(list);
+    }
+
 
     /**
      * @Description: 查询组织信息
@@ -461,12 +461,12 @@ public class APIManage {
      */
     @RequestMapping("areaSelect")
     public Body areaSelect(Double lat1, Double lng1, Double lat2, Double lng2, String startTime, String endTime,
-                           String terminals) {
-        List<String> list = divide(terminals);
-        Map<String, String> carInArea = new HashMap<>();
+                           String numbers) {
+        List<String> list = divide(numbers);
+        List<Map<String, String> >carInArea = new ArrayList<>();
         for (String s : list) {
             Map<String, String> map = new HashMap<>();
-            map.put("terminal", s);
+            map.put("carnumber", s);
             map.put("tradeno", tradeno);
             map.put("startTime", startTime);
             map.put("endTime", endTime);
@@ -481,12 +481,14 @@ public class APIManage {
             List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
             if (resultData.size() > 0) {
                 for (Map<String, Object> resultDatum : resultData) {
-                    Double lng = (Double) resultDatum.get("lng");
-                    Double lat = (Double) resultDatum.get("lat");
+                    Double lng = new Double( resultDatum.get("lng").toString());
+                    Double lat = new Double( resultDatum.get("lat").toString());
                     boolean isIn = isInArea(lat, lng, lat1, lat2, lng1, lng2);
                     if (isIn) {
+                        Map<String,String> objectMap=new HashMap<>();
                         String carnumber = resultDatum.get("carnumber").toString();
-                        carInArea.put("carnumber", carnumber);
+                        objectMap.put("carnumber", carnumber);
+                        carInArea.add(objectMap);
                         break;
                     }
                 }

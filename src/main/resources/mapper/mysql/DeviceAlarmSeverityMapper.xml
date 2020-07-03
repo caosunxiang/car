@@ -14,6 +14,21 @@ select * from device_alarm_severity where
         AND alarm_start_time BETWEEN #{startTime}
         AND #{endTime}
     </if>
+        <if test="number !=null and number!=''">
+            and  car_number =#{number}
+        </if>
     order by alarm_start_time desc ;
+    </select>
+    <select id="selectAlarmSeverityAll" resultType="java.util.Map">
+        select * from device_alarm_severity where
+        1=1
+        <if test="startTime !=null and endTime!=null">
+            AND alarm_start_time BETWEEN #{startTime}
+            AND #{endTime}
+        </if>
+        <if test="number !=null and number!=''">
+            and  car_number =#{number}
+        </if>
+        order by alarm_start_time desc ;
     </select>
 </mapper>
