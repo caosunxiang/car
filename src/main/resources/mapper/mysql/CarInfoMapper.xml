@@ -41,9 +41,14 @@
         </if>
         <if test="status !=null and status == 'X'.toString()">
             AND l.carstatus IN (1,2,8)
+            and c.car_service_status = 0
         </if>
         <if test="status !=null and status == 'A'.toString()">
             AND l.carstatus IN (3,4,5,6,7)
+            and c.car_service_status = 0
+        </if>
+        <if test="status !=null and status == 'C'.toString()">
+            and c.car_service_status != 0
         </if>
     </select>
     <select id="selectCarOnly" resultType="com.example.car.entity.CarInfo">
