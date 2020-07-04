@@ -21,4 +21,6 @@ public interface CarInfoMapper {
     List<Map<String, Object>> selectCarDetail(@Param("deptid") String deptid, @Param("carnumber") String carnumber,
                                               @Param("terminalid") String terminalid, @Param("status") String status);
     CarInfo selectCarOnly(@Param("number") String number);
+
+    Integer selectStatusCount(@Param("id")String id,@Param("status")String status);
 }

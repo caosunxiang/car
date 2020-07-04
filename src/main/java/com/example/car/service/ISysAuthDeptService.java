@@ -16,5 +16,5 @@ public interface ISysAuthDeptService {
      * @Author: 冷酷的苹果
      * @Date: 2020/6/17 14:00
      */
-    Body selectSysAuthDept(String name,String number);
+    Body selectSysAuthDept(String name,String number,String status);
 }

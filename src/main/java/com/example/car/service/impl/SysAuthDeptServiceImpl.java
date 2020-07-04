@@ -1,6 +1,7 @@
 package com.example.car.service.impl;
 
 import com.example.car.common.utils.json.Body;
+import com.example.car.mapper.mysql.CarInfoMapper;
 import com.example.car.mapper.mysql.SysAuthDeptMapper;
 import com.example.car.service.ISysAuthDeptService;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +25,17 @@ public class SysAuthDeptServiceImpl implements ISysAuthDeptService {
 
     private final SysAuthDeptMapper sysAuthDeptMapper;
 
+    private final CarInfoMapper carInfoMapper;
 
     @Override
-    public Body selectSysAuthDept(String name,String number) {
+    public Body selectSysAuthDept(String name,String number,String status) {
         List<Map<String, Object>> list = this.sysAuthDeptMapper.selectSysAuthDept(name,number);
         if (list.size()>0){
             for (Map<String, Object> map : list) {
                 map.put("deptid",map.get("deptid")+"");
                 map.put("parentid",map.get("parentid")+"");
+                Integer count=carInfoMapper.selectStatusCount(map.get("ids").toString(),status);
+                map.put("count",count);
             }
         }
         return Body.newInstance(list);
