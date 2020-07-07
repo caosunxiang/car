@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -39,8 +40,8 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
     private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
 
     @Override
-    public Body selectAlarmSeverity(String startTime,String number, String endTime) {
-        List<DeviceAlarmSeverity> deviceAlarmSeverities=deviceAlarmSeverityMapper.selectAlarmSeverity(startTime,number,endTime);
+    public Body selectAlarmSeverity(String startTime,String number, String endTime,String name) {
+        List<Map<String, Object>> deviceAlarmSeverities=deviceAlarmSeverityMapper.selectAlarmSeverity(startTime,number,endTime,name);
         return Body.newInstance(deviceAlarmSeverities);
     }
 }

@@ -31,7 +31,27 @@ WHERE
     AND alarm.start_time BETWEEN #{startTime}
     AND #{endTime}
 </if>
-and dept.deptid=#{id}
+<if test="id!=null and id!=''">
+    and dept.deptid=#{id}
+</if>
+        <if test="type!=null and type!=''">
+            and alarm.alarm_number=#{type}
+        </if>
+        order by alarm.end_time desc
+        limit 0,#{size}
 	;
+    </select>
+
+    <select id="selectGpsAlarm" resultType="java.util.Map">
+         SELECT
+	*
+FROM
+	 device_alarm alarm
+WHERE
+1 = 1
+and alarm.terminal_id =#{number}
+and alarm.alarm_number=198
+order by end_time desc
+limit 0,1;
     </select>
 </mapper>

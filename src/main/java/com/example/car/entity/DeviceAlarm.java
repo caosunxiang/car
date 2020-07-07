@@ -87,7 +87,7 @@ public class DeviceAlarm {
     /**
      * 报警结束时间
      */
-    private Date endTime;
+    private String endTime;
 
     /**
      * 处理人ID

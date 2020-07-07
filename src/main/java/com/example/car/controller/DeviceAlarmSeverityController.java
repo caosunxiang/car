@@ -14,7 +14,6 @@ import com.example.car.common.utils.json.Body;
 import com.example.car.service.DeviceAlarmSeverityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +45,7 @@ public class DeviceAlarmSeverityController {
     * @Date: 2020/7/1 18:26
     */
     @RequestMapping("selectAlarmSeverity")
-    public Body selectAlarmSeverity(String startTime,String number, String endTime) {
-        return deviceAlarmSeverityService.selectAlarmSeverity(startTime,number,endTime);
+    public Body selectAlarmSeverity(String startTime,String number, String endTime,String name) {
+        return deviceAlarmSeverityService.selectAlarmSeverity(startTime,number,endTime,name);
     }
 }

@@ -1,14 +1,20 @@
 package com.example.car.service.impl;
 
+import com.example.car.common.utils.DateUtil;
 import com.example.car.common.utils.json.Body;
+import com.example.car.entity.DeviceAlarm;
 import com.example.car.mapper.mysql.CarInfoMapper;
+import com.example.car.mapper.mysql.DeviceAlarmMapper;
 import com.example.car.service.ICarInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -20,11 +26,14 @@ import java.util.Map;
  */
 @Service
 @RequiredArgsConstructor
-@Transactional(transactionManager = "masterTransactionManager",propagation = Propagation.SUPPORTS, readOnly = true)
+@Transactional(transactionManager = "masterTransactionManager", propagation = Propagation.SUPPORTS, readOnly = true)
 public class CarInfoServiceImpl implements ICarInfoService {
 
     @Autowired
-    private  CarInfoMapper carInfoMapper;
+    private CarInfoMapper carInfoMapper;
+
+    @Autowired
+    private DeviceAlarmMapper deviceAlarmMapper;
 
 
     @Override
@@ -42,6 +51,16 @@ public class CarInfoServiceImpl implements ICarInfoService {
     @Override
     public Body selectCarDetail(String deptid, String carnumber, String terminalid, String status) {
         List<Map<String, Object>> list = this.carInfoMapper.selectCarDetail(deptid, carnumber, terminalid, status);
+        if (!StringUtils.isEmpty(deptid)) {
+            for (Map<String, Object> objectMap : list) {
+                Map<String,Object> deviceAlarm = deviceAlarmMapper.selectGpsAlarm(objectMap.get("terminal_id").toString());
+                if (deviceAlarm != null) {
+                    Long time = DateUtil.dateDiff(deviceAlarm.get("end_time").toString(),DateUtil.getDateFormat(new Date(),
+                            DateUtil.FULL_TIME_SPLIT_PATTERN), DateUtil.FULL_TIME_SPLIT_PATTERN, "h");
+                    objectMap.put("time", time);
+                }
+            }
+        }
         return Body.newInstance(list);
     }
 }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +32,15 @@ public class DeviceAlarmServiceImpl implements IDeviceAlarmService {
 
 
     @Override
-    public Body selectAlarm(String number,String startTime,String endTime) {
+    public Body selectAlarm(String number,String startTime,String endTime,Integer size,Integer type) {
         List<Map<String, Object>> listMain=new ArrayList<>();
+        if (StringUtils.isEmpty(size)){
+            size=500;
+        }
         Long id=new Long("722445496500748288");
         List<SysAuthDept> deptList=sysAuthDeptMapper.selectSysAuthDeptByParent(id);
         for (SysAuthDept sysAuthDept : deptList) {
-            List<Map<String, Object>> list = this.deviceAlarmMapper.selectAlarm(number,startTime,endTime,sysAuthDept.getDeptid());
+            List<Map<String, Object>> list = this.deviceAlarmMapper.selectAlarm(number,startTime,endTime,sysAuthDept.getDeptid(),size,type);
             listMain.addAll(list);
         }
 

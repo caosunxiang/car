@@ -16,10 +16,7 @@ import com.example.car.common.utils.DateUtil;
 import com.example.car.common.utils.HttpUtils;
 import com.example.car.common.utils.Md5Util;
 import com.example.car.common.utils.WebSocket;
-import com.example.car.common.utils.json.Body;
-import com.example.car.entity.CarInfo;
 import com.example.car.entity.DeviceAlarmSeverity;
-import com.example.car.entity.SysAuthDept;
 import com.example.car.mapper.mysql.DeviceAlarmSeverityMapper;
 import com.example.car.mapper.mysql.SysAuthDeptMapper;
 import com.example.car.mapper.sqlserver.MuckMapper;
@@ -29,7 +26,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -154,16 +150,18 @@ public class Task {
         List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
         for (Map<String, Object> resultDatum : resultData) {
             if (StringUtils.isEmpty(resultDatum.get("gpsflag")) && Double.parseDouble(resultDatum.get("speed").toString())>5) {
-                DeviceAlarmSeverity deviceAlarmSeverity = new DeviceAlarmSeverity();
-                deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
-                deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
-                deviceAlarmSeverity.setAlarmName("GPS不在线");
-                deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
-                deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
-                deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
-                        DateUtil.FULL_TIME_SPLIT_PATTERN));
-                deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity);
-                System.out.println("不好啦！报警了，这个人GPS不在线");
+                if (resultDatum.get("gpsflag").toString().equals("0")) {
+                    DeviceAlarmSeverity deviceAlarmSeverity = new DeviceAlarmSeverity();
+                    deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
+                    deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
+                    deviceAlarmSeverity.setAlarmName("GPS不在线");
+                    deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
+                    deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
+                    deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
+                            DateUtil.FULL_TIME_SPLIT_PATTERN));
+                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity);
+                    System.out.println("不好啦！报警了，这个人GPS不在线");
+                }
             }
         }
     }
@@ -187,16 +185,18 @@ public class Task {
         List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
         for (Map<String, Object> resultDatum : resultData) {
             if (StringUtils.isEmpty(resultDatum.get("gpsflag")) && Double.parseDouble(resultDatum.get("speed").toString())>5) {
-                DeviceAlarmSeverity deviceAlarmSeverity = new DeviceAlarmSeverity();
-                deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
-                deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
-                deviceAlarmSeverity.setAlarmName("GPS不在线");
-                deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
-                deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
-                deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
-                        DateUtil.FULL_TIME_SPLIT_PATTERN));
-                System.out.println("不好啦！报警了，这个人GPS不在线");
-                list.add(deviceAlarmSeverity);
+                if (resultDatum.get("gpsflag").toString().equals("0")){
+                    DeviceAlarmSeverity deviceAlarmSeverity = new DeviceAlarmSeverity();
+                    deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
+                    deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
+                    deviceAlarmSeverity.setAlarmName("GPS不在线");
+                    deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
+                    deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
+                    deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
+                            DateUtil.FULL_TIME_SPLIT_PATTERN));
+                    System.out.println("不好啦！报警了，这个人GPS不在线");
+                    list.add(deviceAlarmSeverity);
+                }
             }
         }
         WebSocket webSocket = new WebSocket();

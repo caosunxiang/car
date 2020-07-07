@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.car.mapper.mysql.DeviceAlarmSettingsMapper">
 <select id="selectAlarmById" resultType="java.util.Map">
-SELECT * FROM device_alarm_settings WHERE alarmnumber = #{id }
+SELECT * FROM device_alarm_settings WHERE
+1=1
+<if test="id !=null and id !=''">
+    and alarmnumber = #{id }
+</if>
 </select>
+
 </mapper>

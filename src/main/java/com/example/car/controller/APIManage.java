@@ -118,14 +118,17 @@ public class APIManage {
      * @Date: 2020/7/2 15:17
      */
     @RequestMapping("selectAlarmAll")
-    public Body selectAlarmAll(String startTime, String endTime,String number) {
+    public Body selectAlarmAll(String startTime, String endTime,String number,Integer size,Integer type) {
         Long id=new Long("722445496500748288");
+        if (StringUtils.isEmpty(size)){
+            size=500;
+        }
         List<Map<String, Object>> list=new ArrayList<>();
         List<SysAuthDept> deptList=sysAuthDeptMapper.selectSysAuthDeptByParent(id);
         for (SysAuthDept sysAuthDept : deptList) {
-            list.addAll(this.deviceAlarmMapper.selectAlarm(number,startTime,endTime,sysAuthDept.getDeptid())) ;
+            list.addAll(this.deviceAlarmMapper.selectAlarm(number,startTime,endTime,sysAuthDept.getDeptid(),size,type)) ;
         }
-        List<Map<String, Object>> list1 = deviceAlarmSeverityMapper.selectAlarmSeverityAll(startTime, endTime,number);
+        List<Map<String, Object>> list1 = deviceAlarmSeverityMapper.selectAlarmSeverityAll(startTime, endTime,number,size);
         list.addAll(list1);
         return Body.newInstance(list);
     }

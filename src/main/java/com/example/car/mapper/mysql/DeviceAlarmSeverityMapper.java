@@ -9,9 +9,10 @@ import java.util.Map;
 public interface DeviceAlarmSeverityMapper {
     void insertAlarmSeverity(DeviceAlarmSeverity alarmSeverity);
 
-    List<DeviceAlarmSeverity> selectAlarmSeverity(@Param("startTime") String startTime, @Param("number") String number,
-                                                  @Param("endTime") String endTime);
+    List<Map<String, Object>> selectAlarmSeverity(@Param("startTime") String startTime, @Param("number") String number,
+                                                  @Param("endTime") String endTime,@Param("name")String name);
 
     List<Map<String, Object>> selectAlarmSeverityAll(@Param("startTime") String startTime,
-                                                     @Param("endTime") String endTime, @Param("number") String number);
+                                                     @Param("endTime") String endTime, @Param("number") String number
+            , @Param("size") Integer size);
 }
