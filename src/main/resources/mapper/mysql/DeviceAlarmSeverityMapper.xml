@@ -29,7 +29,8 @@ select
         <if test="name !=null and name!=''">
             and  alarm_name =#{name}
         </if>
-    order by alarm_start_time desc ;
+    order by alarm_start_time desc
+        limit 0,#{size} ;
     </select>
     <select id="selectAlarmSeverityAll" resultType="java.util.Map">
         SELECT

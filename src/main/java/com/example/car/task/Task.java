@@ -58,7 +58,6 @@ public class Task {
     private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
 
 
-
     @Scheduled(cron = " * 0/30 * * * ? ")//无证运输存数据库
     public void noMuckIn() throws IOException {
         String terminals = Task.getCarTerminal();
@@ -75,7 +74,7 @@ public class Task {
         JSONObject jsonObject = JSONObject.parseObject(result);
         List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
         for (Map<String, Object> resultDatum : resultData) {
-            if (!StringUtils.isEmpty(resultDatum.get("speed")) && Double.parseDouble(resultDatum.get("speed").toString())>5) {
+            if (!StringUtils.isEmpty(resultDatum.get("speed")) && Double.parseDouble(resultDatum.get("speed").toString()) > 5) {
                 List<Map<String, String>> muck = muckMapper.selectMuck(resultDatum.get("carnumber").toString(), null,
                         DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN));
                 if (muck.size() <= 0) {
@@ -111,7 +110,7 @@ public class Task {
         JSONObject jsonObject = JSONObject.parseObject(result);
         List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
         for (Map<String, Object> resultDatum : resultData) {
-            if (!StringUtils.isEmpty(resultDatum.get("speed")) && Double.parseDouble(resultDatum.get("speed").toString())>5) {
+            if (!StringUtils.isEmpty(resultDatum.get("speed")) && Double.parseDouble(resultDatum.get("speed").toString()) > 5) {
                 List<Map<String, String>> muck = muckMapper.selectMuck(resultDatum.get("carnumber").toString(), null,
                         DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN));
                 if (muck.size() <= 0) {
@@ -149,25 +148,24 @@ public class Task {
         JSONObject jsonObject = JSONObject.parseObject(result);
         List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
         for (Map<String, Object> resultDatum : resultData) {
-            if (StringUtils.isEmpty(resultDatum.get("gpsflag")) && Double.parseDouble(resultDatum.get("speed").toString())>5) {
-                if (resultDatum.get("gpsflag").toString().equals("0")) {
-                    DeviceAlarmSeverity deviceAlarmSeverity = new DeviceAlarmSeverity();
-                    deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
-                    deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
-                    deviceAlarmSeverity.setAlarmName("GPS不在线");
-                    deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
-                    deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
-                    deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
-                            DateUtil.FULL_TIME_SPLIT_PATTERN));
-                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity);
-                    System.out.println("不好啦！报警了，这个人GPS不在线");
-                }
+            if (StringUtils.isEmpty(resultDatum.get("gpsflag")) || !resultDatum.get("gpsflag").toString().equals("1") ||
+                    resultDatum.get("carstatus").toString().equals("1")||resultDatum.get("carstatus").toString().equals("2")) {
+                DeviceAlarmSeverity deviceAlarmSeverity = new DeviceAlarmSeverity();
+                deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
+                deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
+                deviceAlarmSeverity.setAlarmName("GPS不在线");
+                deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
+                deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
+                deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
+                        DateUtil.FULL_TIME_SPLIT_PATTERN));
+                deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity);
+                System.out.println("不好啦！报警了，这个人GPS不在线");
             }
         }
     }
 
 
-    @Scheduled(cron = " * 0/10 * * * ? ")
+    @Scheduled(cron = " * 0/13 * * * ? ")
     public void GPSDown() throws IOException {//gps不在线报警推送
         List<DeviceAlarmSeverity> list = new ArrayList<>();
         String terminals = Task.getCarTerminal();
@@ -184,8 +182,8 @@ public class Task {
         JSONObject jsonObject = JSONObject.parseObject(result);
         List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
         for (Map<String, Object> resultDatum : resultData) {
-            if (StringUtils.isEmpty(resultDatum.get("gpsflag")) && Double.parseDouble(resultDatum.get("speed").toString())>5) {
-                if (resultDatum.get("gpsflag").toString().equals("0")){
+            if (StringUtils.isEmpty(resultDatum.get("gpsflag")) && Double.parseDouble(resultDatum.get("speed").toString()) > 5) {
+                if (resultDatum.get("gpsflag").toString().equals("0")) {
                     DeviceAlarmSeverity deviceAlarmSeverity = new DeviceAlarmSeverity();
                     deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
                     deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
@@ -222,7 +220,7 @@ public class Task {
         for (Map<String, Object> resultDatum : resultData) {
             List<Map<String, String>> muck = muckMapper.selectMuck(resultDatum.get("carnumber").toString(), null,
                     DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN));
-            if (muck.size() > 0&&!StringUtils.isEmpty(resultDatum.get("speed")) && Double.parseDouble(resultDatum.get("speed").toString())>5) {
+            if (muck.size() > 0 && !StringUtils.isEmpty(resultDatum.get("speed")) && Double.parseDouble(resultDatum.get("speed").toString()) > 5) {
                 int type = 0;
                 for (Map<String, String> map1 : muck) {//判断是不是在准允时间内
                     if (map1.get("PermitType").equals("日间准运") && type == 0) {
@@ -247,7 +245,7 @@ public class Task {
 
                         Boolean flag = belongCalendar(now, beginTime, endTime);
                         if (!flag) {
-                            DeviceAlarmSeverity deviceAlarmSeverity=new DeviceAlarmSeverity();
+                            DeviceAlarmSeverity deviceAlarmSeverity = new DeviceAlarmSeverity();
                             deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
                             deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
                             deviceAlarmSeverity.setAlarmName("超时运输");
@@ -287,7 +285,7 @@ public class Task {
 
                         Boolean flag1 = belongCalendar(now1, beginTime1, endTime1);
                         if (!(flag || flag1)) {
-                            DeviceAlarmSeverity deviceAlarmSeverity=new DeviceAlarmSeverity();
+                            DeviceAlarmSeverity deviceAlarmSeverity = new DeviceAlarmSeverity();
                             deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
                             deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
                             deviceAlarmSeverity.setAlarmName("超时运输");
@@ -311,12 +309,6 @@ public class Task {
 //    public void park(){//规定区域停车
 //
 //    }
-
-
-
-
-
-
 
 
     public static String getCarTerminal() {
@@ -343,28 +335,29 @@ public class Task {
         }
         return terminals;
     }
-        /**
-         * 判断时间是否在时间段内
-         *
-         * @param nowTime
-         * @param beginTime
-         * @param endTime
-         * @return
-         */
-        public static boolean belongCalendar(Date nowTime, Date beginTime, Date endTime) {
-            Calendar date = Calendar.getInstance();
-            date.setTime(nowTime);
 
-            Calendar begin = Calendar.getInstance();
-            begin.setTime(beginTime);
+    /**
+     * 判断时间是否在时间段内
+     *
+     * @param nowTime
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    public static boolean belongCalendar(Date nowTime, Date beginTime, Date endTime) {
+        Calendar date = Calendar.getInstance();
+        date.setTime(nowTime);
 
-            Calendar end = Calendar.getInstance();
-            end.setTime(endTime);
+        Calendar begin = Calendar.getInstance();
+        begin.setTime(beginTime);
 
-            if (date.after(begin) && date.before(end)) {
-                return true;
-            } else {
-                return false;
-            }
+        Calendar end = Calendar.getInstance();
+        end.setTime(endTime);
+
+        if (date.after(begin) && date.before(end)) {
+            return true;
+        } else {
+            return false;
         }
+    }
 }

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -40,8 +41,11 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
     private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
 
     @Override
-    public Body selectAlarmSeverity(String startTime,String number, String endTime,String name) {
-        List<Map<String, Object>> deviceAlarmSeverities=deviceAlarmSeverityMapper.selectAlarmSeverity(startTime,number,endTime,name);
+    public Body selectAlarmSeverity(String startTime,String number, String endTime,String name,Integer size) {
+        if (StringUtils.isEmpty(size)){
+            size=500;
+        }
+        List<Map<String, Object>> deviceAlarmSeverities=deviceAlarmSeverityMapper.selectAlarmSeverity(startTime,number,endTime,name,size);
         return Body.newInstance(deviceAlarmSeverities);
     }
 }

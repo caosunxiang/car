@@ -121,7 +121,7 @@ public class APIManage {
     public Body selectAlarmAll(String startTime, String endTime,String number,Integer size,Integer type) {
         Long id=new Long("722445496500748288");
         if (StringUtils.isEmpty(size)){
-            size=500;
+            size=250;
         }
         List<Map<String, Object>> list=new ArrayList<>();
         List<SysAuthDept> deptList=sysAuthDeptMapper.selectSysAuthDeptByParent(id);

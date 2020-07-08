@@ -45,7 +45,7 @@ public class DeviceAlarmSeverityController {
     * @Date: 2020/7/1 18:26
     */
     @RequestMapping("selectAlarmSeverity")
-    public Body selectAlarmSeverity(String startTime,String number, String endTime,String name) {
-        return deviceAlarmSeverityService.selectAlarmSeverity(startTime,number,endTime,name);
+    public Body selectAlarmSeverity(String startTime,String number, String endTime,String name,Integer size) {
+        return deviceAlarmSeverityService.selectAlarmSeverity(startTime,number,endTime,name,size);
     }
 }
