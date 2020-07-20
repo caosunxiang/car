@@ -23,7 +23,7 @@
             AND p.CarNo = #{carNo}
         </if>
         <if test="time !=null and time !=''">
-            and p.EndTime  &gt;=   #{time}
+            and p.EndTime  <![CDATA[ >=]]>   #{time}
         </if>
         <if test="permitNo !=null and permitNo !=''">
             AND p.permitNo = #{permitNo}
@@ -51,7 +51,10 @@
             and p.ProjectName LIKE '%'+ #{projectName}+'%'
         </if>
         <if test="time !=null and time !=''">
-            and pt.EndTime  &gt;=   #{time}
+            and pt.EndTime <![CDATA[ >= ]]>   #{time}
+        </if>
+        <if test="endTime !=null and endTime !=''">
+            and pt.EndTime  <![CDATA[ <=]]>   #{endTime}
         </if>
         <if test="name !=null and name!=''">
             and pt.CarNo LIKE '%'+ #{name}+'%'

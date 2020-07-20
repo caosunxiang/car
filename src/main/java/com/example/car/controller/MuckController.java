@@ -55,8 +55,8 @@ public class MuckController {
     * @Date: 2020/6/22 10:34
     */
     @RequestMapping("selectMuckByName")
-    public Body selectMuckByName(String projectName,String time,String name) {
-        return this.muckService.selectMuckByName(projectName,time,name);
+    public Body selectMuckByName(String projectName,String time,String name,String endTime) {
+        return this.muckService.selectMuckByName(projectName,time,name,endTime);
     }
 
     /** 

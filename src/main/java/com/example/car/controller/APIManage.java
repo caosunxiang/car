@@ -74,8 +74,7 @@ public class APIManage {
         address = url + address;
         System.out.println("url:" + address);
         System.out.println("json:" + json);
-        String result = HttpUtils.httpPostRaw(address, json, null, "UTF-8");
-        return result;
+        return HttpUtils.doJsonPost(address, json);
     }
 
 

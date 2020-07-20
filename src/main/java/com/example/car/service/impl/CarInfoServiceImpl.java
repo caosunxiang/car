@@ -53,11 +53,17 @@ public class CarInfoServiceImpl implements ICarInfoService {
         List<Map<String, Object>> list = this.carInfoMapper.selectCarDetail(deptid, carnumber, terminalid, status);
         if (!StringUtils.isEmpty(deptid)) {
             for (Map<String, Object> objectMap : list) {
-                Map<String,Object> deviceAlarm = deviceAlarmMapper.selectGpsAlarm(objectMap.get("terminal_id").toString());
-                if (deviceAlarm != null) {
-                    Long time = DateUtil.dateDiff(deviceAlarm.get("end_time").toString(),DateUtil.getDateFormat(new Date(),
-                            DateUtil.FULL_TIME_SPLIT_PATTERN), DateUtil.FULL_TIME_SPLIT_PATTERN, "h");
-                    objectMap.put("time", time);
+                if (!StringUtils.isEmpty(objectMap.get("terminal_id"))){
+                    Map<String,Object> deviceAlarm = deviceAlarmMapper.selectGpsAlarm(objectMap.get("terminal_id").toString());
+                    if (deviceAlarm != null) {
+                        if (!StringUtils.isEmpty(deviceAlarm.get("end_time"))){
+                            Long time = DateUtil.dateDiff(deviceAlarm.get("end_time").toString(),DateUtil.getDateFormat(new Date(),
+                                    DateUtil.FULL_TIME_SPLIT_PATTERN), DateUtil.FULL_TIME_SPLIT_PATTERN, "h");
+                            objectMap.put("time", "距离上次离线"+time+"小时");
+                        }
+                    }else{
+                        objectMap.put("time", "没有离线记录");
+                    }
                 }
             }
         }

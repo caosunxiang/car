@@ -459,7 +459,7 @@ public class HttpUtils {
                 httpPost.setHeader("Content-Type", "application/json");
             }
 
-            HttpResponse response = client.execute(httpPost);
+            HttpResponse response = client.execute(httpPost );
             if (response != null) {
                 HttpEntity resEntity = response.getEntity();
                 if (resEntity != null) {
