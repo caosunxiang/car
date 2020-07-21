@@ -25,7 +25,19 @@ public class DeviceAlarmController {
     private final IDeviceAlarmService deviceAlarmService;
 
     @RequestMapping("selectAlarm")
-    public Body selectAlarm(String number,String startTime,String endTime,Integer size,Integer type) {
-        return this.deviceAlarmService.selectAlarm(number,startTime,endTime,size,type);
+    public Body selectAlarm(String number, String startTime, String endTime, Integer size, Integer type) {
+        return this.deviceAlarmService.selectAlarm(number, startTime, endTime, size, type);
+    }
+
+    /*** 
+     * @Description: 查询其他的报警信息
+     * @Param: [number, startTime, endTime, size]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/7/20 15:20
+     */
+    @RequestMapping("selectAlarmOther")
+    public Body selectAlarmOther(String number, String startTime, String endTime, Integer size) {
+        return this.deviceAlarmService.selectAlarmOther(number, startTime, endTime, size);
     }
 }

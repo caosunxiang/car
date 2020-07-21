@@ -14,7 +14,7 @@ import java.util.Date;
 public class DeviceAlarmSeverity {
 
     /**
-     *严重报警id
+     * 严重报警id
      */
 
     private Integer alarmId;
@@ -34,12 +34,19 @@ public class DeviceAlarmSeverity {
      */
     private String alarmStartTime;
 
-
-
     /**
-     * 报警开始时间
+     * 报警开始速度
      */
     private String alarmStartSpeed;
+    /**
+     * 报警结束时间
+     */
+    private String alarmEndTime;
+
+    /**
+     * 报警结束速度
+     */
+    private String alarmEndSpeed;
 
     /**
      * 报警纬度
@@ -50,7 +57,6 @@ public class DeviceAlarmSeverity {
      * 报警经度
      */
     private String alarmLng;
-
 
 
 }

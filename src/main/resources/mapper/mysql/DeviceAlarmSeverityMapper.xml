@@ -2,34 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.car.mapper.mysql.DeviceAlarmSeverityMapper">
 
-    <insert id="insertAlarmSeverity" >
+    <insert id="insertAlarmSeverity">
 insert  into  device_alarm_severity
 (alarm_name,car_number,alarm_start_time,alarm_start_speed,alarm_lat,alarm_lng)
 values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLat},#{alarmLng});
     </insert>
 
+    <update id="updateAlarmSeverity">
+        update    device_alarm_severity set
+        alarm_end_time =#{alarmEndTime},alarm_end_speed=#{alarmEndSpeed}
+        where alarm_id =#{alarmId};
+    </update>
+
     <select id="selectAlarmSeverity" resultType="java.util.Map">
-select
+        select
         alarm_id AS id,
         alarm_name AS alarmname,
         car_number AS carnumber,
         alarm_start_time AS start_time,
         alarm_start_speed as start_speed,
+        alarm_end_time AS start_time,
+        alarm_end_speed as start_speed,
         alarm_lat AS start_lat,
         alarm_lng AS start_lon
- from device_alarm_severity where
-    1=1
-    <if test="startTime !=null and endTime!=null">
-        AND alarm_start_time BETWEEN #{startTime}
-        AND #{endTime}
-    </if>
+        from device_alarm_severity where
+        1=1
+        <if test="startTime !=null and endTime!=null">
+            AND alarm_start_time BETWEEN #{startTime}
+            AND #{endTime}
+        </if>
         <if test="number !=null and number!=''">
-            and  car_number =#{number}
+            and car_number =#{number}
         </if>
         <if test="name !=null and name!=''">
-            and  alarm_name =#{name}
+            and alarm_name =#{name}
         </if>
-    order by alarm_start_time desc
+        order by alarm_start_time desc
         limit 0,#{size} ;
     </select>
     <select id="selectAlarmSeverityAll" resultType="java.util.Map">
@@ -39,6 +47,8 @@ select
         car_number AS carnumber,
         alarm_start_time AS start_time,
         alarm_start_speed as start_speed,
+        alarm_end_time AS start_time,
+        alarm_end_speed as start_speed,
         alarm_lat AS start_lat,
         alarm_lng AS start_lon
         FROM
@@ -50,10 +60,49 @@ select
             AND #{endTime}
         </if>
         <if test="number !=null and number!=''">
-            and  car_number =#{number}
+            and car_number =#{number}
         </if>
         order by alarm_start_time desc
         limit 0,#{size}
         ;
+    </select>
+    <select id="selectAlarmSeverityCount" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        device_alarm_severity
+        WHERE
+        1 =1
+        <if test="startTime !=null and endTime!=null">
+            AND alarm_start_time BETWEEN #{startTime}
+            AND #{endTime}
+        </if>
+    </select>
+
+    <select id="selectAlarmSeverityTask" resultType="com.example.car.entity.DeviceAlarmSeverity">
+        select
+        alarm_id AS alarmId,
+        alarm_name AS alarmName,
+        car_number AS carNumber,
+        alarm_start_time AS alarmStartTime,
+        alarm_start_speed as alarmStartSpeed,
+        alarm_end_time AS alarmEndTime,
+        alarm_end_speed as alarmEndSpeed,
+        alarm_lat AS alarmLat,
+        alarm_lng AS alarmLng
+        from device_alarm_severity where
+        1=1
+        <if test="startTime !=null and endTime!=null">
+            AND alarm_start_time BETWEEN #{startTime}
+            AND #{endTime}
+        </if>
+        <if test="number !=null and number!=''">
+            and car_number =#{number}
+        </if>
+        <if test="name !=null and name!=''">
+            and alarm_name =#{name}
+        </if>
+        order by alarm_start_time desc
+        limit 0,1 ;
     </select>
 </mapper>

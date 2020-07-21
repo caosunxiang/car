@@ -2,46 +2,83 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.car.mapper.mysql.DeviceAlarmMapper">
     <select id="selectAlarm" resultType="java.util.Map">
-   SELECT
-	car.id,
-	car.deptid,
-	car.carnumber,
-	alarm.alarm_number,
-	alarm.start_lat,
-	alarm.start_lon,
-	alarm.end_lat,
-	alarm.end_lon,
-	alarm.start_time,
-	alarm.end_time,
-	alarm.start_speed,
-	alarm.end_speed ,
-	setting.alarmname,
-	IFNULL(alarm.handle_by,'')handle_by
-FROM
-	car_info car
-	LEFT JOIN device_alarm alarm ON alarm.terminal_id = car.terminal_id
-	LEFT JOIN device_alarm_settings setting ON setting.alarmnumber = alarm.alarm_number
-	left join sys_auth_dept dept on dept.deptid=car.deptid
-WHERE
-1 = 1
-<if test="number!=null and number!=''">
-    AND car.carnumber  LIKE CONCAT('%',#{number},'%')
-</if>
-<if test="startTime!=null and endTime!=null and startTime!='' and endTime!=''">
-    AND alarm.start_time BETWEEN #{startTime}
-    AND #{endTime}
-</if>
-<if test="id!=null and id!=''">
-    and dept.deptid=#{id}
-</if>
+        SELECT
+        car.id,
+        car.deptid,
+        car.carnumber,
+        alarm.alarm_number,
+        alarm.start_lat,
+        alarm.start_lon,
+        alarm.end_lat,
+        alarm.end_lon,
+        alarm.start_time,
+        alarm.end_time,
+        alarm.start_speed,
+        alarm.end_speed ,
+        setting.alarmname,
+        IFNULL(alarm.handle_by,'')handle_by
+        FROM
+        car_info car
+        LEFT JOIN device_alarm alarm ON alarm.terminal_id = car.terminal_id
+        LEFT JOIN device_alarm_settings setting ON setting.alarmnumber = alarm.alarm_number
+        left join sys_auth_dept dept on dept.deptid=car.deptid
+        WHERE
+        1 = 1
+        <if test="number!=null and number!=''">
+            AND car.carnumber LIKE CONCAT('%',#{number},'%')
+        </if>
+        <if test="startTime!=null and endTime!=null and startTime!='' and endTime!=''">
+            AND alarm.start_time BETWEEN #{startTime}
+            AND #{endTime}
+        </if>
+        <if test="id!=null and id!=''">
+            and dept.deptid=#{id}
+        </if>
         <if test="type!=null and type!=''">
             and alarm.alarm_number=#{type}
         </if>
         order by alarm.end_time desc
         limit 0,#{size}
-	;
+        ;
     </select>
-
+    <select id="selectAlarmOther" resultType="java.util.Map">
+        SELECT
+        car.id,
+        car.deptid,
+        car.carnumber,
+        alarm.alarm_number,
+        alarm.start_lat,
+        alarm.start_lon,
+        alarm.end_lat,
+        alarm.end_lon,
+        alarm.start_time,
+        alarm.end_time,
+        alarm.start_speed,
+        alarm.end_speed ,
+        setting.alarmname,
+        IFNULL(alarm.handle_by,'')handle_by
+        FROM
+        car_info car
+        LEFT JOIN device_alarm alarm ON alarm.terminal_id = car.terminal_id
+        LEFT JOIN device_alarm_settings setting ON setting.alarmnumber = alarm.alarm_number
+        left join sys_auth_dept dept on dept.deptid=car.deptid
+        WHERE
+        1 = 1
+        <if test="number!=null and number!=''">
+            AND car.carnumber LIKE CONCAT('%',#{number},'%')
+        </if>
+        <if test="startTime!=null and endTime!=null and startTime!='' and endTime!=''">
+            AND alarm.start_time BETWEEN #{startTime}
+            AND #{endTime}
+        </if>
+        <if test="id!=null and id!=''">
+            and dept.deptid=#{id}
+        </if>
+            and alarm.alarm_number <![CDATA[ ><]]>2
+        order by alarm.end_time desc
+        limit 0,#{size}
+        ;
+    </select>
     <select id="selectGpsAlarm" resultType="java.util.Map">
          SELECT
 	*

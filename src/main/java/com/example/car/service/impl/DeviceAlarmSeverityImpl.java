@@ -11,7 +11,6 @@
 package com.example.car.service.impl;
 
 import com.example.car.common.utils.json.Body;
-import com.example.car.entity.DeviceAlarmSeverity;
 import com.example.car.mapper.mysql.DeviceAlarmSeverityMapper;
 import com.example.car.service.DeviceAlarmSeverityService;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +46,11 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
         }
         List<Map<String, Object>> deviceAlarmSeverities=deviceAlarmSeverityMapper.selectAlarmSeverity(startTime,number,endTime,name,size);
         return Body.newInstance(deviceAlarmSeverities);
+    }
+
+    @Override
+    public Body selectAlarmSeverityCount(String startTime, String endTime) {
+        Integer count=deviceAlarmSeverityMapper.selectAlarmSeverityCount(startTime,endTime);
+        return Body.newInstance(count);
     }
 }

@@ -46,4 +46,19 @@ public class DeviceAlarmServiceImpl implements IDeviceAlarmService {
 
         return Body.newInstance(listMain);
     }
+
+    @Override
+    public Body selectAlarmOther(String number, String startTime, String endTime, Integer size) {
+        List<Map<String, Object>> listMain=new ArrayList<>();
+        if (StringUtils.isEmpty(size)){
+            size=500;
+        }
+        Long id=new Long("722445496500748288");
+        List<SysAuthDept> deptList=sysAuthDeptMapper.selectSysAuthDeptByParent(id);
+        for (SysAuthDept sysAuthDept : deptList) {
+            List<Map<String, Object>> list = this.deviceAlarmMapper.selectAlarmOther(number,startTime,endTime,sysAuthDept.getDeptid(),size);
+            listMain.addAll(list);
+        }
+        return  Body.newInstance(listMain);
+    }
 }

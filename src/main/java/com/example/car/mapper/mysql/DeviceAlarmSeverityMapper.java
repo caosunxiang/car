@@ -16,4 +16,12 @@ public interface DeviceAlarmSeverityMapper {
     List<Map<String, Object>> selectAlarmSeverityAll(@Param("startTime") String startTime,
                                                      @Param("endTime") String endTime, @Param("number") String number
             , @Param("size") Integer size);
+
+    Integer selectAlarmSeverityCount(@Param("startTime") String startTime,
+                             @Param("endTime") String endTime);
+
+    DeviceAlarmSeverity selectAlarmSeverityTask(@Param("startTime") String startTime, @Param("number") String number,
+                            @Param("endTime") String endTime, @Param("name") String name);
+
+    void updateAlarmSeverity(DeviceAlarmSeverity alarmSeverity);
 }

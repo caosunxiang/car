@@ -40,11 +40,11 @@
             AND c.terminal_id=#{terminalid}
         </if>
         <if test="status !=null and status == 'X'.toString()">
-            AND l.carstatus IN (1,2,8)
+            AND l.carstatus IN (1,2)
             and c.car_service_status = 0
         </if>
         <if test="status !=null and status == 'A'.toString()">
-            AND l.carstatus IN (3,4,5,6,7)
+            AND l.carstatus IN (3,4,5,6,7,8)
             and c.car_service_status = 0
         </if>
         <if test="status !=null and status == 'C'.toString()">
@@ -68,11 +68,11 @@ select * from car_info where carnumber=#{number};
             AND a.deptid = #{id}
         </if>
         <if test="status !=null and status == 'X'.toString()">
-            AND l.carstatus IN (1,2,8)
+            AND l.carstatus IN (1,2)
             and c.car_service_status = 0
         </if>
         <if test="status !=null and status == 'A'.toString()">
-            AND l.carstatus IN (3,4,5,6,7)
+            AND l.carstatus IN (3,4,5,6,7,8)
             and c.car_service_status = 0
         </if>
         <if test="status !=null and status == 'C'.toString()">

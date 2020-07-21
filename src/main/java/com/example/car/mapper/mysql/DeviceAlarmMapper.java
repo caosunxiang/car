@@ -14,7 +14,13 @@ import java.util.Map;
 public interface DeviceAlarmMapper {
     List<Map<String, Object>> selectAlarm(@Param("number") String number, @Param("startTime") String startTime,
                                           @Param("endTime") String endTime, @Param("id") Long id,
-                                          @Param("size") Integer size,@Param("type")Integer type);
+                                          @Param("size") Integer size, @Param("type") Integer type);
+
+    List<Map<String, Object>> selectAlarmOther(@Param("number") String number, @Param("startTime") String startTime,
+                                               @Param("endTime") String endTime, @Param("id") Long id,
+                                               @Param("size") Integer size);
 
     Map<String, Object> selectGpsAlarm(@Param("number") String number);
+
+
 }

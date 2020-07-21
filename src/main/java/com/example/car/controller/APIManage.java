@@ -12,10 +12,8 @@ package com.example.car.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.example.car.common.utils.DateUtil;
-import com.example.car.common.utils.Distance;
-import com.example.car.common.utils.HttpUtils;
-import com.example.car.common.utils.Md5Util;
+import com.example.car.common.utils.*;
+import com.example.car.common.utils.async.service.AreaSelect;
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.CarInfo;
 import com.example.car.entity.DeviceAlarmSeverity;
@@ -23,6 +21,8 @@ import com.example.car.entity.SysAuthDept;
 import com.example.car.mapper.mysql.*;
 import com.example.car.mapper.sqlserver.MuckMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -45,6 +47,8 @@ import java.util.*;
 @CrossOrigin
 @RestController
 public class APIManage {
+    private static final Logger logger = LoggerFactory.getLogger(APIManage.class);
+
 
     private final static String username = "yccgj";
     private final static String tradeno = "20180908180001";
@@ -61,6 +65,8 @@ public class APIManage {
     private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
     @Autowired
     private DeviceAlarmMapper deviceAlarmMapper;
+    @Autowired
+    private AreaSelect areaSelect;
 
     /**
      * @Description: 接口转发
@@ -117,17 +123,19 @@ public class APIManage {
      * @Date: 2020/7/2 15:17
      */
     @RequestMapping("selectAlarmAll")
-    public Body selectAlarmAll(String startTime, String endTime,String number,Integer size,Integer type) {
-        Long id=new Long("722445496500748288");
-        if (StringUtils.isEmpty(size)){
-            size=250;
+    public Body selectAlarmAll(String startTime, String endTime, String number, Integer size, Integer type) {
+        Long id = new Long("722445496500748288");
+        if (StringUtils.isEmpty(size)) {
+            size = 250;
         }
-        List<Map<String, Object>> list=new ArrayList<>();
-        List<SysAuthDept> deptList=sysAuthDeptMapper.selectSysAuthDeptByParent(id);
+        List<Map<String, Object>> list = new ArrayList<>();
+        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(id);
         for (SysAuthDept sysAuthDept : deptList) {
-            list.addAll(this.deviceAlarmMapper.selectAlarm(number,startTime,endTime,sysAuthDept.getDeptid(),size,type)) ;
+            list.addAll(this.deviceAlarmMapper.selectAlarm(number, startTime, endTime, sysAuthDept.getDeptid(), size,
+                    type));
         }
-        List<Map<String, Object>> list1 = deviceAlarmSeverityMapper.selectAlarmSeverityAll(startTime, endTime,number,size);
+        List<Map<String, Object>> list1 = deviceAlarmSeverityMapper.selectAlarmSeverityAll(startTime, endTime, number
+                , size);
         list.addAll(list1);
         return Body.newInstance(list);
     }
@@ -319,40 +327,42 @@ public class APIManage {
      */
     @RequestMapping("areaSelect")
     public Body areaSelect(Double lat1, Double lng1, Double lat2, Double lng2, String startTime, String endTime,
-                           String numbers) {
-        List<String> list = divide(numbers);
-        List<Map<String, String> >carInArea = new ArrayList<>();
-        for (String s : list) {
-            Map<String, String> map = new HashMap<>();
-            map.put("carnumber", s);
-            map.put("tradeno", tradeno);
-            map.put("startTime", startTime);
-            map.put("endTime", endTime);
-            map.put("username", username);
-            String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
-            System.out.println(sign);
-            map.put("sign", sign);
-            String json = JSON.toJSONString(map);
-            String address = url + "cmsapi/getHistoryTrack";
-            String result = HttpUtils.doJsonPost(address, json);
-            JSONObject jsonObject = JSONObject.parseObject(result);
-            List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
-            if (resultData.size() > 0) {
-                for (Map<String, Object> resultDatum : resultData) {
-                    Double lng = new Double( resultDatum.get("lng").toString());
-                    Double lat = new Double( resultDatum.get("lat").toString());
-                    boolean isIn = isInArea(lat, lng, lat1, lat2, lng1, lng2);
-                    if (isIn) {
-                        Map<String,String> objectMap=new HashMap<>();
-                        String carnumber = resultDatum.get("carnumber").toString();
-                        objectMap.put("carnumber", carnumber);
-                        carInArea.add(objectMap);
-                        break;
-                    }
-                }
-            }
-        }
-        return Body.newInstance(carInArea);
+                           String numbers) throws ExecutionException, InterruptedException {
+        long start = System.currentTimeMillis();
+        List<String> list = CutString.divide(numbers);
+        List<List<String>> lists = ListUtils.averageAssign(list, 6);
+        List<Map<String,String>>mapList=new ArrayList<>();
+        CompletableFuture<List<Map<String, String>>> page1 = areaSelect.areaSelect(lat1, lng1, lat2, lng2, startTime,
+                endTime, lists.get(0));
+        CompletableFuture<List<Map<String, String>>> page2 = areaSelect.areaSelect(lat1, lng1, lat2, lng2, startTime,
+                endTime, lists.get(1));
+        CompletableFuture<List<Map<String, String>>> page3 = areaSelect.areaSelect(lat1, lng1, lat2, lng2, startTime,
+                endTime, lists.get(2));
+        CompletableFuture<List<Map<String, String>>> page4 = areaSelect.areaSelect(lat1, lng1, lat2, lng2, startTime,
+                endTime, lists.get(3));
+        CompletableFuture<List<Map<String, String>>> page5 = areaSelect.areaSelect(lat1, lng1, lat2, lng2, startTime,
+                endTime, lists.get(4));
+        CompletableFuture<List<Map<String, String>>> page6 = areaSelect.areaSelect(lat1, lng1, lat2, lng2, startTime,
+                endTime, lists.get(5));
+        // Wait until they are all done
+        //join() 的作用：让“主线程”等待“子线程”结束之后才能继续运行
+        CompletableFuture.allOf(page1,page2,page3,page4,page5,page6).join();
+        // Print results, including elapsed time
+        float exc = (float)(System.currentTimeMillis() - start)/1000;
+        logger.info("Elapsed time: " + exc + " seconds");
+        logger.info("--> " + page1.get());
+        logger.info("--> " + page2.get());
+        logger.info("--> " + page3.get());
+        logger.info("--> " + page4.get());
+        logger.info("--> " + page5.get());
+        logger.info("--> " + page6.get());
+        mapList.addAll(page1.get());
+        mapList.addAll(page2.get());
+        mapList.addAll(page3.get());
+        mapList.addAll(page4.get());
+        mapList.addAll(page5.get());
+        mapList.addAll(page6.get());
+        return Body.newInstance(mapList);
     }
 
 
@@ -379,76 +389,5 @@ public class APIManage {
         } else {
             return false;
         }
-    }
-
-
-    /**
-     *      *
-     *      * @param latitue 待测点的纬度
-     *      * @param longitude 待测点的经度
-     *      * @param areaLatitude1 纬度范围限制1
-     *      * @param areaLatitude2 纬度范围限制2
-     *      * @param areaLongitude1 经度限制范围1
-     *      * @param areaLongitude2 经度范围限制2
-     *      * @return
-     *     
-     */
-    public static boolean isInArea(double latitue, double longitude, double areaLatitude1, double areaLatitude2,
-                                   double areaLongitude1, double areaLongitude2) {
-        if (isInRange(latitue, areaLatitude1, areaLatitude2)) {//如果在纬度的范围内
-            if (areaLongitude1 * areaLongitude2 > 0) {//如果都在东半球或者都在西半球
-                if (isInRange(longitude, areaLongitude1, areaLongitude2)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {//如果一个在东半球，一个在西半球
-                if (Math.abs(areaLongitude1) + Math.abs(areaLongitude2) < 180) {//如果跨越0度经线在半圆的范围内
-                    if (isInRange(longitude, areaLongitude1, areaLongitude2)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {//如果跨越180度经线在半圆范围内
-                    double left = Math.max(areaLongitude1, areaLongitude2);//东半球的经度范围left-180
-                    double right = Math.min(areaLongitude1, areaLongitude2);//西半球的经度范围right-（-180）
-                    if (isInRange(longitude, left, 180) || isInRange(longitude, right, -180)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            }
-        } else {
-            return false;
-        }
-    }
-
-
-    public static boolean isInRange(double point, double left, double right) {
-        if (point >= Math.min(left, right) && point <= Math.max(left, right)) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-    public static List<String> divide(String msg) {
-        List<String> list = new ArrayList<String>();
-        msg = msg + ",";
-        char a[] = msg.toCharArray();
-        Integer c = 0;
-        Integer changeCount = 0;
-        for (int i = 0; i < a.length; i++) {
-            if (a[i] == ',') {
-                String string = msg.substring(c, i);
-                c = i + 1;
-                System.out.println(string);
-                list.add(string);
-                changeCount++;
-            }
-        }
-        return list;
     }
 }

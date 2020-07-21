@@ -54,7 +54,7 @@
             and pt.EndTime <![CDATA[ >= ]]>   #{time}
         </if>
         <if test="endTime !=null and endTime !=''">
-            and pt.EndTime  <![CDATA[ <=]]>   #{endTime}
+            and pt.EndTime  <![CDATA[ <= ]]>   #{endTime}
         </if>
         <if test="name !=null and name!=''">
             and pt.CarNo LIKE '%'+ #{name}+'%'

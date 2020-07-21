@@ -48,4 +48,16 @@ public class DeviceAlarmSeverityController {
     public Body selectAlarmSeverity(String startTime,String number, String endTime,String name,Integer size) {
         return deviceAlarmSeverityService.selectAlarmSeverity(startTime,number,endTime,name,size);
     }
+
+    /** 
+    * @Description:
+    * @Param: [startTime, endTime]
+    * @return: com.example.car.common.utils.json.Body
+    * @Author: 冷酷的苹果
+    * @Date: 2020/7/20 16:14
+    */
+    @RequestMapping("selectAlarmSeverityCount")
+    public Body selectAlarmSeverityCount(String startTime, String endTime) {
+        return  deviceAlarmSeverityService.selectAlarmSeverityCount(startTime,endTime);
+    }
 }

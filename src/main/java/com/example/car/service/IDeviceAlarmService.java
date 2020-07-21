@@ -10,4 +10,6 @@ import com.example.car.common.utils.json.Body;
  */
 public interface IDeviceAlarmService {
     Body selectAlarm(String number,String startTime,String endTime,Integer size,Integer type);
+
+    Body selectAlarmOther(String number,String startTime,String endTime,Integer size);
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.car.mapper.mysql.CarStatusChangeRecordMapper">
+    <select id="selectCarStatusChangeRecord" resultType="java.util.Map">
+        select `status`.* from car_status_change_record `status` left join car_info car on car.id = `status`.carid where 1=1
+        <if test="name !=null and name !=''">
+            and car.terminal_id=#{name}
+        </if>
+            and `status`.current_status<![CDATA[ <> ]]>0
+        order by `status`.modify_date desc
+        limit 0,#{size}
+    </select>
+</mapper>

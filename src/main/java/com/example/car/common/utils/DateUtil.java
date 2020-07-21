@@ -47,7 +47,7 @@ public class DateUtil {
         return localDateTime.format(DateTimeFormatter.ofPattern(format));
     }
 
-    public static Long dateDiff(String startTime, String endTime,  String format, String str) {
+    public static String dateDiff(String startTime, String endTime,  String format, String str) {
         // 按照传入的格式生成一个simpledateformate对象
         SimpleDateFormat sd = new SimpleDateFormat(format);
         long nd = 1000 * 24 * 60 * 60;// 一天的毫秒数
@@ -71,9 +71,9 @@ public class DateUtil {
                     + (min - day * 24 * 60) + "分钟" + sec + "秒。");
             System.out.println("hour=" + hour + ",min=" + min);
             if (str.equalsIgnoreCase("h")) {
-                return hour;
+                return hour+"小时"+(min - day * 24 * 60) +"分";
             } else {
-                return min;
+                return min+"分";
             }
 
         } catch (ParseException e) {
@@ -81,9 +81,9 @@ public class DateUtil {
             e.printStackTrace();
         }
         if (str.equalsIgnoreCase("h")) {
-            return hour;
+            return hour+"小时"+(min - day * 24 * 60) +"分";
         } else {
-            return min;
+            return min+"分";
         }
     }
     /*
