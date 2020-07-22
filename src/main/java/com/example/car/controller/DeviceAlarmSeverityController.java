@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 〈一句话功能简述〉<br> 
+ * 〈一句话功能简述〉<br>
  * 〈严重报警〉
  *
  * @author 冷酷的苹果
@@ -38,26 +38,38 @@ public class DeviceAlarmSeverityController {
     private final DeviceAlarmSeverityService deviceAlarmSeverityService;
 
     /*** 
-    * @Description: 查询严重报警
-    * @Param: [startTime, endTime]
-    * @return: com.example.car.common.utils.json.Body
-    * @Author: 冷酷的苹果
-    * @Date: 2020/7/1 18:26
-    */
+     * @Description: 查询严重报警
+     * @Param: [startTime, endTime]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/7/1 18:26
+     */
     @RequestMapping("selectAlarmSeverity")
-    public Body selectAlarmSeverity(String startTime,String number, String endTime,String name,Integer size) {
-        return deviceAlarmSeverityService.selectAlarmSeverity(startTime,number,endTime,name,size);
+    public Body selectAlarmSeverity(String startTime, String number, String endTime, String name, Integer size) {
+        return deviceAlarmSeverityService.selectAlarmSeverity(startTime, number, endTime, name, size);
+    }
+
+    /**
+     * @Description:
+     * @Param: [startTime, endTime]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/7/20 16:14
+     */
+    @RequestMapping("selectAlarmSeverityCount")
+    public Body selectAlarmSeverityCount(String startTime, String endTime) {
+        return deviceAlarmSeverityService.selectAlarmSeverityCount(startTime, endTime);
     }
 
     /** 
-    * @Description:
-    * @Param: [startTime, endTime]
+    * @Description: 查询有效严重报警
+    * @Param: [startTime, number, endTime, name]
     * @return: com.example.car.common.utils.json.Body
     * @Author: 冷酷的苹果
-    * @Date: 2020/7/20 16:14
+    * @Date: 2020/7/22 14:13
     */
-    @RequestMapping("selectAlarmSeverityCount")
-    public Body selectAlarmSeverityCount(String startTime, String endTime) {
-        return  deviceAlarmSeverityService.selectAlarmSeverityCount(startTime,endTime);
+    @RequestMapping("selectAlarmSeverityValid")
+    public Body selectAlarmSeverityValid(String startTime, String number, String endTime, String name) {
+        return deviceAlarmSeverityService.selectAlarmSeverityValid(startTime, number, endTime, name);
     }
 }

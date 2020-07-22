@@ -11,6 +11,7 @@
 package com.example.car.service.impl;
 
 import com.example.car.common.utils.json.Body;
+import com.example.car.entity.DeviceAlarmSeverity;
 import com.example.car.mapper.mysql.DeviceAlarmSeverityMapper;
 import com.example.car.service.DeviceAlarmSeverityService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 〈一句话功能简述〉<br> 
+ * 〈一句话功能简述〉<br>
  * 〈〉
  *
  * @author 冷酷的苹果
@@ -33,24 +34,32 @@ import java.util.Map;
  */
 @Service
 @RequiredArgsConstructor
-@Transactional(transactionManager = "masterTransactionManager",propagation = Propagation.SUPPORTS, readOnly = true)
+@Transactional(transactionManager = "masterTransactionManager", propagation = Propagation.SUPPORTS, readOnly = true)
 public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
 
     @Autowired
     private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
 
     @Override
-    public Body selectAlarmSeverity(String startTime,String number, String endTime,String name,Integer size) {
-        if (StringUtils.isEmpty(size)){
-            size=500;
+    public Body selectAlarmSeverity(String startTime, String number, String endTime, String name, Integer size) {
+        if (StringUtils.isEmpty(size)) {
+            size = 500;
         }
-        List<Map<String, Object>> deviceAlarmSeverities=deviceAlarmSeverityMapper.selectAlarmSeverity(startTime,number,endTime,name,size);
+        List<Map<String, Object>> deviceAlarmSeverities = deviceAlarmSeverityMapper.selectAlarmSeverity(startTime,
+                number, endTime, name, size);
         return Body.newInstance(deviceAlarmSeverities);
     }
 
     @Override
     public Body selectAlarmSeverityCount(String startTime, String endTime) {
-        Integer count=deviceAlarmSeverityMapper.selectAlarmSeverityCount(startTime,endTime);
+        Integer count = deviceAlarmSeverityMapper.selectAlarmSeverityCount(startTime, endTime);
         return Body.newInstance(count);
+    }
+
+    @Override
+    public Body selectAlarmSeverityValid(String startTime, String number, String endTime, String name) {
+        List<DeviceAlarmSeverity> alarmSeverity = deviceAlarmSeverityMapper.selectAlarmSeverityValid(startTime, number,
+                endTime, name);
+        return Body.newInstance(alarmSeverity);
     }
 }

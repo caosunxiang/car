@@ -24,4 +24,7 @@ public interface DeviceAlarmSeverityMapper {
                             @Param("endTime") String endTime, @Param("name") String name);
 
     void updateAlarmSeverity(DeviceAlarmSeverity alarmSeverity);
+
+    List<DeviceAlarmSeverity> selectAlarmSeverityValid(@Param("startTime") String startTime, @Param("number") String number,
+                             @Param("endTime") String endTime, @Param("name") String name);
 }

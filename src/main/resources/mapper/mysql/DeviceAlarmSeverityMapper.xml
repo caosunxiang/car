@@ -21,8 +21,8 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         car_number AS carnumber,
         alarm_start_time AS start_time,
         alarm_start_speed as start_speed,
-        alarm_end_time AS start_time,
-        alarm_end_speed as start_speed,
+        alarm_end_time AS end_time,
+        alarm_end_speed as end_speed,
         alarm_lat AS start_lat,
         alarm_lng AS start_lon
         from device_alarm_severity where
@@ -47,8 +47,8 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         car_number AS carnumber,
         alarm_start_time AS start_time,
         alarm_start_speed as start_speed,
-        alarm_end_time AS start_time,
-        alarm_end_speed as start_speed,
+        alarm_end_time AS end_time,
+        alarm_end_speed as end_speed,
         alarm_lat AS start_lat,
         alarm_lng AS start_lon
         FROM
@@ -104,5 +104,41 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         </if>
         order by alarm_start_time desc
         limit 0,1 ;
+    </select>
+
+    <select id="selectAlarmSeverityValid" resultType="com.example.car.entity.DeviceAlarmSeverity">
+        SELECT
+        *
+        FROM
+        (
+        select
+        alarm_id AS alarmId,
+        alarm_name AS alarmName,
+        car_number AS carNumber,
+        alarm_start_time AS alarmStartTime,
+        alarm_start_speed as alarmStartSpeed,
+        alarm_end_time AS alarmEndTime,
+        alarm_end_speed as alarmEndSpeed,
+        alarm_lat AS alarmLat,
+        alarm_lng AS alarmLng
+        from device_alarm_severity where
+        1=1
+        <if test="startTime !=null and endTime!=null">
+            AND alarm_start_time BETWEEN #{startTime}
+            AND #{endTime}
+        </if>
+        <if test="number !=null and number!=''">
+            and car_number =#{number}
+        </if>
+        <if test="name != null and name!=''">
+            and alarm_name =#{name}
+        </if>
+        and alarm_end_time IS NULL
+        order by alarm_start_time desc
+        ) a
+        GROUP BY
+        a.carNumber
+        ORDER BY
+        a.alarmStartTime DESC
     </select>
 </mapper>
