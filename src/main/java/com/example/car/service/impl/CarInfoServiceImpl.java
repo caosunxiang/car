@@ -2,7 +2,9 @@ package com.example.car.service.impl;
 
 import com.example.car.common.utils.DateUtil;
 import com.example.car.common.utils.json.Body;
+import com.example.car.entity.CarMileage;
 import com.example.car.mapper.mysql.CarInfoMapper;
+import com.example.car.mapper.mysql.CarMileageMapper;
 import com.example.car.mapper.mysql.CarStatusChangeRecordMapper;
 import com.example.car.mapper.mysql.DeviceOnlineRecordMapper;
 import com.example.car.service.ICarInfoService;
@@ -37,6 +39,8 @@ public class CarInfoServiceImpl implements ICarInfoService {
     @Autowired
     private CarStatusChangeRecordMapper carStatusChangeRecordMapper;
 
+    @Autowired
+    private CarMileageMapper carMileageMapper;
 
     @Override
     public Body selectCar(String carnumber, String terminalId, String sim) {
@@ -55,6 +59,8 @@ public class CarInfoServiceImpl implements ICarInfoService {
         List<Map<String, Object>> list = this.carInfoMapper.selectCarDetail(deptid, carnumber, terminalid, status);
         if (!StringUtils.isEmpty(deptid)) {
             for (Map<String, Object> objectMap : list) {
+                CarMileage carMileage=carMileageMapper.selectByName(objectMap.get("carnumber").toString());
+                objectMap.put("mileage",carMileage.getCarMileageToday());
                 if (!StringUtils.isEmpty(status)&&status.equals("A")){
                     //车辆上线时间
                     List<Map<String, Object>> maps = deviceOnlineRecordMapper.selectDeviceOnlineRecord(objectMap.get(

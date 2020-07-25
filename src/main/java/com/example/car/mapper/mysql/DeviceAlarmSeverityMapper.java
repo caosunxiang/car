@@ -21,10 +21,12 @@ public interface DeviceAlarmSeverityMapper {
                              @Param("endTime") String endTime);
 
     DeviceAlarmSeverity selectAlarmSeverityTask(@Param("startTime") String startTime, @Param("number") String number,
-                            @Param("endTime") String endTime, @Param("name") String name);
+                            @Param("endTime") String endTime, @Param("name") String name,@Param("day")String day);
 
     void updateAlarmSeverity(DeviceAlarmSeverity alarmSeverity);
 
     List<DeviceAlarmSeverity> selectAlarmSeverityValid(@Param("startTime") String startTime, @Param("number") String number,
                              @Param("endTime") String endTime, @Param("name") String name);
+
+    List<DeviceAlarmSeverity>selectAlarmMuck( @Param("number") String number);
 }

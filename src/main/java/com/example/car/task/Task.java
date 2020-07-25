@@ -15,7 +15,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.car.common.utils.DateUtil;
 import com.example.car.common.utils.HttpUtils;
 import com.example.car.common.utils.Md5Util;
+import com.example.car.entity.CarMileage;
 import com.example.car.entity.DeviceAlarmSeverity;
+import com.example.car.mapper.mysql.CarMileageMapper;
 import com.example.car.mapper.mysql.DeviceAlarmSeverityMapper;
 import com.example.car.mapper.mysql.SysAuthDeptMapper;
 import com.example.car.mapper.sqlserver.MuckMapper;
@@ -55,6 +57,9 @@ public class Task {
     @Autowired
     private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
 
+    @Autowired
+    private CarMileageMapper carMileageMapper;
+
 
     @Scheduled(cron = " * 0/10 * * * ? ")//无证运输存数据库
     public void noMuckIn() throws IOException {
@@ -72,32 +77,53 @@ public class Task {
         JSONObject jsonObject = JSONObject.parseObject(result);
         List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
         for (Map<String, Object> resultDatum : resultData) {
+            Double mileage=null;
             DeviceAlarmSeverity deviceAlarmSeverity = deviceAlarmSeverityMapper.selectAlarmSeverityTask(null,
-                    resultDatum.get("carnumber").toString(), null, "无准运证行驶");
-            if (!StringUtils.isEmpty(resultDatum.get("speed")) && Double.parseDouble(resultDatum.get("speed").toString()) > 5) {//分行驶和停止两个情况
-                if (StringUtils.isEmpty(deviceAlarmSeverity)||!StringUtils.isEmpty(deviceAlarmSeverity.getAlarmEndTime())) {//判断行驶情况下没有未完成报警记录的情况
-                    List<Map<String, String>> muck = muckMapper.selectMuck(resultDatum.get("carnumber").toString(),
-                            null,DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN));
-                    if (muck.size() <= 0) {//无准运证情况
-                        deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
-                        deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
-                        deviceAlarmSeverity.setAlarmName("无准运证行驶");
-                        deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
-                        deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
-                        deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
-                                DateUtil.FULL_TIME_SPLIT_PATTERN));
-                        deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity);
-                        System.out.println("不好啦！报警了，这个人没有准运证");
-                    }
-                }
-            } else {//停止状态
-                    if (StringUtils.isEmpty(deviceAlarmSeverity.getAlarmEndTime())) {
-                        deviceAlarmSeverity.setAlarmEndSpeed(resultDatum.get("speed").toString());
-                        deviceAlarmSeverity.setAlarmEndTime(DateUtil.getDateFormat(new Date(),
-                                DateUtil.FULL_TIME_SPLIT_PATTERN));
-                        deviceAlarmSeverityMapper.updateAlarmSeverity(deviceAlarmSeverity);
-                    }
+                    resultDatum.get("carnumber").toString(), null, "无准运证行驶", "A");
+            CarMileage carMileage = carMileageMapper.selectByName(resultDatum.get("carnumber").toString());
+            if (!StringUtils.isEmpty(resultDatum.get("summileage"))){
+                mileage = Double.parseDouble(resultDatum.get("summileage").toString()) - carMileage.getCarMileage();
+            }else {
+                mileage=0.0;
             }
+
+            if (!StringUtils.isEmpty(resultDatum.get("speed")) && Double.parseDouble(resultDatum.get("speed").toString()) > 35 && mileage > 3) {//分行驶和停止两个情况
+                // if (StringUtils.isEmpty(deviceAlarmSeverity)||!StringUtils.isEmpty(deviceAlarmSeverity
+                // .getAlarmEndTime())) {//判断行驶情况下没有未完成报警记录的情况
+                List<Map<String, String>> muck = muckMapper.selectMuck(resultDatum.get("carnumber").toString(),
+                        null, DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN));
+                if (muck.size() <= 0 && StringUtils.isEmpty(deviceAlarmSeverity)) {//无准运证情况并且没有无证运输的当天记录
+                    DeviceAlarmSeverity deviceAlarmSeverity1 = new DeviceAlarmSeverity();
+                    deviceAlarmSeverity1.setAlarmLng(resultDatum.get("lng").toString());
+                    deviceAlarmSeverity1.setAlarmLat(resultDatum.get("lat").toString());
+                    deviceAlarmSeverity1.setAlarmName("无准运证行驶");
+                    deviceAlarmSeverity1.setAlarmStartSpeed(resultDatum.get("speed").toString());
+                    deviceAlarmSeverity1.setCarNumber(resultDatum.get("carnumber").toString());
+                    deviceAlarmSeverity1.setAlarmMileage(mileage.toString());
+                    deviceAlarmSeverity1.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
+                            DateUtil.FULL_TIME_SPLIT_PATTERN));
+                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
+                    System.out.println("不好啦！报警了，这个人没有准运证");
+                } else if (muck.size() <= 0 && !StringUtils.isEmpty(deviceAlarmSeverity)) {//无准运证情况但有无证运输的当天记录
+                    deviceAlarmSeverity.setAlarmEndSpeed(resultDatum.get("speed").toString());
+                    deviceAlarmSeverity.setAlarmMileage(mileage.toString());
+                    deviceAlarmSeverity.setAlarmEndTime(DateUtil.getDateFormat(new Date(),
+                            DateUtil.FULL_TIME_SPLIT_PATTERN));
+                    deviceAlarmSeverity.setAlarmEndLat(resultDatum.get("lat").toString());
+                    deviceAlarmSeverity.setAlarmEndLng(resultDatum.get("lng").toString());
+                    deviceAlarmSeverityMapper.updateAlarmSeverity(deviceAlarmSeverity);
+                }
+                // }
+            }
+//            else {//停止状态
+//                    if (!StringUtils.isEmpty(deviceAlarmSeverity)&&StringUtils.isEmpty(deviceAlarmSeverity
+//                    .getAlarmEndTime())) {
+//                        deviceAlarmSeverity.setAlarmEndSpeed(resultDatum.get("speed").toString());
+//                        deviceAlarmSeverity.setAlarmEndTime(DateUtil.getDateFormat(new Date(),
+//                                DateUtil.FULL_TIME_SPLIT_PATTERN));
+//                        deviceAlarmSeverityMapper.updateAlarmSeverity(deviceAlarmSeverity);
+//                    }
+//            }
         }
     }
 
@@ -141,7 +167,7 @@ public class Task {
 //    }
 
 
-   @Scheduled(cron = " * 0/10 * * * ? ")
+    @Scheduled(cron = " * 0/10 * * * ? ")
     public void GPSDownIn() throws IOException {//gps不在线报警存数据库
         String terminals = Task.getCarTerminal();
         String address = url + "cmsapi/getTerminalGpsStatus";
@@ -158,36 +184,74 @@ public class Task {
         List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
         for (Map<String, Object> resultDatum : resultData) {
             DeviceAlarmSeverity deviceAlarmSeverity = deviceAlarmSeverityMapper.selectAlarmSeverityTask(null,
-                    resultDatum.get("carnumber").toString(), null, "GPS不在线");
+                    resultDatum.get("carnumber").toString(), null, "GPS不在线", null);
             if (resultDatum.get("carstatus").toString().equals("1") || resultDatum.get("carstatus").toString().equals("2")) {//分离线状态，在线状态
-                if (StringUtils.isEmpty(deviceAlarmSeverity)||!StringUtils.isEmpty(deviceAlarmSeverity.getAlarmEndTime())) {//离线状态下没有未完成的报警记录
-                    deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
-                    deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
-                    deviceAlarmSeverity.setAlarmName("GPS不在线");
-                    deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
-                    deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
-                    deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
+                if (StringUtils.isEmpty(deviceAlarmSeverity) || !StringUtils.isEmpty(deviceAlarmSeverity.getAlarmEndTime())) {//离线状态下没有未完成的报警记录
+                    DeviceAlarmSeverity deviceAlarmSeverity1 = new DeviceAlarmSeverity();
+                    deviceAlarmSeverity1.setAlarmLng(resultDatum.get("lng").toString());
+                    deviceAlarmSeverity1.setAlarmLat(resultDatum.get("lat").toString());
+                    deviceAlarmSeverity1.setAlarmName("GPS不在线");
+                    deviceAlarmSeverity1.setAlarmStartSpeed(resultDatum.get("speed").toString());
+                    deviceAlarmSeverity1.setCarNumber(resultDatum.get("carnumber").toString());
+                    deviceAlarmSeverity1.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
                             DateUtil.FULL_TIME_SPLIT_PATTERN));
-                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity);
+                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
                     System.out.println("不好啦！报警了，这个人GPS不在线");
                 }
             } else {//在线状态
-                if (StringUtils.isEmpty(deviceAlarmSeverity.getAlarmEndTime())) {//在线 有未完成的报警记录
+                if (!StringUtils.isEmpty(deviceAlarmSeverity) && StringUtils.isEmpty(deviceAlarmSeverity.getAlarmEndTime())) {//在线 有未完成的报警记录
                     deviceAlarmSeverity.setAlarmEndSpeed(resultDatum.get("speed").toString());
                     deviceAlarmSeverity.setAlarmEndTime(DateUtil.getDateFormat(new Date(),
                             DateUtil.FULL_TIME_SPLIT_PATTERN));
+                    deviceAlarmSeverity.setAlarmEndLat(resultDatum.get("lat").toString());
+                    deviceAlarmSeverity.setAlarmEndLng(resultDatum.get("lng").toString());
                     deviceAlarmSeverityMapper.updateAlarmSeverity(deviceAlarmSeverity);
                 }
             }
         }
     }
 
-//    @Scheduled(cron = " * 0/10 * * * ? ")
-//    public void GPSHistory(){
-//
-//    }
-
-
+    /**
+     * @Description: 检测系统车辆的里程数
+     * @Param: []
+     * @return: void
+     * @Author: 冷酷的苹果
+     * @Date: 2020/7/24 17:50
+     */
+    @Scheduled(cron = " 0 0 1 * * ? ")
+    public void carMileage() {
+        String terminals = Task.getCarTerminal();
+        String address = url + "cmsapi/getTerminalGpsStatus";
+        String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
+        System.out.println(sign);
+        Map<String, String> map = new HashMap<>();
+        map.put("sign", sign);
+        map.put("tradeno", tradeno);
+        map.put("username", username);
+        map.put("terminal", terminals);
+        String json = JSON.toJSONString(map);
+        String result = HttpUtils.doJsonPost(address, json);
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
+        for (Map<String, Object> resultDatum : resultData) {
+            System.out.println(resultDatum.get("carnumber").toString());
+            CarMileage carMileage = carMileageMapper.selectByName(resultDatum.get("carnumber").toString());
+            if (StringUtils.isEmpty(carMileage)) {
+                CarMileage carMileage1 = new CarMileage();
+                carMileage1.setCarName(resultDatum.get("carnumber").toString());
+                carMileage1.setCarMileage(new Double(resultDatum.get("mileage").toString()));
+                carMileage1.setCarMileageToday(0.0);
+                carMileageMapper.insertCarMileage(carMileage1);
+            } else {
+                if (StringUtils.isEmpty(carMileage.getCarMileage())){
+                    carMileage.setCarMileage(0.0);
+                }
+                carMileage.setCarMileageToday(Double.parseDouble(resultDatum.get("mileage").toString()) - carMileage.getCarMileage());
+                carMileage.setCarMileage(new Double(resultDatum.get("mileage").toString()));
+                carMileageMapper.updateCarMileage(carMileage);
+            }
+        }
+    }
 
 
 //    @Scheduled(cron = " * 0/13 * * * ? ")
@@ -389,8 +453,13 @@ public class Task {
     }
 
 
-
     public static void main(String[] args) {
+        DeviceAlarmSeverity deviceAlarmSeverity = null;
+        if (!StringUtils.isEmpty(deviceAlarmSeverity) && StringUtils.isEmpty(deviceAlarmSeverity.getAlarmEndTime())) {
+            System.out.println("成功");
+        } else {
 
+            System.out.println("成功");
+        }
     }
 }

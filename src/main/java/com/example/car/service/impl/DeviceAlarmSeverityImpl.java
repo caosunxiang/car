@@ -62,4 +62,10 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
                 endTime, name);
         return Body.newInstance(alarmSeverity);
     }
+
+    @Override
+    public Body selectAlarmMuck(String number) {
+        List<DeviceAlarmSeverity> alarmSeverity = deviceAlarmSeverityMapper.selectAlarmMuck(number);
+        return Body.newInstance(alarmSeverity);
+    }
 }

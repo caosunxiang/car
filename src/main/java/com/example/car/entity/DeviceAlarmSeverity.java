@@ -58,5 +58,20 @@ public class DeviceAlarmSeverity {
      */
     private String alarmLng;
 
+    /**
+     * 行驶里程
+     */
+    private String alarmMileage;
+
+    /**
+     * 报警结束纬度
+     */
+    private String alarmEndLat;
+
+    /**
+     * 报警结束经度
+     */
+    private String alarmEndLng;
+
 
 }

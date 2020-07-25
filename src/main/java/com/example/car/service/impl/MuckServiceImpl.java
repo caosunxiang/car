@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -45,8 +46,14 @@ public class MuckServiceImpl implements MuckService {
     }
 
     @Override
-    public Body selectMuckByName(String projectName,String time,String name,String endTime) {
-        List<Map<String,String>>list=this.muckMapper.selectMuckByName(projectName,time,name,endTime);
+    public Body selectMuckByName(String projectName,String time,String name,String endTime,Integer index,Integer size) {
+        if (StringUtils.isEmpty(index)){
+            index=1;
+        }
+        if (StringUtils.isEmpty(size)){
+            size=20;
+        }
+        List<Map<String,String>>list=this.muckMapper.selectMuckByName(projectName,time,name,endTime,(index*size),size);
         return Body.newInstance(list);
     }
 

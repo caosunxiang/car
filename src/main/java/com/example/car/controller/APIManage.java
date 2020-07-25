@@ -16,10 +16,11 @@ import com.example.car.common.utils.*;
 import com.example.car.common.utils.async.service.AreaSelect;
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.CarInfo;
-import com.example.car.entity.DeviceAlarmSeverity;
+import com.example.car.entity.CarMileage;
 import com.example.car.entity.SysAuthDept;
 import com.example.car.mapper.mysql.*;
 import com.example.car.mapper.sqlserver.MuckMapper;
+import com.example.car.task.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -67,6 +67,8 @@ public class APIManage {
     private DeviceAlarmMapper deviceAlarmMapper;
     @Autowired
     private AreaSelect areaSelect;
+    @Autowired
+    private CarMileageMapper carMileageMapper;
 
     /**
      * @Description: 接口转发
@@ -331,7 +333,7 @@ public class APIManage {
         long start = System.currentTimeMillis();
         List<String> list = CutString.divide(numbers);
         List<List<String>> lists = ListUtils.averageAssign(list, 6);
-        List<Map<String,String>>mapList=new ArrayList<>();
+        List<Map<String, String>> mapList = new ArrayList<>();
         CompletableFuture<List<Map<String, String>>> page1 = areaSelect.areaSelect(lat1, lng1, lat2, lng2, startTime,
                 endTime, lists.get(0));
         CompletableFuture<List<Map<String, String>>> page2 = areaSelect.areaSelect(lat1, lng1, lat2, lng2, startTime,
@@ -346,9 +348,9 @@ public class APIManage {
                 endTime, lists.get(5));
         // Wait until they are all done
         //join() 的作用：让“主线程”等待“子线程”结束之后才能继续运行
-        CompletableFuture.allOf(page1,page2,page3,page4,page5,page6).join();
+        CompletableFuture.allOf(page1, page2, page3, page4, page5, page6).join();
         // Print results, including elapsed time
-        float exc = (float)(System.currentTimeMillis() - start)/1000;
+        float exc = (float) (System.currentTimeMillis() - start) / 1000;
         logger.info("Elapsed time: " + exc + " seconds");
         logger.info("--> " + page1.get());
         logger.info("--> " + page2.get());
@@ -388,6 +390,48 @@ public class APIManage {
             return true;
         } else {
             return false;
+        }
+    }
+
+    @RequestMapping("test")
+    public void getTradeno() {
+        String terminals = Task.getCarTerminal();
+        String address = url + "cmsapi/getTerminalGpsStatus";
+        String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
+        System.out.println(sign);
+        Map<String, String> map = new HashMap<>();
+        map.put("sign", sign);
+        map.put("tradeno", tradeno);
+        map.put("username", username);
+        map.put("terminal", terminals);
+        String json = JSON.toJSONString(map);
+        String result = HttpUtils.doJsonPost(address, json);
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
+        for (Map<String, Object> resultDatum : resultData) {
+            System.out.println(resultDatum.get("carnumber").toString());
+            CarMileage carMileage = carMileageMapper.selectByName(resultDatum.get("carnumber").toString());
+            if (StringUtils.isEmpty(carMileage)) {
+                CarMileage carMileage1 = new CarMileage();
+                if (StringUtils.isEmpty(resultDatum.get("mileage"))) {
+                    carMileage1.setCarName(resultDatum.get("carnumber").toString());
+                    carMileage1.setCarMileage(0.0);
+                    carMileage1.setCarMileageToday(0.0);
+                    carMileageMapper.insertCarMileage(carMileage1);
+                }else {
+                    carMileage1.setCarName(resultDatum.get("carnumber").toString());
+                    carMileage1.setCarMileage(new Double(resultDatum.get("mileage").toString()));
+                    carMileage1.setCarMileageToday(0.0);
+                    carMileageMapper.insertCarMileage(carMileage1);
+                }
+            } else {
+                if (StringUtils.isEmpty(carMileage.getCarMileage())) {
+                    carMileage.setCarMileage(0.0);
+                }
+                carMileage.setCarMileageToday(Double.parseDouble(resultDatum.get("mileage").toString()) - carMileage.getCarMileage());
+                carMileage.setCarMileage(new Double(resultDatum.get("mileage").toString()));
+                carMileageMapper.updateCarMileage(carMileage);
+            }
         }
     }
 }

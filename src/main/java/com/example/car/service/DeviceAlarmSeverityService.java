@@ -8,4 +8,6 @@ public interface DeviceAlarmSeverityService {
     Body selectAlarmSeverityCount(String startTime,String endTime);
 
     Body selectAlarmSeverityValid(String startTime,String number, String endTime,String name);
+
+    Body selectAlarmMuck(String number);
 }

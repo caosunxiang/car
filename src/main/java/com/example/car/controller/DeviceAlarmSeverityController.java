@@ -61,15 +61,27 @@ public class DeviceAlarmSeverityController {
         return deviceAlarmSeverityService.selectAlarmSeverityCount(startTime, endTime);
     }
 
-    /** 
-    * @Description: 查询有效严重报警
-    * @Param: [startTime, number, endTime, name]
-    * @return: com.example.car.common.utils.json.Body
-    * @Author: 冷酷的苹果
-    * @Date: 2020/7/22 14:13
-    */
+    /**
+     * @Description: 查询有效严重报警
+     * @Param: [startTime, number, endTime, name]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/7/22 14:13
+     */
     @RequestMapping("selectAlarmSeverityValid")
     public Body selectAlarmSeverityValid(String startTime, String number, String endTime, String name) {
         return deviceAlarmSeverityService.selectAlarmSeverityValid(startTime, number, endTime, name);
+    }
+
+    /** 
+    * @Description: 查询准运证报警
+    * @Param: [number]
+    * @return: com.example.car.common.utils.json.Body
+    * @Author: 冷酷的苹果
+    * @Date: 2020/7/25 14:02
+    */
+    @RequestMapping("selectAlarmMuck")
+    public Body selectAlarmMuck(String number) {
+        return deviceAlarmSeverityService.selectAlarmMuck(number);
     }
 }

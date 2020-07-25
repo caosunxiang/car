@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.car.mapper.mysql.CarMileageMapper">
+   <insert id="insertCarMileage">
+   insert  into  car_mileage
+(car_name,car_mileage,car_mileage_today)
+values (#{carName},#{carMileage},#{carMileageToday});
+   </insert>
+    <update id="updateCarMileage">
+  update    car_mileage set
+        car_mileage =#{carMileage},car_mileage_today=#{carMileageToday}
+        where id =#{id};
+    </update>
+    <select id="selectByName" resultType="com.example.car.entity.CarMileage">
+        select * from car_mileage where car_name=#{name}
+    </select>
+</mapper>

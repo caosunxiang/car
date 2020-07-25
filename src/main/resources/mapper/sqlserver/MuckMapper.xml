@@ -32,8 +32,11 @@
         p.EndTime DESC;
     </select>
     <select id="selectMuckByName" resultType="java.util.Map">
-        SELECT
-        *
+        select *
+        from (select top ${size} *
+        from (select top ${page} *
+        from ( SELECT
+        top 1000 *
         FROM
         (
         SELECT
@@ -54,7 +57,7 @@
             and pt.EndTime <![CDATA[ >= ]]>   #{time}
         </if>
         <if test="endTime !=null and endTime !=''">
-            and pt.EndTime  <![CDATA[ <= ]]>   #{endTime}
+            and (SELECT CONVERT(VARCHAR(10),pt.EndTime,120))  =  #{endTime}
         </if>
         <if test="name !=null and name!=''">
             and pt.CarNo LIKE '%'+ #{name}+'%'
@@ -65,9 +68,15 @@
         p.LineName,
         p.ProjectName,
         pt.EndTime
-        ) a
+        ) as a
         ORDER BY
         a.EndTime DESC
+        ) as b
+        order by b.EndTime asc  )
+        as temp
+        order by temp.EndTime DESC ) temp_order
+        order by temp_order.EndTime DESC
+        ;
     </select>
     <select id="selectMuckByProject" resultType="java.util.Map">
         SELECT
@@ -96,7 +105,7 @@
         WHERE
         1 = 1
         <if test="projectId !=null and projectId !=''">
-            and p.ProjectId= #{projectId}
+            and t.permitNo= #{projectId}
         </if>
         <if test="time!=null and time!=''">
             and t.EndTime  &gt;=   #{time}
