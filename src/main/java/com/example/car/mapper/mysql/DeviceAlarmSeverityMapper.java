@@ -28,5 +28,5 @@ public interface DeviceAlarmSeverityMapper {
     List<DeviceAlarmSeverity> selectAlarmSeverityValid(@Param("startTime") String startTime, @Param("number") String number,
                              @Param("endTime") String endTime, @Param("name") String name);
 
-    List<DeviceAlarmSeverity>selectAlarmMuck( @Param("number") String number);
+    List<DeviceAlarmSeverity>selectAlarmMuck(@Param("number")String number,@Param("name") String name);
 }

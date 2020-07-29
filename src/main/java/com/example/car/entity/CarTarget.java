@@ -21,15 +21,15 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
-public class CarPicture {
+public class CarTarget {
     /**
      * 车辆类型
      *
      * */
-   private String carType;
+   private String id;
 
    /**
     * 车辆图标
     * */
-   private String carPng;
+   private String carNumber;
 }

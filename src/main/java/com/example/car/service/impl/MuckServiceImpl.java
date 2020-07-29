@@ -53,6 +53,9 @@ public class MuckServiceImpl implements MuckService {
         if (StringUtils.isEmpty(size)){
             size=20;
         }
+        if (index>muckMapper.selectMuckCount(projectName,time,name,endTime)/size){
+            size=muckMapper.selectMuckCount(projectName,time,name,endTime)%size;
+        }
         List<Map<String,String>>list=this.muckMapper.selectMuckByName(projectName,time,name,endTime,(index*size),size);
         return Body.newInstance(list);
     }
@@ -61,5 +64,11 @@ public class MuckServiceImpl implements MuckService {
     public Body selectMuckByProject(String projectId,String time) {
         List<Map<String,String>>list=this.muckMapper.selectMuckByProject(projectId,time);
         return Body.newInstance(list);
+    }
+
+    @Override
+    public Body selectMuckCount(String projectName, String time, String name, String endTime) {
+        Integer count =this.muckMapper.selectMuckCount(projectName,time,name,endTime);
+        return Body.newInstance(count);
     }
 }

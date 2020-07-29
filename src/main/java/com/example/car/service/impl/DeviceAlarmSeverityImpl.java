@@ -65,7 +65,7 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
 
     @Override
     public Body selectAlarmMuck(String number) {
-        List<DeviceAlarmSeverity> alarmSeverity = deviceAlarmSeverityMapper.selectAlarmMuck(number);
+        List<DeviceAlarmSeverity> alarmSeverity = deviceAlarmSeverityMapper.selectAlarmMuck(number,"无准运证行驶");
         return Body.newInstance(alarmSeverity);
     }
 }

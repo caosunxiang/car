@@ -15,12 +15,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.car.common.utils.*;
 import com.example.car.common.utils.async.service.AreaSelect;
 import com.example.car.common.utils.json.Body;
-import com.example.car.entity.CarInfo;
-import com.example.car.entity.CarMileage;
-import com.example.car.entity.SysAuthDept;
+import com.example.car.entity.*;
 import com.example.car.mapper.mysql.*;
 import com.example.car.mapper.sqlserver.MuckMapper;
-import com.example.car.task.Task;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +51,7 @@ public class APIManage {
     private final static String tradeno = "20180908180001";
     private final static String url = "http://101.132.236.6:8088/";
     @Autowired
-    private CarPictureMapper carPictureMapper;
+    private CarTargetMapper carTargetMapper;
     @Autowired
     private CarInfoMapper carInfoMapper;
     @Autowired
@@ -69,6 +66,8 @@ public class APIManage {
     private AreaSelect areaSelect;
     @Autowired
     private CarMileageMapper carMileageMapper;
+    @Autowired
+    private DeviceLaspositionMapper deviceLaspositionMapper;
 
     /**
      * @Description: 接口转发
@@ -256,10 +255,8 @@ public class APIManage {
                 boolean isIn = Distance.coordinateToDistance(lat, lng, latCar, lngCar, distance);
                 if (!isIn) {
                     CarInfo carInfo = carInfoMapper.selectCarOnly(resultDatum.get("carnumber").toString());
-                    String picture = carPictureMapper.selectCarPicture(carInfo.getCartype());
                     Long deptid = carInfo.getDeptid();
                     SysAuthDept sysAuthDept = sysAuthDeptMapper.selectSysAuthDeptById(deptid);
-                    resultDatum.put("picture", picture);
                     resultDatum.put("dept", sysAuthDept.getDeptname());
                     maps.add(resultDatum);
                 }
@@ -395,42 +392,37 @@ public class APIManage {
 
     @RequestMapping("test")
     public void getTradeno() {
-        String terminals = Task.getCarTerminal();
-        String address = url + "cmsapi/getTerminalGpsStatus";
-        String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
-        System.out.println(sign);
-        Map<String, String> map = new HashMap<>();
-        map.put("sign", sign);
-        map.put("tradeno", tradeno);
-        map.put("username", username);
-        map.put("terminal", terminals);
-        String json = JSON.toJSONString(map);
-        String result = HttpUtils.doJsonPost(address, json);
-        JSONObject jsonObject = JSONObject.parseObject(result);
-        List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
-        for (Map<String, Object> resultDatum : resultData) {
-            System.out.println(resultDatum.get("carnumber").toString());
-            CarMileage carMileage = carMileageMapper.selectByName(resultDatum.get("carnumber").toString());
-            if (StringUtils.isEmpty(carMileage)) {
-                CarMileage carMileage1 = new CarMileage();
-                if (StringUtils.isEmpty(resultDatum.get("mileage"))) {
-                    carMileage1.setCarName(resultDatum.get("carnumber").toString());
-                    carMileage1.setCarMileage(0.0);
-                    carMileage1.setCarMileageToday(0.0);
-                    carMileageMapper.insertCarMileage(carMileage1);
-                }else {
-                    carMileage1.setCarName(resultDatum.get("carnumber").toString());
-                    carMileage1.setCarMileage(new Double(resultDatum.get("mileage").toString()));
-                    carMileage1.setCarMileageToday(0.0);
-                    carMileageMapper.insertCarMileage(carMileage1);
+        List<CarTarget> carTargets=carTargetMapper.selectCarTarget();
+        for (CarTarget carTarget : carTargets) {
+            DeviceLasposition deviceLasposition=deviceLaspositionMapper.selectLaspositionByCarNo(carTarget.getCarNumber());
+            if (StringUtils.isEmpty(deviceLasposition)||StringUtils.isEmpty(deviceLasposition.getCarnumber())){
+                continue;
+            }
+            DeviceAlarmSeverity deviceAlarmSeverity = deviceAlarmSeverityMapper.selectAlarmSeverityTask(null,
+                    deviceLasposition.getCarnumber(), null, "无准运证行驶", "A");
+            if ( Double.parseDouble(deviceLasposition.getSpeed() )> 35.00) {//分行驶和停止两个情况
+                if ( StringUtils.isEmpty(deviceAlarmSeverity)) {//无准运证情况并且没有无证运输的当天记录
+                    DeviceAlarmSeverity deviceAlarmSeverity1 = new DeviceAlarmSeverity();
+                    deviceAlarmSeverity1.setAlarmLng(deviceLasposition.getLng().toString());
+                    deviceAlarmSeverity1.setAlarmLat(deviceLasposition.getLat().toString());
+                    deviceAlarmSeverity1.setAlarmName("无准运证行驶");
+                    deviceAlarmSeverity1.setAlarmStartSpeed(deviceLasposition.getSpeed());
+                    deviceAlarmSeverity1.setCarNumber( deviceLasposition.getCarnumber());
+                    deviceAlarmSeverity1.setAlarmMileage(deviceLasposition.getMileage());
+                    deviceAlarmSeverity1.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
+                            DateUtil.FULL_TIME_SPLIT_PATTERN));
+                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
+                    System.out.println("不好啦！报警了，这个人没有准运证");
+                } else{//无准运证情况但有无证运输的当天记录
+                    deviceAlarmSeverity.setAlarmEndSpeed(deviceLasposition.getSpeed());
+                    deviceAlarmSeverity.setAlarmMileage(deviceLasposition.getMileage());
+                    deviceAlarmSeverity.setAlarmEndTime(DateUtil.getDateFormat(new Date(),
+                            DateUtil.FULL_TIME_SPLIT_PATTERN));
+                    deviceAlarmSeverity.setAlarmEndLat(deviceLasposition.getLat().toString());
+                    deviceAlarmSeverity.setAlarmEndLng(deviceLasposition.getLng().toString());
+                    deviceAlarmSeverityMapper.updateAlarmSeverity(deviceAlarmSeverity);
                 }
-            } else {
-                if (StringUtils.isEmpty(carMileage.getCarMileage())) {
-                    carMileage.setCarMileage(0.0);
-                }
-                carMileage.setCarMileageToday(Double.parseDouble(resultDatum.get("mileage").toString()) - carMileage.getCarMileage());
-                carMileage.setCarMileage(new Double(resultDatum.get("mileage").toString()));
-                carMileageMapper.updateCarMileage(carMileage);
+                // }
             }
         }
     }

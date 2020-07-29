@@ -12,7 +12,7 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
   update    device_alarm_severity set
         alarm_end_time =#{alarmEndTime},alarm_end_speed=#{alarmEndSpeed},alarm_mileage=#{alarmMileage},
         alarm_end_lat=#{alarmEndLat},alarm_end_lng=#{alarmEndLng}
-        where id =#{id};
+        where alarm_id =#{alarmId};
     </update>
 
     <select id="selectAlarmSeverity" resultType="java.util.Map">
@@ -178,11 +178,13 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         alarm_lng AS alarmLng
         from device_alarm_severity where
         1=1
-            AND  TO_DAYS(alarm_start_time) = TO_DAYS(NOW())
-        <if test="number !=null and number!=''">
+        <if test="number !=null and number !=''">
             and car_number =#{number}
         </if>
-            and alarm_name ='无准运证行驶'
+        <if test="name !=null and name!=''">
+            and alarm_name =#{name}
+        </if>
+            AND  TO_DAYS(alarm_start_time) = TO_DAYS(NOW())
         order by alarm_start_time desc
         ) a
         GROUP BY

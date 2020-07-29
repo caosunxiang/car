@@ -59,8 +59,6 @@ public class CarInfoServiceImpl implements ICarInfoService {
         List<Map<String, Object>> list = this.carInfoMapper.selectCarDetail(deptid, carnumber, terminalid, status);
         if (!StringUtils.isEmpty(deptid)) {
             for (Map<String, Object> objectMap : list) {
-                CarMileage carMileage=carMileageMapper.selectByName(objectMap.get("carnumber").toString());
-                objectMap.put("mileage",carMileage.getCarMileageToday());
                 if (!StringUtils.isEmpty(status)&&status.equals("A")){
                     //车辆上线时间
                     List<Map<String, Object>> maps = deviceOnlineRecordMapper.selectDeviceOnlineRecord(objectMap.get(

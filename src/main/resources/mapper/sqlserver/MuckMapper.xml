@@ -57,7 +57,7 @@
             and pt.EndTime <![CDATA[ >= ]]>   #{time}
         </if>
         <if test="endTime !=null and endTime !=''">
-            and (SELECT CONVERT(VARCHAR(10),pt.EndTime,120))  =  #{endTime}
+            and (SELECT CONVERT(VARCHAR(10),pt.EndTime,120)) = #{endTime}
         </if>
         <if test="name !=null and name!=''">
             and pt.CarNo LIKE '%'+ #{name}+'%'
@@ -72,7 +72,7 @@
         ORDER BY
         a.EndTime DESC
         ) as b
-        order by b.EndTime asc  )
+        order by b.EndTime asc )
         as temp
         order by temp.EndTime DESC ) temp_order
         order by temp_order.EndTime DESC
@@ -108,11 +108,34 @@
             and t.permitNo= #{projectId}
         </if>
         <if test="time!=null and time!=''">
-            and t.EndTime  &gt;=   #{time}
+            and t.EndTime &gt;= #{time}
         </if>
         ORDER BY
         p.EndTime DESC;
     </select>
-
+    <select id="selectMuckCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM (SELECT
+        p.PermitNo
+        FROM
+        View_ProjectPermit p
+        LEFT JOIN View_PermitTruck pt ON p.PermitNo = pt.PermitNo
+        WHERE
+        1 = 1
+        <if test="projectName !=null and projectName !=''">
+            and p.ProjectName LIKE '%'+ #{projectName}+'%'
+        </if>
+        <if test="time !=null and time !=''">
+            and pt.EndTime <![CDATA[ >= ]]>   #{time}
+        </if>
+        <if test="endTime !=null and endTime !=''">
+            and (SELECT CONVERT(VARCHAR(10),pt.EndTime,120)) = #{endTime}
+        </if>
+        <if test="name !=null and name!=''">
+            and pt.CarNo LIKE '%'+ #{name}+'%'
+        </if>
+        GROUP BY
+        p.PermitNo
+        ) AS c
+    </select>
 
 </mapper>

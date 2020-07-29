@@ -10,7 +10,10 @@
  */
 package com.example.car.mapper.mysql;
 
+import com.example.car.entity.CarTarget;
 import io.lettuce.core.dynamic.annotation.Param;
+
+import java.util.List;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -20,6 +23,10 @@ import io.lettuce.core.dynamic.annotation.Param;
  * @create 2020/6/28
  * @since 1.0.0
  */
-public interface CarPictureMapper {
-   String selectCarPicture(@Param("type")String type);
+public interface CarTargetMapper {
+   void insertCarTarget(CarTarget carTarget);
+
+   List<CarTarget> selectCarTarget();
+
+   void deleteCarTarget();
 }

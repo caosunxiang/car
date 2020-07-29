@@ -8,4 +8,6 @@ public interface MuckService {
     Body selectMuckByName(String projectName,String time,String name,String endTime,Integer index,Integer size);
 
     Body selectMuckByProject(String projectId,String time);
+
+    Body selectMuckCount(String projectName,String time,String name,String endTime);
 }
