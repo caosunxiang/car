@@ -22,5 +22,9 @@ public interface DeviceAlarmMapper {
 
     Map<String, Object> selectGpsAlarm(@Param("number") String number);
 
+    Integer selectAlarmCount(@Param("number") String number, @Param("startTime") String startTime,
+                             @Param("endTime") String endTime, @Param("id") Long id, @Param("type") Integer type);
 
+
+    Integer selectAlarmNowCount( @Param("type") Integer type);
 }

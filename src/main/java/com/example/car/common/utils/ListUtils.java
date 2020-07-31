@@ -10,11 +10,13 @@
  */
 package com.example.car.common.utils;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 〈一句话功能简述〉<br> 
+ * 〈一句话功能简述〉<br>
  * 〈操作集合〉
  *
  * @author 冷酷的苹果
@@ -52,6 +54,7 @@ public class ListUtils {
 
     /**
      * 将一组数据固定分组，每组n个元素
+     *
      * @param source 要分组的数据源
      * @param n      每组n个元素
      * @param <T>
@@ -76,7 +79,6 @@ public class ListUtils {
         }
         return result;
     }
-
 
 
     /**
@@ -105,5 +107,27 @@ public class ListUtils {
             result.add(subset);
         }
         return result;
+    }
+
+
+    /**
+     * @Description: list转字符串
+     * @Param: [list, separator]
+     * @return: java.lang.String
+     * @Author: 冷酷的苹果
+     * @Date: 2020/7/31 13:13
+     */
+    public static String listToString5(List list, char separator) {
+        return StringUtils.join(list.toArray(),separator);
+    }
+
+
+    public static void main(String[] args) {
+        List<String> list1=new ArrayList<>();
+        list1.add("c");
+        list1.add("e");
+        list1.add("a");
+        String carName=ListUtils.listToString5(list1, ',');
+        System.out.println(carName);
     }
 }

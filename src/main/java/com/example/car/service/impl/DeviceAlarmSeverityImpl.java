@@ -12,6 +12,7 @@ package com.example.car.service.impl;
 
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.DeviceAlarmSeverity;
+import com.example.car.mapper.mysql.DeviceAlarmMapper;
 import com.example.car.mapper.mysql.DeviceAlarmSeverityMapper;
 import com.example.car.service.DeviceAlarmSeverityService;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,8 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
 
     @Autowired
     private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
+    @Autowired
+    private DeviceAlarmMapper deviceAlarmMapper;
 
     @Override
     public Body selectAlarmSeverity(String startTime, String number, String endTime, String name, Integer size) {
@@ -53,6 +56,7 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
     @Override
     public Body selectAlarmSeverityCount(String startTime, String endTime) {
         Integer count = deviceAlarmSeverityMapper.selectAlarmSeverityCount(startTime, endTime);
+        count+=deviceAlarmMapper.selectAlarmCount(null,startTime,endTime,null,2);
         return Body.newInstance(count);
     }
 
@@ -64,8 +68,8 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
     }
 
     @Override
-    public Body selectAlarmMuck(String number) {
-        List<DeviceAlarmSeverity> alarmSeverity = deviceAlarmSeverityMapper.selectAlarmMuck(number,"无准运证行驶");
+    public Body selectAlarmMuck(String number,String name) {
+        List<DeviceAlarmSeverity> alarmSeverity = deviceAlarmSeverityMapper.selectAlarmMuck(number,name);
         return Body.newInstance(alarmSeverity);
     }
 }

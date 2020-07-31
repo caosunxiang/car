@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.util.unit.DataUnit;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -242,27 +243,33 @@ public class APIManage {
      * @Date: 2020/6/28 10:43
      */
     @RequestMapping("selectHome")
-    public Body selectHome(String json, Double lat, Double lng, Double distance) {
-        List<Map<String, Object>> maps = new ArrayList<>();
-        String address = url + "cmsapi/getTerminalGpsStatus";
-        String result = HttpUtils.doJsonPost(address, json);
-        JSONObject jsonObject = JSONObject.parseObject(result);
-        List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
-        if (resultData.size() > 0) {
-            for (Map<String, Object> resultDatum : resultData) {
-                Double latCar = Double.valueOf(resultDatum.get("lat").toString());
-                Double lngCar = Double.valueOf(resultDatum.get("lng").toString());
-                boolean isIn = Distance.coordinateToDistance(lat, lng, latCar, lngCar, distance);
-                if (!isIn) {
-                    CarInfo carInfo = carInfoMapper.selectCarOnly(resultDatum.get("carnumber").toString());
-                    Long deptid = carInfo.getDeptid();
-                    SysAuthDept sysAuthDept = sysAuthDeptMapper.selectSysAuthDeptById(deptid);
-                    resultDatum.put("dept", sysAuthDept.getDeptname());
-                    maps.add(resultDatum);
+    public Body selectHome( Double lat, Double lng, Double distance) {
+        if (StringUtils.isEmpty(lat)||StringUtils.isEmpty(lng)){
+            return  Body.BODY_451;
+        }
+        List<SysAuthDept> deptList=sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
+        List<DeviceLasposition> deviceLaspositions=new ArrayList<>();
+        List<DeviceLasposition> list=new ArrayList<>();
+        System.currentTimeMillis();
+        for (SysAuthDept sysAuthDept : deptList) {
+            List<DeviceLasposition> deviceLasposition = deviceLaspositionMapper.selectLasposition(sysAuthDept.getDeptid().toString());
+            for (DeviceLasposition lasposition : deviceLasposition) {
+                if (sysAuthDept.getDeptid().equals(lasposition.getDeptid())){
+                    lasposition.setDept(sysAuthDept.getDeptname());
                 }
             }
+            deviceLaspositions.addAll(deviceLasposition);
         }
-        return Body.newInstance(maps);
+        System.currentTimeMillis();
+            for (DeviceLasposition resultDatum : deviceLaspositions) {
+                Double latCar = resultDatum.getLat();
+                Double lngCar = resultDatum.getLng();
+                boolean isIn = Distance.coordinateToDistance(lat, lng, latCar, lngCar, distance);
+                if (!isIn) {
+                    list.add(resultDatum);
+                }
+            }
+        return Body.newInstance(list);
     }
 
     /**

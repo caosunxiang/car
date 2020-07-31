@@ -229,7 +229,7 @@ public class Task {
 //    }
 
 
-    @Scheduled(cron = " 0 0 1 * * ? ")
+    @Scheduled(cron = " 0 0 1,13 * * ? ")
     public void targetCar() {
         carTargetMapper.deleteCarTarget();
         List<SysAuthDept> deptList=sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));

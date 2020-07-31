@@ -91,4 +91,47 @@ and alarm.alarm_number=198
 order by end_time desc
 limit 0,1;
     </select>
+
+    <select id="selectAlarmCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        car_info car
+        LEFT JOIN device_alarm alarm ON alarm.terminal_id = car.terminal_id
+        LEFT JOIN device_alarm_settings setting ON setting.alarmnumber = alarm.alarm_number
+        left join sys_auth_dept dept on dept.deptid=car.deptid
+        WHERE
+        1 = 1
+        <if test="number!=null and number!=''">
+            AND car.carnumber LIKE CONCAT('%',#{number},'%')
+        </if>
+        <if test="startTime!=null and endTime!=null and startTime!='' and endTime!=''">
+            AND alarm.start_time BETWEEN #{startTime}
+            AND #{endTime}
+        </if>
+        <if test="id!=null and id!=''">
+            and dept.deptid=#{id}
+        </if>
+        <if test="type!=null and type!=''">
+            and alarm.alarm_number=#{type}
+        </if>
+        ;
+    </select>
+
+    <select id="selectAlarmNowCount" resultType="java.lang.Integer">
+           SELECT
+        COUNT(1)
+        FROM
+        car_info car
+        LEFT JOIN device_alarm alarm ON alarm.terminal_id = car.terminal_id
+        LEFT JOIN device_alarm_settings setting ON setting.alarmnumber = alarm.alarm_number
+        left join sys_auth_dept dept on dept.deptid=car.deptid
+        WHERE
+        1 = 1
+       	AND TO_DAYS(alarm.start_time)=TO_DAYS(NOW())
+        <if test="type!=null and type!=''">
+            and alarm.alarm_number=#{type}
+        </if>
+        ;
+    </select>
 </mapper>

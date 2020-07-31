@@ -81,7 +81,7 @@ public class DeviceAlarmSeverityController {
     * @Date: 2020/7/25 14:02
     */
     @RequestMapping("selectAlarmMuck")
-    public Body selectAlarmMuck(String number) {
-        return deviceAlarmSeverityService.selectAlarmMuck(number);
+    public Body selectAlarmMuck(String number,String name) {
+        return deviceAlarmSeverityService.selectAlarmMuck(number,name);
     }
 }
