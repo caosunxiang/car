@@ -140,4 +140,92 @@ public class CarInfoServiceImpl implements ICarInfoService {
         }
         return Body.newInstance(list);
     }
+
+    @Override
+    public Body selectCarDetailPage(String deptid, String carnumber, String terminalid, String status, Integer index,
+                                    Integer size) {
+        List<Map<String, Object>> list = this.carInfoMapper.selectCarDetailPage(deptid, carnumber, terminalid, status,(index-1)*size,size);
+        if (!StringUtils.isEmpty(deptid)) {
+            for (Map<String, Object> objectMap : list) {
+                if (!StringUtils.isEmpty(status)&&status.equals("A")){
+                    //车辆上线时间
+                    List<Map<String, Object>> maps = deviceOnlineRecordMapper.selectDeviceOnlineRecord(objectMap.get(
+                            "terminal_id").toString(), 1, 1);
+                    if (maps.size() >0) {
+                        for (Map<String, Object> map : maps) {
+                            String time = DateUtil.dateDiff(map.get("create_date").toString(),DateUtil.getDateFormat(new Date(),
+                                    DateUtil.FULL_TIME_SPLIT_PATTERN), DateUtil.FULL_TIME_SPLIT_PATTERN, "h");
+                            objectMap.put("time", time);
+                            objectMap.put("startTime",map.get("create_date"));
+                        }
+                    }
+                }else if (!StringUtils.isEmpty(status)&&status.equals("X")){
+                    //车辆下线时间
+                    List<Map<String, Object>> maps = deviceOnlineRecordMapper.selectDeviceOnlineRecord(objectMap.get(
+                            "terminal_id").toString(), 2, 1);
+                    if (maps.size() >0) {
+                        for (Map<String, Object> map : maps) {
+                            String time = DateUtil.dateDiff(map.get("create_date").toString(),DateUtil.getDateFormat(new Date(),
+                                    DateUtil.FULL_TIME_SPLIT_PATTERN), DateUtil.FULL_TIME_SPLIT_PATTERN, "h");
+                            objectMap.put("time", time);
+                            objectMap.put("startTime",map.get("create_date"));
+                        }
+                    }
+                }else if (!StringUtils.isEmpty(status)&&status.equals("C")){
+                    //车辆报备时间
+                    List<Map<String, Object>> maps = carStatusChangeRecordMapper.selectCarStatusChangeRecord(objectMap.get(
+                            "terminal_id").toString(), 1);
+                    if (maps.size() >0) {
+                        for (Map<String, Object> map : maps) {
+                            String time = DateUtil.dateDiff(map.get("modify_date").toString(),DateUtil.getDateFormat(new Date(),
+                                    DateUtil.FULL_TIME_SPLIT_PATTERN), DateUtil.FULL_TIME_SPLIT_PATTERN, "h");
+                            objectMap.put("time", time);
+                            objectMap.put("startTime",map.get("modify_date"));
+                        }
+                    }
+                }else {
+                    if (objectMap.get("car_service_status").equals(0)&&(!objectMap.get("carstatus").equals(1)&&!objectMap.get("carstatus").equals(2))){
+                        //车辆上线时间
+                        List<Map<String, Object>> mapsUp = deviceOnlineRecordMapper.selectDeviceOnlineRecord(objectMap.get(
+                                "terminal_id").toString(), 1, 1);
+                        if (mapsUp.size() >0) {
+                            for (Map<String, Object> map : mapsUp) {
+                                String time = DateUtil.dateDiff(map.get("create_date").toString(),DateUtil.getDateFormat(new Date(),
+                                        DateUtil.FULL_TIME_SPLIT_PATTERN), DateUtil.FULL_TIME_SPLIT_PATTERN, "h");
+                                objectMap.put("time", time);
+                                objectMap.put("startTime",map.get("create_date"));
+                            }
+                        }
+                    }else if (objectMap.get("car_service_status").equals(0)&&(objectMap.get("carstatus").equals(1)||objectMap.get("carstatus").equals(2))){
+                        //车辆下线时间
+                        List<Map<String, Object>> mapsDown = deviceOnlineRecordMapper.selectDeviceOnlineRecord(objectMap.get(
+                                "terminal_id").toString(), 2, 1);
+                        if (mapsDown.size() >0) {
+                            for (Map<String, Object> map : mapsDown) {
+                                String time = DateUtil.dateDiff(map.get("create_date").toString(),DateUtil.getDateFormat(new Date(),
+                                        DateUtil.FULL_TIME_SPLIT_PATTERN), DateUtil.FULL_TIME_SPLIT_PATTERN, "h");
+                                objectMap.put("time", time);
+                                objectMap.put("startTime",map.get("create_date"));
+                            }
+                        }
+                    }else {
+                        //车辆报备时间
+                        List<Map<String, Object>> mapsC = carStatusChangeRecordMapper.selectCarStatusChangeRecord(objectMap.get(
+                                "terminal_id").toString(), 1);
+                        if (mapsC.size() >0) {
+                            for (Map<String, Object> map : mapsC) {
+                                String time = DateUtil.dateDiff(map.get("modify_date").toString(),DateUtil.getDateFormat(new Date(),
+                                        DateUtil.FULL_TIME_SPLIT_PATTERN), DateUtil.FULL_TIME_SPLIT_PATTERN, "h");
+                                objectMap.put("time", time);
+                                objectMap.put("startTime",map.get("modify_date"));
+                            }
+                        }
+                    }
+
+
+                }
+            }
+        }
+        return Body.newInstance(list);
+    }
 }

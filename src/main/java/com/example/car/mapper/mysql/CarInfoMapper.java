@@ -14,13 +14,18 @@ import java.util.Map;
  */
 public interface CarInfoMapper {
     List<Map<String, Object>> selectCar(@Param("carnumber") String carnumber, @Param("terminalId") String terminalId,
-                            @Param("sim") String sim);
+                                        @Param("sim") String sim);
 
     List<Map<String, Object>> selectCarByDeptName(@Param("deptname") String deptname);
 
     List<Map<String, Object>> selectCarDetail(@Param("deptid") String deptid, @Param("carnumber") String carnumber,
                                               @Param("terminalid") String terminalid, @Param("status") String status);
+
     CarInfo selectCarOnly(@Param("number") String number);
 
-    Integer selectStatusCount(@Param("id")String id,@Param("status")String status);
+    Integer selectStatusCount(@Param("id") String id, @Param("status") String status);
+
+    List<Map<String, Object>> selectCarDetailPage(@Param("deptid") String deptid, @Param("carnumber") String carnumber,
+                                              @Param("terminalid") String terminalid, @Param("status") String status,
+                                              @Param("index") Integer index, @Param("size") Integer size);
 }

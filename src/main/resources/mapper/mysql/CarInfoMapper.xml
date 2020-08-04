@@ -52,7 +52,27 @@
         </if>
     </select>
     <select id="selectCarOnly" resultType="com.example.car.entity.CarInfo">
-select * from car_info where carnumber=#{number};
+SELECT
+	car.id,
+	car.deptid,
+	car.carnumber,
+	car.province,
+	car.city,
+	car.district,
+	car.cartype,
+	car.remark,
+	car.color,
+	car.engineint,
+	car.vin,
+	car.installtime,
+	car.is_delete AS isDelete,
+	car.create_date AS createDate,
+	car.create_user AS createUser,
+	car.modify_date AS modifyDate,
+	car.modify_user AS modifyUser,
+	car.car_service_status AS carServiceStatus
+FROM
+	car_info car where  car.carnumber=#{number};
     </select>
     <select id="selectStatusCount" resultType="java.lang.Integer">
         SELECT
@@ -78,5 +98,38 @@ select * from car_info where carnumber=#{number};
         <if test="status !=null and status == 'C'.toString()">
             and c.car_service_status != 0
         </if>
+    </select>
+
+    <select id="selectCarDetailPage" resultType="java.util.Map">
+        SELECT
+        *
+        FROM
+        car_info c
+        LEFT JOIN sys_auth_dept a ON a.deptid = c.deptid
+        LEFT JOIN device_info d ON d.carid = c.id
+        LEFT JOIN device_last_position l ON l.carid=c.id
+        WHERE
+        1 = 1
+        <if test="deptid !=null and deptid !=''">
+            AND a.deptid = #{deptid}
+        </if>
+        <if test="carnumber !=null and carnumber!=''">
+            AND c.carnumber= #{carnumber}
+        </if>
+        <if test="terminalid !=null and terminalid!=''">
+            AND c.terminal_id=#{terminalid}
+        </if>
+        <if test="status !=null and status == 'X'.toString()">
+            AND l.carstatus IN (1,2)
+            and c.car_service_status = 0
+        </if>
+        <if test="status !=null and status == 'A'.toString()">
+            AND l.carstatus IN (3,4,5,6,7,8)
+            and c.car_service_status = 0
+        </if>
+        <if test="status !=null and status == 'C'.toString()">
+            and c.car_service_status != 0
+        </if>
+        limit #{index},#{size};
     </select>
 </mapper>

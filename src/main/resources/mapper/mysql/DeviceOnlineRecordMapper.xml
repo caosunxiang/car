@@ -13,5 +13,71 @@
         limit 0,#{size}
     </select>
 
+<select id="selectOnlineRecord" resultType="com.example.car.entity.DeviceOnlineRecord">
+    SELECT
+    record.id,
+    record.terminal_id as terminalId,
+    record.terminal,
+    record.lng,
+    record.lat,
+    record.`status`,
+    record.is_delete as isDelete,
+    record.create_date as createDate
+    FROM
+    device_online_record record
+    LEFT JOIN car_info car ON record.terminal_id = car.terminal_id
+    WHERE
+    1 = 1
+	<if test="time !=null and time !=''">
+        AND
+        TO_DAYS(NOW()) - TO_DAYS(record.create_date)<![CDATA[ <= ]]>#{time}
+    </if>
+		<if test="number !=null and number !=''">
+            AND
+            car.carnumber=#{number}
+        </if>
+    ORDER BY
+    record.create_date asc
+</select>
 
+    <select id="selectOnlineRecordOnly" resultType="com.example.car.entity.DeviceOnlineRecord">
+       SELECT
+        record.id,
+        record.terminal_id as terminalId,
+        record.terminal,
+        record.lng,
+        record.lat,
+        record.`status`,
+        record.is_delete as isDelete,
+        record.create_date as createDate
+        FROM
+        device_online_record record
+        LEFT JOIN car_info car ON record.terminal_id = car.terminal_id
+        WHERE
+        1 = 1
+      ORDER BY record.create_date desc
+			LIMIT 0,1
+    </select>
+
+    <select id="selectEChat" resultType="com.example.car.common.utils.entity.EChatBean">
+        SELECT
+        record.id,
+        record.`status` as  `status`,
+        record.create_date as createDate
+        FROM
+        device_online_record record
+        LEFT JOIN car_info car ON record.terminal_id = car.terminal_id
+        WHERE
+        1 = 1
+        <if test="time !=null and time !=''">
+            AND
+            TO_DAYS(NOW()) - TO_DAYS(record.create_date)<![CDATA[ <= ]]>#{time}
+        </if>
+        <if test="number !=null and number !=''">
+            AND
+            car.carnumber=#{number}
+        </if>
+        ORDER BY
+        record.create_date asc
+    </select>
 </mapper>

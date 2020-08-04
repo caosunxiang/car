@@ -14,4 +14,7 @@ public interface ICarInfoService {
     Body selectCarByDeptName(String deptname);
 
     Body selectCarDetail(String deptid, String carnumber, String terminalid, String status);
+
+    Body selectCarDetailPage(String deptid, String carnumber, String terminalid, String status, Integer index,
+                             Integer size);
 }

@@ -57,6 +57,7 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
     public Body selectAlarmSeverityCount(String startTime, String endTime) {
         Integer count = deviceAlarmSeverityMapper.selectAlarmSeverityCount(startTime, endTime);
         count+=deviceAlarmMapper.selectAlarmCount(null,startTime,endTime,null,2);
+        count+=deviceAlarmMapper.selectAlarmCount(null,startTime,endTime,null,14);
         return Body.newInstance(count);
     }
 

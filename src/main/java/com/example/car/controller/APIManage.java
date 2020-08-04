@@ -14,8 +14,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.car.common.utils.*;
 import com.example.car.common.utils.async.service.AreaSelect;
+import com.example.car.common.utils.entity.EChatBean;
 import com.example.car.common.utils.json.Body;
-import com.example.car.entity.*;
+import com.example.car.entity.CarInfo;
+import com.example.car.entity.DeviceLasposition;
+import com.example.car.entity.SysAuthDept;
 import com.example.car.mapper.mysql.*;
 import com.example.car.mapper.sqlserver.MuckMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.util.unit.DataUnit;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -69,6 +71,10 @@ public class APIManage {
     private CarMileageMapper carMileageMapper;
     @Autowired
     private DeviceLaspositionMapper deviceLaspositionMapper;
+    @Autowired
+    private DeviceOnlineRecordMapper deviceOnlineRecordMapper;
+    @Autowired
+    private CarStatusChangeRecordMapper carStatusChangeRecordMapper;
 
     /**
      * @Description: 接口转发
@@ -243,32 +249,33 @@ public class APIManage {
      * @Date: 2020/6/28 10:43
      */
     @RequestMapping("selectHome")
-    public Body selectHome( Double lat, Double lng, Double distance) {
-        if (StringUtils.isEmpty(lat)||StringUtils.isEmpty(lng)){
-            return  Body.BODY_451;
+    public Body selectHome(Double lat, Double lng, Double distance) {
+        if (StringUtils.isEmpty(lat) || StringUtils.isEmpty(lng)) {
+            return Body.BODY_451;
         }
-        List<SysAuthDept> deptList=sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
-        List<DeviceLasposition> deviceLaspositions=new ArrayList<>();
-        List<DeviceLasposition> list=new ArrayList<>();
+        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
+        List<DeviceLasposition> deviceLaspositions = new ArrayList<>();
+        List<DeviceLasposition> list = new ArrayList<>();
         System.currentTimeMillis();
         for (SysAuthDept sysAuthDept : deptList) {
-            List<DeviceLasposition> deviceLasposition = deviceLaspositionMapper.selectLasposition(sysAuthDept.getDeptid().toString());
+            List<DeviceLasposition> deviceLasposition =
+                    deviceLaspositionMapper.selectLasposition(sysAuthDept.getDeptid().toString());
             for (DeviceLasposition lasposition : deviceLasposition) {
-                if (sysAuthDept.getDeptid().equals(lasposition.getDeptid())){
+                if (sysAuthDept.getDeptid().equals(lasposition.getDeptid())) {
                     lasposition.setDept(sysAuthDept.getDeptname());
                 }
             }
             deviceLaspositions.addAll(deviceLasposition);
         }
         System.currentTimeMillis();
-            for (DeviceLasposition resultDatum : deviceLaspositions) {
-                Double latCar = resultDatum.getLat();
-                Double lngCar = resultDatum.getLng();
-                boolean isIn = Distance.coordinateToDistance(lat, lng, latCar, lngCar, distance);
-                if (!isIn) {
-                    list.add(resultDatum);
-                }
+        for (DeviceLasposition resultDatum : deviceLaspositions) {
+            Double latCar = resultDatum.getLat();
+            Double lngCar = resultDatum.getLng();
+            boolean isIn = Distance.coordinateToDistance(lat, lng, latCar, lngCar, distance);
+            if (!isIn) {
+                list.add(resultDatum);
             }
+        }
         return Body.newInstance(list);
     }
 
@@ -371,6 +378,52 @@ public class APIManage {
         return Body.newInstance(mapList);
     }
 
+    /**
+     * @Description: 折线图
+     * @Param: [number, time]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/8/3 15:58
+     */
+    @RequestMapping("selectEChat")
+    public Body selectEChat(String number, Integer time) {
+        List<EChatBean> list = new ArrayList<>();
+        List<EChatBean> deviceOnlineRecords = deviceOnlineRecordMapper.selectEChat(number, time);
+        for (EChatBean deviceOnlineRecord : deviceOnlineRecords) {
+            if (deviceOnlineRecord.getStatus().equals(1)){
+                deviceOnlineRecord.setType("上线");
+            }else {
+                deviceOnlineRecord.setType("下线");
+            }
+        }
+        List<EChatBean> carStatusChangeRecords = carStatusChangeRecordMapper.selectEChat(number, time);
+        for (EChatBean carStatusChangeRecord : carStatusChangeRecords) {
+            if (carStatusChangeRecord.getStatus().equals(0)){
+                carStatusChangeRecord.setType("正常");
+            }else {
+                carStatusChangeRecord.setType("报备");
+            }
+        }
+        list.addAll(deviceOnlineRecords);
+        list.addAll(carStatusChangeRecords);
+        list.sort((o1, o2) -> Integer.compare(o1.getCreateDate().compareTo(o2.getCreateDate()), 0));
+        return Body.newInstance(list);
+    }
+
+    /** 
+    * @Description: 计算时间差
+    * @Param: [startTime, endTime]
+    * @return: com.example.car.common.utils.json.Body
+    * @Author: 冷酷的苹果
+    * @Date: 2020/8/3 16:21
+    */
+    @RequestMapping("timeDeff")
+    public Body timeDeff(String startTime,String endTime){
+        String time=DateUtil.dateDiff(startTime,endTime,DateUtil.FULL_TIME_SPLIT_PATTERN,"h");
+        return Body.newInstance(time);
+    }
+
+
 
     /**
      * 判断时间是否在时间段内
@@ -398,39 +451,71 @@ public class APIManage {
     }
 
     @RequestMapping("test")
-    public void getTradeno() {
-        List<CarTarget> carTargets=carTargetMapper.selectCarTarget();
-        for (CarTarget carTarget : carTargets) {
-            DeviceLasposition deviceLasposition=deviceLaspositionMapper.selectLaspositionByCarNo(carTarget.getCarNumber());
-            if (StringUtils.isEmpty(deviceLasposition)||StringUtils.isEmpty(deviceLasposition.getCarnumber())){
-                continue;
-            }
-            DeviceAlarmSeverity deviceAlarmSeverity = deviceAlarmSeverityMapper.selectAlarmSeverityTask(null,
-                    deviceLasposition.getCarnumber(), null, "无准运证行驶", "A");
-            if ( Double.parseDouble(deviceLasposition.getSpeed() )> 35.00) {//分行驶和停止两个情况
-                if ( StringUtils.isEmpty(deviceAlarmSeverity)) {//无准运证情况并且没有无证运输的当天记录
-                    DeviceAlarmSeverity deviceAlarmSeverity1 = new DeviceAlarmSeverity();
-                    deviceAlarmSeverity1.setAlarmLng(deviceLasposition.getLng().toString());
-                    deviceAlarmSeverity1.setAlarmLat(deviceLasposition.getLat().toString());
-                    deviceAlarmSeverity1.setAlarmName("无准运证行驶");
-                    deviceAlarmSeverity1.setAlarmStartSpeed(deviceLasposition.getSpeed());
-                    deviceAlarmSeverity1.setCarNumber( deviceLasposition.getCarnumber());
-                    deviceAlarmSeverity1.setAlarmMileage(deviceLasposition.getMileage());
-                    deviceAlarmSeverity1.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
-                            DateUtil.FULL_TIME_SPLIT_PATTERN));
-                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
-                    System.out.println("不好啦！报警了，这个人没有准运证");
-                } else{//无准运证情况但有无证运输的当天记录
-                    deviceAlarmSeverity.setAlarmEndSpeed(deviceLasposition.getSpeed());
-                    deviceAlarmSeverity.setAlarmMileage(deviceLasposition.getMileage());
-                    deviceAlarmSeverity.setAlarmEndTime(DateUtil.getDateFormat(new Date(),
-                            DateUtil.FULL_TIME_SPLIT_PATTERN));
-                    deviceAlarmSeverity.setAlarmEndLat(deviceLasposition.getLat().toString());
-                    deviceAlarmSeverity.setAlarmEndLng(deviceLasposition.getLng().toString());
-                    deviceAlarmSeverityMapper.updateAlarmSeverity(deviceAlarmSeverity);
-                }
-                // }
-            }
-        }
+    public void getTradeno(String number, Integer time, String day) {
+//        long up = 0;
+//        long down = 0;
+//        long other = 0;
+//        Map<String, Long> map = new HashMap<>();
+//        List<DeviceOnlineRecord> deviceOnlineRecords = deviceOnlineRecordMapper.selectOnlineRecord(number, time);
+//        List<CarStatusChangeRecord> carStatusChangeRecords = carStatusChangeRecordMapper.selectCarStatusRecord(number
+//                , time);
+//        CarInfo carInfo = carInfoMapper.selectCarOnly(number);
+//            if (carStatusChangeRecords.size() > 0) {
+//                String temp = day;
+//                for (CarStatusChangeRecord carStatusChangeRecord : carStatusChangeRecords) {
+//                    if (!carInfo.getCarServiceStatus().equals(0)){
+//                        other += DateUtil.datetime(temp, carStatusChangeRecord.getModifyDate(),
+//                                DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+//                        temp = carStatusChangeRecord.getModifyDate();
+//                    }
+//
+//                }
+//                other += DateUtil.datetime(temp, DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN),
+//                        DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+//            } else {
+//                other += DateUtil.datetime(day, DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN),
+//                        DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+//            }
+//        if (deviceOnlineRecords.size() > 0) {
+//            String temp = day;
+//            for (DeviceOnlineRecord deviceOnlineRecord : deviceOnlineRecords) {
+//                if (deviceOnlineRecord.getStatus().equals(2)) {
+//                    up += DateUtil.datetime(temp, deviceOnlineRecord.getCreateDate(),
+//                            DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+//                    temp = deviceOnlineRecord.getCreateDate();
+//                } else {
+//                    down += DateUtil.datetime(temp, deviceOnlineRecord.getCreateDate(), DateUtil
+//                    .FULL_TIME_SPLIT_PATTERN
+//                            , "m");
+//                    temp = deviceOnlineRecord.getCreateDate();
+//                }
+//            }
+//            if (ListUtils.getLastElement(deviceOnlineRecords).getStatus().equals(2)) {
+//                down += DateUtil.datetime(temp, DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN),
+//                        DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+//            } else {
+//                up += DateUtil.datetime(temp, DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN),
+//                        DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+//            }
+//        } else {
+//            DeviceOnlineRecord deviceOnlineRecord = deviceOnlineRecordMapper.selectOnlineRecordOnly();
+//            if (StringUtils.isEmpty(deviceOnlineRecord)) {
+//                up += DateUtil.datetime(day, DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN),
+//                        DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+//            } else {
+//                if (deviceOnlineRecord.getStatus().equals(1)) {
+//                    up += DateUtil.datetime(day, DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN),
+//                            DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+//                } else {
+//                    down += DateUtil.datetime(day, DateUtil.getDateFormat(new Date(), DateUtil
+//                    .FULL_TIME_SPLIT_PATTERN),
+//                            DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+//                }
+//            }
+//        }
+//        map.put("up", up);
+//        map.put("down", down);
+//        map.put("other", other);
+//        return Body.newInstance(map);
     }
 }

@@ -10,4 +10,51 @@
         order by `status`.modify_date desc
         limit 0,#{size}
     </select>
+    <select id="selectCarStatusRecord" resultType="com.example.car.entity.CarStatusChangeRecord">
+        SELECT
+        record.id,
+        record.carid,
+        record.userid,
+        record.prev_status AS prevStatus,
+        record.current_status AS currentStatus,
+        record.modify_date AS modifyDate,
+        record.remark
+        FROM
+        car_status_change_record record
+        LEFT JOIN car_info car ON record.carid = car.id
+        WHERE
+        1 = 1
+        <if test="time !=null and time !=''">
+            AND
+            TO_DAYS(NOW()) -  TO_DAYS(record.modify_date)<![CDATA[ <= ]]>#{time}
+        </if>
+        <if test="number !=null and number !=''">
+            AND
+            car.carnumber=#{number}
+        </if>
+        ORDER BY
+        record.modify_date asc
+    </select>
+
+    <select id="selectEChat" resultType="com.example.car.common.utils.entity.EChatBean">
+        SELECT
+        record.id,
+        record.current_status  as  `status`,
+        record.modify_date AS createDate
+        FROM
+        car_status_change_record record
+        LEFT JOIN car_info car ON record.carid = car.id
+        WHERE
+        1 = 1
+        <if test="time !=null and time !=''">
+            AND
+            TO_DAYS(NOW()) -  TO_DAYS(record.modify_date)<![CDATA[ <= ]]>#{time}
+        </if>
+        <if test="number !=null and number !=''">
+            AND
+            car.carnumber=#{number}
+        </if>
+        ORDER BY
+        record.modify_date asc
+    </select>
 </mapper>
