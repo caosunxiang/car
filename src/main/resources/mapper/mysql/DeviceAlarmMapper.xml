@@ -134,4 +134,77 @@ limit 0,1;
         </if>
         ;
     </select>
+
+    <select id="selectAlarmEChat" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM (SELECT
+COUNT(1)
+FROM
+	device_alarm alarm
+	LEFT JOIN car_info car ON car.terminal_id = alarm.terminal_id
+	WHERE
+	car.deptid=#{deptid}
+	GROUP BY
+	car.carnumber
+)a
+    </select>
+    <select id="selectAlarmCar" resultType="java.lang.String">
+        SELECT
+        car.carnumber
+        FROM
+        device_alarm alarm
+        LEFT JOIN car_info car ON car.terminal_id = alarm.terminal_id
+        WHERE
+	car.deptid=#{deptid}
+	AND alarm.alarm_number IN (2,14)
+        <if test="number !=null and number!=''">
+            AND car.carnumber=#{number}
+        </if>
+        GROUP BY
+        alarm.terminal_id
+    </select>
+
+    <select id="selectEChat" resultType="java.lang.String">
+        SELECT
+        alarm.alarm_number
+        FROM
+        device_alarm alarm
+        LEFT JOIN car_info car ON car.terminal_id = alarm.terminal_id
+        WHERE
+        car.deptid=#{deptid}
+        AND alarm.alarm_number IN (2,14)
+        <if test="number !=null and number!=''">
+            AND car.carnumber=#{number}
+        </if>
+        GROUP BY
+        alarm.alarm_number
+    </select>
+    <select id="selectEChat1" resultType="com.example.car.common.utils.entity.EChatBean3">
+        SELECT
+        car.id,
+        car.deptid,
+        car.carnumber,
+        `set`.alarmname,
+        alarm.start_lat,
+        alarm.start_lon,
+        alarm.end_lat,
+        alarm.end_lon,
+        alarm.start_time,
+        alarm.end_time,
+        alarm.start_speed,
+        alarm.end_speed
+        FROM
+        car_info car
+        LEFT JOIN device_alarm alarm ON alarm.terminal_id = car.terminal_id
+        LEFT JOIN device_alarm_settings `set` ON `set`.alarmnumber=alarm.alarm_number
+        where
+        1=1
+        <if test="number !=null and number !=''">
+        and car.carnumber=#{number }
+        </if>
+        and alarm.alarm_number in (2,14)
+        <if test="time !=null and time !=''">
+        AND TO_DAYS(NOW())-TO_DAYS(alarm.start_time)<![CDATA[ <= ]]>#{time}
+        </if>
+        order by alarm.end_time desc
+    </select>
 </mapper>

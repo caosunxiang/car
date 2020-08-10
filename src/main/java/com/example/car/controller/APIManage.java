@@ -15,8 +15,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.car.common.utils.*;
 import com.example.car.common.utils.async.service.AreaSelect;
 import com.example.car.common.utils.entity.EChatBean;
+import com.example.car.common.utils.entity.EChatBean1;
+import com.example.car.common.utils.entity.EChatBean2;
+import com.example.car.common.utils.entity.EChatBean3;
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.CarInfo;
+import com.example.car.entity.DeviceAlarmSeverity;
 import com.example.car.entity.DeviceLasposition;
 import com.example.car.entity.SysAuthDept;
 import com.example.car.mapper.mysql.*;
@@ -386,43 +390,134 @@ public class APIManage {
      * @Date: 2020/8/3 15:58
      */
     @RequestMapping("selectEChat")
-    public Body selectEChat(String number, Integer time) {
+    public Body selectEChat(String number, String startTime, String endTime) {
+        long up = 0;
+        long down = 0;
+        long other = 0;
+        String temp = startTime;
+        Map<String, Long> map = new HashMap<>();
         List<EChatBean> list = new ArrayList<>();
-        List<EChatBean> deviceOnlineRecords = deviceOnlineRecordMapper.selectEChat(number, time);
+        DeviceLasposition deviceLasposition = deviceLaspositionMapper.selectLaspositionByCarNo(number);
+        CarInfo carInfo = carInfoMapper.selectCarOnly(number);
+        List<EChatBean> deviceOnlineRecords = deviceOnlineRecordMapper.selectEChat(number, startTime, endTime);
         for (EChatBean deviceOnlineRecord : deviceOnlineRecords) {
-            if (deviceOnlineRecord.getStatus().equals(1)){
+            if (deviceOnlineRecord.getStatus().equals(1)) {
                 deviceOnlineRecord.setType("上线");
-            }else {
+            } else {
                 deviceOnlineRecord.setType("下线");
             }
         }
-        List<EChatBean> carStatusChangeRecords = carStatusChangeRecordMapper.selectEChat(number, time);
+        List<EChatBean> carStatusChangeRecords = carStatusChangeRecordMapper.selectEChat(number, startTime, endTime);
         for (EChatBean carStatusChangeRecord : carStatusChangeRecords) {
-            if (carStatusChangeRecord.getStatus().equals(0)){
+            if (carStatusChangeRecord.getStatus().equals(0)) {
                 carStatusChangeRecord.setType("正常");
-            }else {
+                if (deviceLasposition.getCarstatus() == 1 || deviceLasposition.getCarstatus() == 2) {
+                    carStatusChangeRecord.setNowStatus("下线");
+                } else {
+                    carStatusChangeRecord.setNowStatus("上线");
+                }
+            } else {
                 carStatusChangeRecord.setType("报备");
             }
         }
         list.addAll(deviceOnlineRecords);
         list.addAll(carStatusChangeRecords);
         list.sort((o1, o2) -> Integer.compare(o1.getCreateDate().compareTo(o2.getCreateDate()), 0));
-        return Body.newInstance(list);
+        if (list.size() <= 0) {
+            EChatBean eChatBean = new EChatBean();
+            if (carInfo.getCarServiceStatus() == 0) {
+                if (!StringUtils.isEmpty(deviceLasposition)) {
+                    if (deviceLasposition.getCarstatus() == 1 || deviceLasposition.getCarstatus() == 2) {
+                        eChatBean.setNowStatus("下线");
+                    } else {
+                        eChatBean.setNowStatus("上线");
+                    }
+                    list.add(eChatBean);
+                }
+            } else {
+                eChatBean.setType("报备");
+                list.add(eChatBean);
+            }
+        }
+        System.out.println(list.toString());
+        for (EChatBean eChatBean : list) {
+            if (!StringUtils.isEmpty(eChatBean.getType()) && eChatBean.getType().equals("下线")) {
+                if (StringUtils.isEmpty(eChatBean.getCreateDate())) {
+                    up += DateUtil.datetime(temp, endTime, DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+                    temp = endTime;
+                } else {
+                    up += DateUtil.datetime(temp, eChatBean.getCreateDate(), DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+                    temp = eChatBean.getCreateDate();
+                }
+            } else if (!StringUtils.isEmpty(eChatBean.getType()) && eChatBean.getType().equals("上线")) {
+                if (StringUtils.isEmpty(eChatBean.getCreateDate())) {
+                    down += DateUtil.datetime(temp, endTime, DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+                    temp = endTime;
+                } else {
+                    down += DateUtil.datetime(temp, eChatBean.getCreateDate(), DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+                    temp = eChatBean.getCreateDate();
+                }
+            } else if (!StringUtils.isEmpty(eChatBean.getType()) && eChatBean.getType().equals("报备")) {
+                if (StringUtils.isEmpty(eChatBean.getCreateDate())) {
+                    other += DateUtil.datetime(temp, endTime, DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+                    temp = endTime;
+                } else {
+                    other += DateUtil.datetime(temp, eChatBean.getCreateDate(), DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+                    temp = eChatBean.getCreateDate();
+                }
+            } else {
+                if (eChatBean.getNowStatus().equals("下线")) {
+                    if (StringUtils.isEmpty(eChatBean.getCreateDate())) {
+                        down += DateUtil.datetime(temp, endTime, DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+                        temp = endTime;
+                    } else {
+                        down += DateUtil.datetime(temp, eChatBean.getCreateDate(), DateUtil.FULL_TIME_SPLIT_PATTERN,
+                                "m");
+                        temp = eChatBean.getCreateDate();
+                    }
+                } else {
+                    if (StringUtils.isEmpty(eChatBean.getCreateDate())) {
+                        up += DateUtil.datetime(temp, endTime, DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+                        temp = endTime;
+                    } else {
+                        up += DateUtil.datetime(temp, eChatBean.getCreateDate(), DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+                        temp = eChatBean.getCreateDate();
+                    }
+                }
+            }
+        }
+        EChatBean eChatBean = ListUtils.getLastElement(list);
+        if (!StringUtils.isEmpty(eChatBean.getType()) && eChatBean.getType().equals("下线")) {
+            down += DateUtil.datetime(temp, endTime, DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+        } else if (!StringUtils.isEmpty(eChatBean.getType()) && eChatBean.getType().equals("上线")) {
+            up += DateUtil.datetime(temp, endTime, DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+        } else if (!StringUtils.isEmpty(eChatBean.getType()) && eChatBean.getType().equals("报备")) {
+            other += DateUtil.datetime(temp, endTime, DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+        } else {
+            if (eChatBean.getNowStatus().equals("下线")) {
+                down += DateUtil.datetime(temp, endTime, DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+            } else {
+                up += DateUtil.datetime(temp, endTime, DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
+            }
+        }
+        map.put("up", up);
+        map.put("down", down);
+        map.put("other", other);
+        return Body.newInstance(map);
     }
 
-    /** 
-    * @Description: 计算时间差
-    * @Param: [startTime, endTime]
-    * @return: com.example.car.common.utils.json.Body
-    * @Author: 冷酷的苹果
-    * @Date: 2020/8/3 16:21
-    */
+    /**
+     * @Description: 计算时间差
+     * @Param: [startTime, endTime]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/8/3 16:21
+     */
     @RequestMapping("timeDeff")
-    public Body timeDeff(String startTime,String endTime){
-        String time=DateUtil.dateDiff(startTime,endTime,DateUtil.FULL_TIME_SPLIT_PATTERN,"h");
+    public Body timeDeff(String startTime, String endTime) {
+        String time = DateUtil.dateDiff(startTime, endTime, DateUtil.FULL_TIME_SPLIT_PATTERN, "h");
         return Body.newInstance(time);
     }
-
 
 
     /**
@@ -517,5 +612,108 @@ public class APIManage {
 //        map.put("down", down);
 //        map.put("other", other);
 //        return Body.newInstance(map);
+    }
+
+
+    /**
+     * @Description: 报警信息柱状图
+     * @Param: []
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/8/5 18:08
+     */
+    @RequestMapping("EChat")
+    public Body EChat(String startTime, String endTime) {
+        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
+        List<EChatBean1> eChatBean1s = new ArrayList<>();
+        for (SysAuthDept sysAuthDept : deptList) {
+            List<DeviceLasposition> deviceLasposition =
+                    deviceLaspositionMapper.selectLaspositionAlarm(sysAuthDept.getDeptid().toString());
+            List<DeviceAlarmSeverity> alarmSeverity = new ArrayList<>();
+            for (DeviceLasposition deviceLaspositions : deviceLasposition) {
+                if (deviceLaspositions.getCarstatus() == 2 || deviceLaspositions.getCarstatus() == 1) {
+                    DeviceAlarmSeverity deviceAlarmSeverity = deviceAlarmSeverityMapper.selectAlarmSeverityTask(null,
+                            deviceLaspositions.getCarnumber(), null, "GPS不在线", null);
+                    alarmSeverity.add(deviceAlarmSeverity);
+                }
+            }
+            alarmSeverity.addAll(deviceAlarmSeverityMapper.selectAlarmMuck(null, "无准运证行驶"));
+            List<Map<String, Object>> list1 = this.deviceAlarmMapper.selectAlarm(null, startTime, endTime,
+                    sysAuthDept.getDeptid(), 100, 2);
+            list1.addAll(this.deviceAlarmMapper.selectAlarm(null, startTime, endTime, sysAuthDept.getDeptid(), 100,
+                    14));
+            Set<String> strings = new HashSet<>();
+            for (DeviceAlarmSeverity deviceAlarmSeverity : alarmSeverity) {
+                strings.add(deviceAlarmSeverity.getCarNumber());
+            }
+            for (Map<String, Object> deviceAlarmSeverity : list1) {
+                strings.add(deviceAlarmSeverity.get("carnumber").toString());
+            }
+            EChatBean1 eChatBean1 = new EChatBean1();
+            eChatBean1.setDept(sysAuthDept.getDeptname());
+            eChatBean1.setDeptid(sysAuthDept.getDeptid().toString());
+            eChatBean1.setNumber(strings.size());
+            eChatBean1.setDelete(sysAuthDept.getIsDelete());
+            eChatBean1s.add(eChatBean1);
+        }
+        return Body.newInstance(eChatBean1s);
+    }
+
+    /**
+     * @Description: 车辆报警
+     * @Param: [deptid, number]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/8/6 10:11
+     */
+    @RequestMapping("EChat1")
+    public Body EChat1(Long deptid, String number, String startTime, String endTime) {
+        List<EChatBean2> eChatBean2s = new ArrayList<>();
+        List<DeviceLasposition> deviceLasposition =
+                deviceLaspositionMapper.selectposition(deptid.toString(),number);
+        for (DeviceLasposition deviceLaspositions : deviceLasposition) {
+            List<String> alarm = new ArrayList<>();
+            EChatBean2 eChatBean2 = new EChatBean2();
+            eChatBean2.setNumber(deviceLaspositions.getCarnumber());
+            if (deviceLaspositions.getCarstatus() == 2 || deviceLaspositions.getCarstatus() == 1) {
+                DeviceAlarmSeverity deviceAlarmSeverity =
+                        deviceAlarmSeverityMapper.selectAlarmSeverityTask(null,
+                                deviceLaspositions.getCarnumber(), null, "GPS不在线", null);
+                   if (!StringUtils.isEmpty(deviceAlarmSeverity)){
+                       alarm.add("GPS不在线");
+                   }
+            }
+            List<DeviceAlarmSeverity> deviceAlarmSeverities =
+                    deviceAlarmSeverityMapper.selectAlarmMuck(deviceLaspositions.getCarnumber(), "无准运证行驶");
+            if (deviceAlarmSeverities.size() > 0) {
+                alarm.add("无准运证行驶");
+            }
+            List<Map<String, Object>> list1 = this.deviceAlarmMapper.selectAlarm(deviceLaspositions.getCarnumber(),
+                    startTime, endTime, deptid, 100, 2);
+            list1.addAll(this.deviceAlarmMapper.selectAlarm(deviceLaspositions.getCarnumber(), startTime, endTime,
+                    deptid, 100, 14));
+            if (list1.size() > 0) {
+                alarm.add("超速行驶");
+            }
+            eChatBean2.setAlarm(alarm);
+            eChatBean2s.add(eChatBean2);
+        }
+
+        return Body.newInstance(eChatBean2s);
+    }
+
+    /**
+     * @Description: 车辆所有报警
+     * @Param: [number]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/8/6 17:45
+     */
+    @RequestMapping("EChat2")
+    public Body EChat2(String number, Integer time) {
+        List<EChatBean3> list = deviceAlarmMapper.selectEChat1(number,time);
+        list.addAll(deviceAlarmSeverityMapper.selectEChat1(number,time));
+        list.sort((o1, o2) -> Integer.compare(o2.getStart_time().compareTo(o1.getStart_time()), 0));
+        return Body.newInstance(list);
     }
 }

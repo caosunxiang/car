@@ -80,10 +80,11 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         device_alarm_severity
         WHERE
         1 =1
-        <if test="startTime !=null and endTime!=null">
+        <if test="startTime !=null and endTime!=null  and startTime!='' and endTime!=''">
             AND alarm_start_time BETWEEN #{startTime}
             AND #{endTime}
         </if>
+        and alarm_name =#{name}
     </select>
 
     <select id="selectAlarmSeverityTask" resultType="com.example.car.entity.DeviceAlarmSeverity">
@@ -184,7 +185,7 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         <if test="name !=null and name!=''">
             and alarm_name =#{name}
         </if>
-            AND  TO_DAYS(alarm_start_time) = TO_DAYS(NOW())
+        AND TO_DAYS(alarm_start_time) = TO_DAYS(NOW())
         order by alarm_start_time desc
         ) a
         GROUP BY
@@ -231,5 +232,78 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         a.carNumber
         ORDER BY
         a.alarmStartTime DESC
+    </select>
+    <select id="selectAlarmCar" resultType="java.lang.String">
+        SELECT
+        alarm.car_number AS carNumber
+FROM
+	device_alarm_severity alarm
+	LEFT JOIN car_info car ON car.carnumber = alarm.car_number
+WHERE
+	car.deptid = #{deptid}
+	<if test="number != null and number!=''">
+        AND alarm.car_number = #{number}
+    </if>
+GROUP BY
+        carNumber
+    </select>
+    <select id="selectEChat" resultType="java.lang.String">
+        SELECT
+        alarm.alarm_name AS alarmName
+        FROM
+        device_alarm_severity alarm
+        LEFT JOIN car_info car ON car.carnumber = alarm.car_number
+        WHERE
+        car.deptid = #{deptid}
+        <if test="number != null and number!=''">
+            AND alarm.car_number = #{number}
+        </if>
+        GROUP BY
+        alarm.alarm_name
+    </select>
+    <select id="selectEChat1" resultType="com.example.car.common.utils.entity.EChatBean3">
+        SELECT
+        *
+        FROM
+        (
+        select
+        alarm_id AS id,
+        alarm_name AS alarmname,
+        car_number AS carnumber,
+        alarm_start_time AS start_time,
+        alarm_start_speed as start_speed,
+        alarm_end_time AS end_time,
+        alarm_end_speed as end_speed,
+        alarm_end_lat AS end_lat,
+        alarm_end_lng as end_lon,
+        alarm_mileage as alarmMileage,
+        alarm_lat AS start_lat,
+        alarm_lng AS start_lon
+        from device_alarm_severity where
+        1=1
+        <if test="number !=null and number !=''">
+            and car_number =#{number}
+        </if>
+        <if test="time !=null and time !=''">
+            AND TO_DAYS(NOW())-TO_DAYS(alarm_start_time)<![CDATA[ <= ]]>#{time}
+        </if>
+        order by alarm_start_time desc
+        ) a
+        GROUP BY
+        a.carnumber
+        ORDER BY
+        a.start_time DESC
+    </select>
+    <select id="selectAlarmEChat" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM (SELECT
+COUNT(1)
+FROM
+	device_alarm_severity alarm
+	LEFT JOIN car_info car ON car.terminal_id = alarm.terminal_id
+	WHERE
+	car.deptid=#{deptid}
+	GROUP BY
+	car.carnumber
+)a
     </select>
 </mapper>

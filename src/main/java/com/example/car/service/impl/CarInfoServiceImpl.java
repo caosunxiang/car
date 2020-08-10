@@ -170,6 +170,9 @@ public class CarInfoServiceImpl implements ICarInfoService {
                             objectMap.put("time", time);
                             objectMap.put("startTime",map.get("create_date"));
                         }
+                    }else {
+                        objectMap.put("time", "从未上线");
+                        objectMap.put("startTime",null);
                     }
                 }else if (!StringUtils.isEmpty(status)&&status.equals("C")){
                     //车辆报备时间
@@ -207,6 +210,9 @@ public class CarInfoServiceImpl implements ICarInfoService {
                                 objectMap.put("time", time);
                                 objectMap.put("startTime",map.get("create_date"));
                             }
+                        }else{
+                            objectMap.put("time", "从未上线");
+                            objectMap.put("startTime",null);
                         }
                     }else {
                         //车辆报备时间

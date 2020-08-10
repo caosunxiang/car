@@ -105,7 +105,8 @@ public class DateUtil {
             diff = sd.parse(endTime).getTime() - sd.parse(startTime).getTime();
             day = diff / nd;// 计算差多少天
             hour = diff % nd / nh + day * 24;// 计算差多少小时
-            min = diff % nd % nh / nm + day * 24 * 60;// 计算差多少分钟
+            min = diff % nd % nh / nm + hour * 60;// 计算差多少分钟
+            System.out.println(">>>>>>>>>>>>"+min);
             sec = diff % nd % nh % nm / ns;// 计算差多少秒
             // 输出结果
             System.out.println("时间相差：" + day + "天" + (hour - day * 24) + "小时"

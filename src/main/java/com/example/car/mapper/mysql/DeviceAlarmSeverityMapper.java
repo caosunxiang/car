@@ -1,10 +1,12 @@
 package com.example.car.mapper.mysql;
 
+import com.example.car.common.utils.entity.EChatBean3;
 import com.example.car.entity.DeviceAlarmSeverity;
 import io.lettuce.core.dynamic.annotation.Param;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface DeviceAlarmSeverityMapper {
     void insertAlarmSeverity(DeviceAlarmSeverity alarmSeverity);
@@ -18,7 +20,7 @@ public interface DeviceAlarmSeverityMapper {
             , @Param("size") Integer size);
 
     Integer selectAlarmSeverityCount(@Param("startTime") String startTime,
-                             @Param("endTime") String endTime);
+                             @Param("endTime") String endTime,@Param("name")String name);
 
     DeviceAlarmSeverity selectAlarmSeverityTask(@Param("startTime") String startTime, @Param("number") String number,
                             @Param("endTime") String endTime, @Param("name") String name,@Param("day")String day);
@@ -33,4 +35,11 @@ public interface DeviceAlarmSeverityMapper {
     Integer  selectAlarmNowCount();
 
     List<String> selectAlarmName();
+
+    Set<String> selectAlarmCar(@Param("deptid")long deptid, @Param("number")String number);
+
+    List<String >selectEChat(@Param("deptid")long deptid, @Param("number")String number);
+
+    List<EChatBean3>selectEChat1(@Param("number")String number,@Param("time")Integer time);
+
 }

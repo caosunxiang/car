@@ -17,6 +17,6 @@
         select  * from  sys_auth_dept where deptid= #{id}
     </select>
     <select id="selectSysAuthDeptByParent" resultType="com.example.car.entity.SysAuthDept">
-          select  * from  sys_auth_dept where parentid= #{id}
+          select  dept.deptid,dept.deptname,dept.contract,dept.parentid,dept.userid,dept.total,dept.caroffline,dept.longoffline,dept.remark,dept.is_delete AS isDelete from  sys_auth_dept dept where dept.parentid= #{id}
     </select>
 </mapper>

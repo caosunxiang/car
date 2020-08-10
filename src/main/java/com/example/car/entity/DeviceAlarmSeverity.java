@@ -73,5 +73,8 @@ public class DeviceAlarmSeverity {
      */
     private String alarmEndLng;
 
-
+    /**
+     * 机构id
+     */
+    private Long deptid;
 }

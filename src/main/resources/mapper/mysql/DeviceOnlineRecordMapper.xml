@@ -69,9 +69,10 @@
         LEFT JOIN car_info car ON record.terminal_id = car.terminal_id
         WHERE
         1 = 1
-        <if test="time !=null and time !=''">
+        <if test="startTime !=null and endTime!=null and startTime!='' and endTime!=''">
             AND
-            TO_DAYS(NOW()) - TO_DAYS(record.create_date)<![CDATA[ <= ]]>#{time}
+            record.create_date BETWEEN #{startTime}
+            AND #{endTime}
         </if>
         <if test="number !=null and number !=''">
             AND

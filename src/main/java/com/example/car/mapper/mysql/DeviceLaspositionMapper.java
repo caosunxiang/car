@@ -15,4 +15,8 @@ public interface DeviceLaspositionMapper {
    List<DeviceLasposition> selectLasposition(@Param("pid")String pid);
 
    DeviceLasposition selectLaspositionByCarNo(@Param("number")String number);
+
+    List<DeviceLasposition> selectLaspositionAlarm(@Param("pid")String pid);
+
+    List<DeviceLasposition> selectposition(@Param("pid")String pid,@Param("number")String number);
 }

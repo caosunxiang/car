@@ -22,5 +22,5 @@ public interface DeviceOnlineRecordMapper {
 
     DeviceOnlineRecord selectOnlineRecordOnly();
 
-    List<EChatBean> selectEChat(@Param("number")String number, @Param("time")Integer time);
+    List<EChatBean> selectEChat(@Param("number")String number, @Param("startTime")String startTime,@Param("endTime")String endTime);
 }
