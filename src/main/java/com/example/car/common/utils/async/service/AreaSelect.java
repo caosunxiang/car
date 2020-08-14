@@ -12,10 +12,7 @@ package com.example.car.common.utils.async.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.example.car.common.utils.CutString;
-import com.example.car.common.utils.HttpUtils;
-import com.example.car.common.utils.InArea;
-import com.example.car.common.utils.Md5Util;
+import com.example.car.common.utils.*;
 import com.example.car.common.utils.json.Body;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +40,8 @@ public class AreaSelect {
 
     // 这里进行标注为异步任务，在执行此方法的时候，会单独开启线程来执行(并指定线程池的名字)
     @Async("area")
-    public CompletableFuture<List<Map<String, String>>> areaSelect(Double lat1, Double lng1, Double lat2, Double lng2
-            , String startTime, String endTime,List<String> numbers) {
+    public CompletableFuture<List<Map<String, String>>> areaSelect(Double lat1, Double lng1, String startTime,
+                                                                   String endTime, List<String> numbers) {
         List<Map<String, String>> carInArea = new ArrayList<>();
         for (String s : numbers) {
             logger.info("Looking up " + s);
@@ -64,7 +61,7 @@ public class AreaSelect {
                 for (Map<String, Object> resultDatum : resultData) {
                     Double lng = new Double(resultDatum.get("lng").toString());
                     Double lat = new Double(resultDatum.get("lat").toString());
-                    boolean isIn = InArea.isInArea(lat, lng, lat1, lat2, lng1, lng2);
+                    boolean isIn = Distance.coordinateToDistance(lat1, lng1, lat, lng, 5000.00);
                     if (isIn) {
                         Map<String, String> objectMap = new HashMap<>();
                         String carnumber = resultDatum.get("carnumber").toString();

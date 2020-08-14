@@ -37,4 +37,6 @@ public interface DeviceAlarmMapper {
     List<String >selectEChat(@Param("deptid")long deptid, @Param("number")String number);
 
     List<EChatBean3>selectEChat1(@Param("number") String number,@Param("time")Integer time);
+
+    List<EChatBean3>selectTask(@Param("number") String number);
 }

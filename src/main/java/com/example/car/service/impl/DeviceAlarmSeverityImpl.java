@@ -10,6 +10,7 @@
  */
 package com.example.car.service.impl;
 
+import com.example.car.common.utils.entity.EChatBean3;
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.DeviceAlarmSeverity;
 import com.example.car.entity.DeviceLasposition;
@@ -64,27 +65,13 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
 
     @Override
     public Body selectAlarmSeverityCount(String startTime, String endTime) {
-        Integer count = deviceAlarmSeverityMapper.selectAlarmSeverityCount(startTime, endTime, "无准运证行驶");
-        count += deviceAlarmMapper.selectAlarmCount(null, startTime, endTime, null, 2);
-        count += deviceAlarmMapper.selectAlarmCount(null, startTime, endTime, null, 14);
-        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
-        List<DeviceLasposition> deviceLaspositions = new ArrayList<>();
-        for (SysAuthDept sysAuthDept : deptList) {
-            List<DeviceLasposition> deviceLasposition =
-                    laspositionMapper.selectLaspositionAlarm(sysAuthDept.getDeptid().toString());
-            deviceLaspositions.addAll(deviceLasposition);
-        }
-        List<DeviceAlarmSeverity> alarmSeverity = new ArrayList<>();
-        for (DeviceLasposition deviceLasposition : deviceLaspositions) {
-            if (deviceLasposition.getCarstatus() == 2 || deviceLasposition.getCarstatus() == 1) {
-                DeviceAlarmSeverity deviceAlarmSeverity = deviceAlarmSeverityMapper.selectAlarmSeverityTask(null,
-                        deviceLasposition.getCarnumber(), null, "GPS不在线", null);
-                if (!StringUtils.isEmpty(deviceAlarmSeverity)){
-                    alarmSeverity.add(deviceAlarmSeverity);
-                }
-            }
-        }
-        count += alarmSeverity.size();
+        List<EChatBean3> eChatBean3sGps = deviceAlarmSeverityMapper.selectEChat1(null,
+                null, null, null, "A","离线告警");
+        List<EChatBean3> eChatBean3sOther = deviceAlarmSeverityMapper.selectEChat1(null,
+                null, null, null, null,"超速告警");
+        List<EChatBean3> eChatBean3sMuck = deviceAlarmSeverityMapper.selectEChat1(null,
+                null, null, null, null,"无准运证行驶");
+        Integer count =eChatBean3sGps.size()+eChatBean3sOther.size()+eChatBean3sMuck.size();
         return Body.newInstance(count);
     }
 
@@ -97,26 +84,9 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
 
     @Override
     public Body selectAlarmMuck(String number, String name) {
-        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
-        List<DeviceLasposition> deviceLaspositions = new ArrayList<>();
-        for (SysAuthDept sysAuthDept : deptList) {
-            List<DeviceLasposition> deviceLasposition =
-                    laspositionMapper.selectLaspositionAlarm(sysAuthDept.getDeptid().toString());
-            deviceLaspositions.addAll(deviceLasposition);
-        }
-        List<DeviceAlarmSeverity> alarmSeverity = new ArrayList<>();
-        if (name.equals("GPS不在线")) {
-            for (DeviceLasposition deviceLasposition : deviceLaspositions) {
-                if (deviceLasposition.getCarstatus() == 2 || deviceLasposition.getCarstatus() == 1) {
-                    DeviceAlarmSeverity deviceAlarmSeverity = deviceAlarmSeverityMapper.selectAlarmSeverityTask(null,
-                            deviceLasposition.getCarnumber(), null, "GPS不在线", null);
-                    alarmSeverity.add(deviceAlarmSeverity);
-                }
-            }
-            return Body.newInstance(alarmSeverity);
-        } else {
-            alarmSeverity = deviceAlarmSeverityMapper.selectAlarmMuck(number, name);
-            return Body.newInstance(alarmSeverity);
-        }
+        List<EChatBean3> alarmSeverity = deviceAlarmSeverityMapper.selectEChat1(number, null, null,
+                null, "A", name);
+        return Body.newInstance(alarmSeverity);
     }
+
 }

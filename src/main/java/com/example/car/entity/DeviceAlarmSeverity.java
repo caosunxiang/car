@@ -77,4 +77,19 @@ public class DeviceAlarmSeverity {
      * 机构id
      */
     private Long deptid;
+
+    /**
+     * 处理人
+     */
+    private Long handleBy;
+
+    /**
+     * 处理状态
+     */
+    private Long handleType;
+
+    /**
+     * 处理时间
+     */
+    private Long handleTime;
 }

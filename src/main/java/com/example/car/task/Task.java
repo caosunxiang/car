@@ -14,11 +14,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.car.common.utils.DateUtil;
 import com.example.car.common.utils.HttpUtils;
+import com.example.car.common.utils.ListUtils;
 import com.example.car.common.utils.Md5Util;
-import com.example.car.entity.CarTarget;
-import com.example.car.entity.DeviceAlarmSeverity;
-import com.example.car.entity.DeviceLasposition;
-import com.example.car.entity.SysAuthDept;
+import com.example.car.common.utils.entity.EChatBean3;
+import com.example.car.entity.*;
 import com.example.car.mapper.mysql.*;
 import com.example.car.mapper.sqlserver.MuckMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +67,9 @@ public class Task {
     @Autowired
     private CarTargetMapper carTargetMapper;
 
+    @Autowired
+    private DeviceAlarmMapper deviceAlarmMapper;
+
 
     @Scheduled(cron = " * 0/5 * * * ? ")//无证运输存数据库
     public void noMuckIn() throws IOException {
@@ -102,6 +104,7 @@ public class Task {
                             DateUtil.FULL_TIME_SPLIT_PATTERN));
                     deviceAlarmSeverity.setAlarmEndLat(deviceLasposition.getLat().toString());
                     deviceAlarmSeverity.setAlarmEndLng(deviceLasposition.getLng().toString());
+                    deviceAlarmSeverity.setDeptid(deviceLasposition.getDeptid());
                     deviceAlarmSeverityMapper.updateAlarmSeverity(deviceAlarmSeverity);
                 }
                 // }
@@ -160,7 +163,7 @@ public class Task {
         }
         for (DeviceLasposition resultDatum : deviceLaspositions) {
             DeviceAlarmSeverity deviceAlarmSeverity = deviceAlarmSeverityMapper.selectAlarmSeverityTask(null,
-                    resultDatum.getCarnumber(), null, "GPS不在线", null);
+                    resultDatum.getCarnumber(), null, "离线告警", "A");
             if (StringUtils.isEmpty(resultDatum) || StringUtils.isEmpty(resultDatum.getCarnumber())) {
                 continue;
             }
@@ -169,68 +172,79 @@ public class Task {
                     DeviceAlarmSeverity deviceAlarmSeverity1 = new DeviceAlarmSeverity();
                     deviceAlarmSeverity1.setAlarmLng(resultDatum.getLng().toString());
                     deviceAlarmSeverity1.setAlarmLat(resultDatum.getLat().toString());
-                    deviceAlarmSeverity1.setAlarmName("GPS不在线");
+                    deviceAlarmSeverity1.setAlarmName("离线告警");
                     deviceAlarmSeverity1.setAlarmStartSpeed(resultDatum.getSpeed());
                     deviceAlarmSeverity1.setCarNumber(resultDatum.getCarnumber());
                     deviceAlarmSeverity1.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
                             DateUtil.FULL_TIME_SPLIT_PATTERN));
                     deviceAlarmSeverity1.setDeptid(resultDatum.getDeptid());
+                    deviceAlarmSeverity1.setDeptid(resultDatum.getDeptid());
                     deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
-                    System.out.println("不好啦！报警了，这个人GPS不在线");
+                    System.out.println("不好啦！报警了，离线告警");
                 } else {
                     deviceAlarmSeverity.setAlarmEndSpeed(resultDatum.getSpeed());
                     deviceAlarmSeverity.setAlarmEndTime(DateUtil.getDateFormat(new Date(),
                             DateUtil.FULL_TIME_SPLIT_PATTERN));
                     deviceAlarmSeverity.setAlarmEndLat(resultDatum.getLat().toString());
                     deviceAlarmSeverity.setAlarmEndLng(resultDatum.getLng().toString());
+                    deviceAlarmSeverity.setDeptid(resultDatum.getDeptid());
                     deviceAlarmSeverityMapper.updateAlarmSeverity(deviceAlarmSeverity);
                 }
             }
         }
     }
 
-//    /**
-//     * @Description: 检测系统车辆的里程数
-//     * @Param: []
-//     * @return: void
-//     * @Author: 冷酷的苹果
-//     * @Date: 2020/7/24 17:50
-//     */
-//    @Scheduled(cron = " 0 0 1 * * ? ")
-//    public void carMileage() {
-//        String terminals = Task.getCarTerminal();
-//        String address = url + "cmsapi/getTerminalGpsStatus";
-//        String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
-//        System.out.println(sign);
-//        Map<String, String> map = new HashMap<>();
-//        map.put("sign", sign);
-//        map.put("tradeno", tradeno);
-//        map.put("username", username);
-//        map.put("terminal", terminals);
-//        String json = JSON.toJSONString(map);
-//        String result = HttpUtils.doJsonPost(address, json);
-//        JSONObject jsonObject = JSONObject.parseObject(result);
-//        List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
-//        for (Map<String, Object> resultDatum : resultData) {
-//            System.out.println(resultDatum.get("carnumber").toString());
-//            CarMileage carMileage = carMileageMapper.selectByName(resultDatum.get("carnumber").toString());
-//            if (StringUtils.isEmpty(carMileage)) {
-//                CarMileage carMileage1 = new CarMileage();
-//                carMileage1.setCarName(resultDatum.get("carnumber").toString());
-//                carMileage1.setCarMileage(new Double(resultDatum.get("mileage").toString()));
-//                carMileage1.setCarMileageToday(0.0);
-//                carMileageMapper.insertCarMileage(carMileage1);
-//            } else {
-//                if (StringUtils.isEmpty(carMileage.getCarMileage())) {
-//                    carMileage.setCarMileage(0.0);
-//                }
-//                carMileage.setCarMileageToday(Double.parseDouble(resultDatum.get("mileage").toString()) -
-//                carMileage.getCarMileage());
-//                carMileage.setCarMileage(new Double(resultDatum.get("mileage").toString()));
-//                carMileageMapper.updateCarMileage(carMileage);
-//            }
-//        }
-//    }
+    /**
+     * @Description: 超速报警
+     * @Param: []
+     * @return: void
+     * @Author: 冷酷的苹果
+     * @Date: 2020/7/24 17:50
+     */
+    @Scheduled(cron = " * 0/5 * * * ? ")
+    public void overspeed() {
+        System.out.println("开始查询超速");
+        List<SysAuthDept> deptList=sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
+        List<DeviceLasposition> deviceLaspositions=new ArrayList<>();
+        List<DeviceLasposition>overspeed =new ArrayList<>();
+        for (SysAuthDept sysAuthDept : deptList) {
+            List<DeviceLasposition> deviceLasposition = deviceLaspositionMapper.selectLaspositionAlarm(sysAuthDept.getDeptid().toString());
+            deviceLaspositions.addAll(deviceLasposition);
+        }
+        for (DeviceLasposition deviceLasposition : deviceLaspositions) {
+            if (Double.parseDouble(deviceLasposition.getSpeed())>65){
+                overspeed.add(deviceLasposition);
+            }
+        }
+        if (overspeed.size()>0){
+            for (DeviceLasposition deviceLasposition : overspeed) {
+                List<EChatBean3> deviceAlarms=deviceAlarmMapper.selectTask(deviceLasposition.getCarnumber());
+                DeviceAlarmSeverity deviceAlarmSeverity = deviceAlarmSeverityMapper.selectAlarmSeverityTask(null,
+                        deviceLasposition.getCarnumber(), null, "超速告警", "A");
+                if (StringUtils.isEmpty(deviceAlarmSeverity)&&deviceAlarms.size()>0){
+                    DeviceAlarmSeverity deviceAlarmSeverity1 = new DeviceAlarmSeverity();
+                    deviceAlarmSeverity1.setAlarmLng(deviceLasposition.getLng().toString());
+                    deviceAlarmSeverity1.setAlarmLat(deviceLasposition.getLat().toString());
+                    deviceAlarmSeverity1.setAlarmName("超速告警");
+                    deviceAlarmSeverity1.setAlarmStartSpeed(ListUtils.getLastElement(deviceAlarms).getStart_speed());
+                    deviceAlarmSeverity1.setCarNumber(deviceLasposition.getCarnumber());
+                    deviceAlarmSeverity1.setAlarmStartTime(ListUtils.getLastElement(deviceAlarms).getStart_time());
+                    deviceAlarmSeverity1.setAlarmEndTime(deviceAlarms.get(0).getEnd_time());
+                    deviceAlarmSeverity1.setAlarmEndSpeed(deviceAlarms.get(0).getEnd_speed());
+                    deviceAlarmSeverity1.setDeptid(deviceLasposition.getDeptid());
+                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
+                    System.out.println("不好啦！报警了，超速告警");
+                }else if (!StringUtils.isEmpty(deviceAlarmSeverity)&&deviceAlarms.size()>0){
+                    deviceAlarmSeverity.setAlarmEndSpeed(deviceAlarms.get(0).getEnd_speed());
+                    deviceAlarmSeverity.setAlarmEndTime(deviceAlarms.get(0).getEnd_time());
+                    deviceAlarmSeverity.setAlarmEndLat(deviceLasposition.getLat().toString());
+                    deviceAlarmSeverity.setAlarmEndLng(deviceLasposition.getLng().toString());
+                    deviceAlarmSeverity.setDeptid(deviceLasposition.getDeptid());
+                    deviceAlarmSeverityMapper.updateAlarmSeverity(deviceAlarmSeverity);
+                }
+            }
+        }
+    }
 
 
     @Scheduled(cron = " 0 0 1,13 * * ? ")

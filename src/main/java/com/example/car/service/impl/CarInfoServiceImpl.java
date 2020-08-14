@@ -2,7 +2,6 @@ package com.example.car.service.impl;
 
 import com.example.car.common.utils.DateUtil;
 import com.example.car.common.utils.json.Body;
-import com.example.car.entity.CarMileage;
 import com.example.car.mapper.mysql.CarInfoMapper;
 import com.example.car.mapper.mysql.CarMileageMapper;
 import com.example.car.mapper.mysql.CarStatusChangeRecordMapper;

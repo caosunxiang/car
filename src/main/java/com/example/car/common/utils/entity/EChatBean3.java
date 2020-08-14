@@ -34,4 +34,5 @@ public class EChatBean3 {
     private String start_lat;
     private String start_lon;
     private String alarmMileage;
+    private String deptname;
 }

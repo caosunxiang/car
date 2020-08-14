@@ -4,14 +4,14 @@
 
     <insert id="insertAlarmSeverity">
 insert  into  device_alarm_severity
-(alarm_name,car_number,alarm_start_time,alarm_start_speed,alarm_lat,alarm_lng)
-values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLat},#{alarmLng});
+(alarm_name,car_number,alarm_start_time,alarm_start_speed,alarm_lat,alarm_lng,alarm_end_time,alarm_end_speed,deptid)
+values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLat},#{alarmLng},#{alarmEndTime},#{alarmEndSpeed},#{deptid});
     </insert>
 
     <update id="updateAlarmSeverity">
   update    device_alarm_severity set
         alarm_end_time =#{alarmEndTime},alarm_end_speed=#{alarmEndSpeed},alarm_mileage=#{alarmMileage},
-        alarm_end_lat=#{alarmEndLat},alarm_end_lng=#{alarmEndLng}
+        alarm_end_lat=#{alarmEndLat},alarm_end_lng=#{alarmEndLng},deptid=#{deptid}
         where alarm_id =#{alarmId};
     </update>
 
@@ -28,6 +28,9 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         alarm_end_lng as alarmEndLng,
         alarm_mileage as alarmMileage,
         alarm_lat AS start_lat,
+        handle_by AS handleBy,
+        handle_type AS handleType,
+        handle_time AS handleTime,
         alarm_lng AS start_lon
         from device_alarm_severity where
         1=1
@@ -57,6 +60,9 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         alarm_end_lng as alarmEndLng,
         alarm_mileage as alarmMileage,
         alarm_lat AS start_lat,
+        handle_by AS handleBy,
+        handle_type AS handleType,
+        handle_time AS handleTime,
         alarm_lng AS start_lon
         FROM
         device_alarm_severity
@@ -100,6 +106,10 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         alarm_end_lng as alarmEndLng,
         alarm_mileage as alarmMileage,
         alarm_lat AS alarmLat,
+        handle_by AS handleBy,
+        handle_type AS handleType,
+        handle_time AS handleTime,
+        deptid AS deptid,
         alarm_lng AS alarmLng
         from device_alarm_severity where
         1=1
@@ -137,6 +147,9 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         alarm_end_lng as alarmEndLng,
         alarm_mileage as alarmMileage,
         alarm_lat AS alarmLat,
+        handle_by AS handleBy,
+        handle_type AS handleType,
+        handle_time AS handleTime,
         alarm_lng AS alarmLng
 
         from device_alarm_severity where
@@ -176,6 +189,9 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         alarm_end_lng as alarmEndLng,
         alarm_mileage as alarmMileage,
         alarm_lat AS alarmLat,
+        handle_by AS handleBy,
+        handle_type AS handleType,
+        handle_time AS handleTime,
         alarm_lng AS alarmLng
         from device_alarm_severity where
         1=1
@@ -222,6 +238,9 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         alarm_end_lng as alarmEndLng,
         alarm_mileage as alarmMileage,
         alarm_lat AS alarmLat,
+         handle_by AS handleBy,
+        handle_type AS handleType,
+        handle_time AS handleTime,
         alarm_lng AS alarmLng
         from device_alarm_severity where
         1=1
@@ -262,37 +281,44 @@ GROUP BY
         alarm.alarm_name
     </select>
     <select id="selectEChat1" resultType="com.example.car.common.utils.entity.EChatBean3">
-        SELECT
-        *
-        FROM
-        (
         select
-        alarm_id AS id,
-        alarm_name AS alarmname,
-        car_number AS carnumber,
-        alarm_start_time AS start_time,
-        alarm_start_speed as start_speed,
-        alarm_end_time AS end_time,
-        alarm_end_speed as end_speed,
-        alarm_end_lat AS end_lat,
-        alarm_end_lng as end_lon,
-        alarm_mileage as alarmMileage,
-        alarm_lat AS start_lat,
-        alarm_lng AS start_lon
-        from device_alarm_severity where
+        alarm.alarm_id AS id,
+        alarm.alarm_name AS alarmname,
+        alarm.car_number AS carnumber,
+        alarm.alarm_start_time AS start_time,
+        alarm.alarm_start_speed as start_speed,
+        alarm.alarm_end_time AS end_time,
+        alarm.alarm_end_speed as end_speed,
+        alarm.alarm_end_lat AS end_lat,
+        alarm.alarm_end_lng as end_lon,
+        alarm.alarm_mileage as alarmMileage,
+        alarm.alarm_lat AS start_lat,
+        alarm.handle_by AS handleBy,
+        alarm.handle_type AS handleType,
+        alarm.handle_time AS handleTime,
+        dept.deptname AS deptname,
+        alarm.alarm_lng AS start_lon
+        from device_alarm_severity alarm LEFT JOIN sys_auth_dept dept ON dept.deptid=alarm.deptid where
         1=1
         <if test="number !=null and number !=''">
-            and car_number =#{number}
+            and alarm.car_number =#{number}
         </if>
         <if test="time !=null and time !=''">
-            AND TO_DAYS(NOW())-TO_DAYS(alarm_start_time)<![CDATA[ <= ]]>#{time}
+            AND TO_DAYS(NOW())-TO_DAYS(alarm.alarm_end_time)<![CDATA[ <= ]]>#{time}
         </if>
-        order by alarm_start_time desc
-        ) a
-        GROUP BY
-        a.carnumber
-        ORDER BY
-        a.start_time DESC
+        <if test="type !=null and type !=''">
+            and alarm.handle_type =#{type}
+        </if>
+        <if test="deptid !=null and deptid !=''">
+            and alarm.deptid =#{deptid}
+        </if>
+        <if test="day !=null and day !='' and day == 'A'.toString()">
+            and TO_DAYS(alarm.alarm_end_time) = TO_DAYS(NOW())
+        </if>
+        <if test="name !=null and name!=''">
+            and alarm.alarm_name =#{name}
+        </if>
+        order by alarm.alarm_start_time desc
     </select>
     <select id="selectAlarmEChat" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM (SELECT
