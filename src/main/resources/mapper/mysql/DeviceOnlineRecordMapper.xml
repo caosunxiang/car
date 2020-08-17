@@ -34,7 +34,7 @@
     </if>
 		<if test="number !=null and number !=''">
             AND
-            car.carnumber=#{number}
+            car.carnumber LIKE CONCAT('%',#{number},'%')
         </if>
     ORDER BY
     record.create_date asc
@@ -76,7 +76,7 @@
         </if>
         <if test="number !=null and number !=''">
             AND
-            car.carnumber=#{number}
+            car.carnumber LIKE CONCAT('%',#{number},'%')
         </if>
         ORDER BY
         record.create_date asc

@@ -70,6 +70,9 @@ public class Task {
     @Autowired
     private DeviceAlarmMapper deviceAlarmMapper;
 
+    @Autowired
+    private DeviceOnlineRecordMapper deviceOnlineRecordMapper;
+
 
     @Scheduled(cron = " * 0/5 * * * ? ")//无证运输存数据库
     public void noMuckIn() throws IOException {
@@ -155,10 +158,11 @@ public class Task {
     @Scheduled(cron = " * 0/5 * * * ? ")
     public void GPSDownIn() throws IOException {//gps不在线报警存数据库
         System.out.println("开始查询不在线");
-        List<SysAuthDept> deptList=sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
-        List<DeviceLasposition> deviceLaspositions=new ArrayList<>();
+        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
+        List<DeviceLasposition> deviceLaspositions = new ArrayList<>();
         for (SysAuthDept sysAuthDept : deptList) {
-            List<DeviceLasposition> deviceLasposition = deviceLaspositionMapper.selectLaspositionAlarm(sysAuthDept.getDeptid().toString());
+            List<DeviceLasposition> deviceLasposition =
+                    deviceLaspositionMapper.selectLaspositionAlarm(sysAuthDept.getDeptid().toString());
             deviceLaspositions.addAll(deviceLasposition);
         }
         for (DeviceLasposition resultDatum : deviceLaspositions) {
@@ -169,18 +173,32 @@ public class Task {
             }
             if (resultDatum.getCarstatus() == 1 || resultDatum.getCarstatus() == 2) {//分离线状态，在线状态
                 if (StringUtils.isEmpty(deviceAlarmSeverity)) {//离线状态下没有未完成的报警记录
-                    DeviceAlarmSeverity deviceAlarmSeverity1 = new DeviceAlarmSeverity();
-                    deviceAlarmSeverity1.setAlarmLng(resultDatum.getLng().toString());
-                    deviceAlarmSeverity1.setAlarmLat(resultDatum.getLat().toString());
-                    deviceAlarmSeverity1.setAlarmName("离线告警");
-                    deviceAlarmSeverity1.setAlarmStartSpeed(resultDatum.getSpeed());
-                    deviceAlarmSeverity1.setCarNumber(resultDatum.getCarnumber());
-                    deviceAlarmSeverity1.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
-                            DateUtil.FULL_TIME_SPLIT_PATTERN));
-                    deviceAlarmSeverity1.setDeptid(resultDatum.getDeptid());
-                    deviceAlarmSeverity1.setDeptid(resultDatum.getDeptid());
-                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
-                    System.out.println("不好啦！报警了，离线告警");
+                    //车辆下线时间
+                    Long time = 0L;
+                    List<Map<String, Object>> maps =
+                            deviceOnlineRecordMapper.selectDeviceOnlineRecord(resultDatum.getTerminalId().toString(),
+                                    1, 1);
+                    if (maps.size() > 0) {
+                        for (Map<String, Object> map : maps) {
+                            time = DateUtil.datetime(map.get("create_date").toString(),
+                                    DateUtil.getDateFormat(new Date(),
+                                            DateUtil.FULL_TIME_SPLIT_PATTERN), DateUtil.FULL_TIME_SPLIT_PATTERN, "h");
+                        }
+                    }
+                    if (time > 15) {
+                        DeviceAlarmSeverity deviceAlarmSeverity1 = new DeviceAlarmSeverity();
+                        deviceAlarmSeverity1.setAlarmLng(resultDatum.getLng().toString());
+                        deviceAlarmSeverity1.setAlarmLat(resultDatum.getLat().toString());
+                        deviceAlarmSeverity1.setAlarmName("离线告警");
+                        deviceAlarmSeverity1.setAlarmStartSpeed(resultDatum.getSpeed());
+                        deviceAlarmSeverity1.setCarNumber(resultDatum.getCarnumber());
+                        deviceAlarmSeverity1.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
+                                DateUtil.FULL_TIME_SPLIT_PATTERN));
+                        deviceAlarmSeverity1.setDeptid(resultDatum.getDeptid());
+                        deviceAlarmSeverity1.setDeptid(resultDatum.getDeptid());
+                        deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
+                        System.out.println("不好啦！报警了，离线告警");
+                    }
                 } else {
                     deviceAlarmSeverity.setAlarmEndSpeed(resultDatum.getSpeed());
                     deviceAlarmSeverity.setAlarmEndTime(DateUtil.getDateFormat(new Date(),
@@ -204,24 +222,25 @@ public class Task {
     @Scheduled(cron = " * 0/5 * * * ? ")
     public void overspeed() {
         System.out.println("开始查询超速");
-        List<SysAuthDept> deptList=sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
-        List<DeviceLasposition> deviceLaspositions=new ArrayList<>();
-        List<DeviceLasposition>overspeed =new ArrayList<>();
+        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
+        List<DeviceLasposition> deviceLaspositions = new ArrayList<>();
+        List<DeviceLasposition> overspeed = new ArrayList<>();
         for (SysAuthDept sysAuthDept : deptList) {
-            List<DeviceLasposition> deviceLasposition = deviceLaspositionMapper.selectLaspositionAlarm(sysAuthDept.getDeptid().toString());
+            List<DeviceLasposition> deviceLasposition =
+                    deviceLaspositionMapper.selectLaspositionAlarm(sysAuthDept.getDeptid().toString());
             deviceLaspositions.addAll(deviceLasposition);
         }
         for (DeviceLasposition deviceLasposition : deviceLaspositions) {
-            if (Double.parseDouble(deviceLasposition.getSpeed())>65){
+            if (Double.parseDouble(deviceLasposition.getSpeed()) > 65) {
                 overspeed.add(deviceLasposition);
             }
         }
-        if (overspeed.size()>0){
+        if (overspeed.size() > 0) {
             for (DeviceLasposition deviceLasposition : overspeed) {
-                List<EChatBean3> deviceAlarms=deviceAlarmMapper.selectTask(deviceLasposition.getCarnumber());
+                List<EChatBean3> deviceAlarms = deviceAlarmMapper.selectTask(deviceLasposition.getCarnumber());
                 DeviceAlarmSeverity deviceAlarmSeverity = deviceAlarmSeverityMapper.selectAlarmSeverityTask(null,
                         deviceLasposition.getCarnumber(), null, "超速告警", "A");
-                if (StringUtils.isEmpty(deviceAlarmSeverity)&&deviceAlarms.size()>0){
+                if (StringUtils.isEmpty(deviceAlarmSeverity) && deviceAlarms.size() > 0) {
                     DeviceAlarmSeverity deviceAlarmSeverity1 = new DeviceAlarmSeverity();
                     deviceAlarmSeverity1.setAlarmLng(deviceLasposition.getLng().toString());
                     deviceAlarmSeverity1.setAlarmLat(deviceLasposition.getLat().toString());
@@ -234,7 +253,7 @@ public class Task {
                     deviceAlarmSeverity1.setDeptid(deviceLasposition.getDeptid());
                     deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
                     System.out.println("不好啦！报警了，超速告警");
-                }else if (!StringUtils.isEmpty(deviceAlarmSeverity)&&deviceAlarms.size()>0){
+                } else if (!StringUtils.isEmpty(deviceAlarmSeverity) && deviceAlarms.size() > 0) {
                     deviceAlarmSeverity.setAlarmEndSpeed(deviceAlarms.get(0).getEnd_speed());
                     deviceAlarmSeverity.setAlarmEndTime(deviceAlarms.get(0).getEnd_time());
                     deviceAlarmSeverity.setAlarmEndLat(deviceLasposition.getLat().toString());
@@ -250,10 +269,11 @@ public class Task {
     @Scheduled(cron = " 0 0 1,13 * * ? ")
     public void targetCar() {
         carTargetMapper.deleteCarTarget();
-        List<SysAuthDept> deptList=sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
-        List<DeviceLasposition> list=new ArrayList<>();
+        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
+        List<DeviceLasposition> list = new ArrayList<>();
         for (SysAuthDept sysAuthDept : deptList) {
-            List<DeviceLasposition> deviceLasposition = deviceLaspositionMapper.selectLaspositionAlarm(sysAuthDept.getDeptid().toString());
+            List<DeviceLasposition> deviceLasposition =
+                    deviceLaspositionMapper.selectLaspositionAlarm(sysAuthDept.getDeptid().toString());
             list.addAll(deviceLasposition);
         }
         for (DeviceLasposition deviceLasposition : list) {

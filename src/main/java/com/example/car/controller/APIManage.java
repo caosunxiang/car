@@ -54,6 +54,7 @@ public class APIManage {
     private final static String username = "yccgj";
     private final static String tradeno = "20180908180001";
     private final static String url = "http://101.132.236.6:8088/";
+    private  static Integer AlarmCount;
     @Autowired
     private CarTargetMapper carTargetMapper;
     @Autowired
@@ -528,13 +529,10 @@ public class APIManage {
     public static boolean belongCalendar(Date nowTime, Date beginTime, Date endTime) {
         Calendar date = Calendar.getInstance();
         date.setTime(nowTime);
-
         Calendar begin = Calendar.getInstance();
         begin.setTime(beginTime);
-
         Calendar end = Calendar.getInstance();
         end.setTime(endTime);
-
         if (date.after(begin) && date.before(end)) {
             return true;
         } else {
@@ -542,8 +540,8 @@ public class APIManage {
         }
     }
 
-    @RequestMapping("test")
-    public void getTradeno(String number, Integer time, String day) {
+    @RequestMapping("test1")
+    public void getTradeno() {
 //        long up = 0;
 //        long down = 0;
 //        long other = 0;
@@ -610,6 +608,24 @@ public class APIManage {
 //        map.put("other", other);
 //        return Body.newInstance(map);
     }
+
+    @RequestMapping("test")
+    public Body test() {
+        List<EChatBean3> eChatBean3sGps = deviceAlarmSeverityMapper.selectEChat1(null,
+                null, null, null, "A", "离线告警");
+        List<EChatBean3> eChatBean3sOther = deviceAlarmSeverityMapper.selectEChat1(null,
+                null, null, null, null, "超速告警");
+        List<EChatBean3> eChatBean3sMuck = deviceAlarmSeverityMapper.selectEChat1(null,
+                null, null, null, null, "无准运证行驶");
+        Integer count = eChatBean3sGps.size() + eChatBean3sOther.size() + eChatBean3sMuck.size();
+        if (count.equals(AlarmCount)) {
+            return Body.newInstance(0);
+        }else {
+            AlarmCount=count;
+            return Body.newInstance(1);
+        }
+    }
+
 
     /*** 
      * @Description: 在线历史纪录
@@ -679,20 +695,20 @@ public class APIManage {
         List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
         List<EChatBean1> eChatBean1s = new ArrayList<>();
         for (SysAuthDept sysAuthDept : deptList) {
-            Integer num=0;
-            String temp=null;
+            Integer num = 0;
+            String temp = null;
             List<EChatBean3> eChatBean3sGps = deviceAlarmSeverityMapper.selectEChat1(null,
-                    0, null, sysAuthDept.getDeptid().toString(), "A","离线告警");
+                    0, null, sysAuthDept.getDeptid().toString(), "A", "离线告警");
             List<EChatBean3> eChatBean3sOther = deviceAlarmSeverityMapper.selectEChat1(null,
-                    0, null, sysAuthDept.getDeptid().toString(), null,"超速告警");
+                    0, null, sysAuthDept.getDeptid().toString(), null, "超速告警");
             List<EChatBean3> eChatBean3sMuck = deviceAlarmSeverityMapper.selectEChat1(null,
-                    0, null, sysAuthDept.getDeptid().toString(), null,"无准运证行驶");
+                    0, null, sysAuthDept.getDeptid().toString(), null, "无准运证行驶");
             eChatBean3sGps.addAll(eChatBean3sOther);
             eChatBean3sGps.addAll(eChatBean3sMuck);
             for (EChatBean3 eChatBean3 : eChatBean3sGps) {
-                if (!eChatBean3.getCarnumber().equals(temp)){
+                if (!eChatBean3.getCarnumber().equals(temp)) {
                     num++;
-                    temp=eChatBean3.getCarnumber();
+                    temp = eChatBean3.getCarnumber();
                 }
             }
             EChatBean1 eChatBean1 = new EChatBean1();
@@ -756,11 +772,11 @@ public class APIManage {
     @RequestMapping("EChat2")
     public Body EChat2(String number, Integer time, String type, String deptid) {
         List<EChatBean3> eChatBean3sGps = deviceAlarmSeverityMapper.selectEChat1(number,
-                time, type, deptid, "A","离线告警");
+                time, type, deptid, "A", "离线告警");
         List<EChatBean3> eChatBean3sOther = deviceAlarmSeverityMapper.selectEChat1(number,
-                time, type, deptid, null,"超速告警");
+                time, type, deptid, null, "超速告警");
         List<EChatBean3> eChatBean3sMuck = deviceAlarmSeverityMapper.selectEChat1(number,
-                time, type, deptid, null,"无准运证行驶");
+                time, type, deptid, null, "无准运证行驶");
         eChatBean3sGps.addAll(eChatBean3sOther);
         eChatBean3sGps.addAll(eChatBean3sMuck);
         return Body.newInstance(eChatBean3sGps);

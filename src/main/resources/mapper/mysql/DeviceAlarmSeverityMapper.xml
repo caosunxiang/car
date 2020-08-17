@@ -39,7 +39,7 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
             AND #{endTime}
         </if>
         <if test="number !=null and number!=''">
-            and car_number =#{number}
+            and car_number LIKE CONCAT('%',#{number},'%')
         </if>
         <if test="name !=null and name!=''">
             and alarm_name =#{name}
@@ -73,7 +73,7 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
             AND #{endTime}
         </if>
         <if test="number !=null and number!=''">
-            and car_number =#{number}
+            and car_number LIKE CONCAT('%',#{number},'%')
         </if>
         order by alarm_start_time desc
         limit 0,#{size}
@@ -118,7 +118,7 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
             AND #{endTime}
         </if>
         <if test="number !=null and number!=''">
-            and car_number =#{number}
+            and car_number LIKE CONCAT('%',#{number},'%')
         </if>
         <if test="name !=null and name!=''">
             and alarm_name =#{name}
@@ -159,7 +159,7 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
             AND #{endTime}
         </if>
         <if test="number !=null and number!=''">
-            and car_number =#{number}
+            and car_number LIKE CONCAT('%',#{number},'%')
         </if>
         <if test="name != null and name!=''">
             and alarm_name =#{name}
@@ -196,7 +196,7 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         from device_alarm_severity where
         1=1
         <if test="number !=null and number !=''">
-            and car_number =#{number}
+            and car_number LIKE CONCAT('%',#{number},'%')
         </if>
         <if test="name !=null and name!=''">
             and alarm_name =#{name}
@@ -261,7 +261,7 @@ FROM
 WHERE
 	car.deptid = #{deptid}
 	<if test="number != null and number!=''">
-        AND alarm.car_number = #{number}
+        AND alarm.car_number LIKE CONCAT('%',#{number},'%')
     </if>
 GROUP BY
         carNumber
@@ -275,7 +275,7 @@ GROUP BY
         WHERE
         car.deptid = #{deptid}
         <if test="number != null and number!=''">
-            AND alarm.car_number = #{number}
+            AND alarm.car_number LIKE CONCAT('%',#{number},'%')
         </if>
         GROUP BY
         alarm.alarm_name
@@ -301,7 +301,7 @@ GROUP BY
         from device_alarm_severity alarm LEFT JOIN sys_auth_dept dept ON dept.deptid=alarm.deptid where
         1=1
         <if test="number !=null and number !=''">
-            and alarm.car_number =#{number}
+            and alarm.car_number LIKE CONCAT('%',#{number},'%')
         </if>
         <if test="time !=null and time !=''">
             AND TO_DAYS(NOW())-TO_DAYS(alarm.alarm_end_time)<![CDATA[ <= ]]>#{time}

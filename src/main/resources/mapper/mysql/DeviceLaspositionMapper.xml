@@ -5,7 +5,7 @@
 select  * from device_last_position where deptid =#{pid}
 </select>
     <select id="selectLaspositionByCarNo" resultType="com.example.car.entity.DeviceLasposition">
-        select  * from device_last_position where carnumber=#{number }
+        select  * from device_last_position where carnumber LIKE CONCAT('%',#{number},'%')
     </select>
     <select id="selectLaspositionAlarm" resultType="com.example.car.entity.DeviceLasposition">
 SELECT
@@ -27,7 +27,7 @@ WHERE
 	car.car_service_status = 0
 	and last.deptid =#{pid}
 	<if test="number !=null and number !=''">
-        and last.carnumber#{number }
+        and last.carnumber LIKE CONCAT('%',#{number},'%')
     </if>
     </select>
 

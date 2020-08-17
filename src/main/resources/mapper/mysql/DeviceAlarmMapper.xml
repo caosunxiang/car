@@ -157,7 +157,7 @@ FROM
 	car.deptid=#{deptid}
 	AND alarm.alarm_number IN (2,14)
         <if test="number !=null and number!=''">
-            AND car.carnumber=#{number}
+            AND car.carnumber LIKE CONCAT('%',#{number},'%')
         </if>
         GROUP BY
         alarm.terminal_id
@@ -173,7 +173,7 @@ FROM
         car.deptid=#{deptid}
         AND alarm.alarm_number IN (2,14)
         <if test="number !=null and number!=''">
-            AND car.carnumber=#{number}
+            AND car.carnumber LIKE CONCAT('%',#{number},'%')
         </if>
         GROUP BY
         alarm.alarm_number
@@ -199,7 +199,7 @@ FROM
         where
         1=1
         <if test="number !=null and number !=''">
-        and car.carnumber=#{number }
+        and car.carnumber LIKE CONCAT('%',#{number},'%')
         </if>
         and alarm.alarm_number in (2,14)
         <if test="time !=null and time !=''">
@@ -228,7 +228,7 @@ FROM
         where
         1=1
         <if test="number !=null and number !=''">
-            and car.carnumber=#{number }
+            and car.carnumber LIKE CONCAT('%',#{number},'%')
         </if>
         and alarm.alarm_number in (2,14)
             AND TO_DAYS(NOW())<![CDATA[ = ]]>TO_DAYS(alarm.start_time)

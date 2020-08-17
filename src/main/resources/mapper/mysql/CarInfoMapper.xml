@@ -34,7 +34,7 @@
             AND a.deptid = #{deptid}
         </if>
         <if test="carnumber !=null and carnumber!=''">
-            AND c.carnumber= #{carnumber}
+            AND c.carnumber LIKE CONCAT('%',#{carnumber},'%')
         </if>
         <if test="terminalid !=null and terminalid!=''">
             AND c.terminal_id=#{terminalid}
@@ -72,7 +72,7 @@ SELECT
 	car.modify_user AS modifyUser,
 	car.car_service_status AS carServiceStatus
 FROM
-	car_info car where  car.carnumber=#{number};
+	car_info car where  car.carnumber LIKE CONCAT('%',#{number},'%');
     </select>
     <select id="selectStatusCount" resultType="java.lang.Integer">
         SELECT
@@ -114,7 +114,7 @@ FROM
             AND a.deptid = #{deptid}
         </if>
         <if test="carnumber !=null and carnumber!=''">
-            AND c.carnumber= #{carnumber}
+            AND c.carnumber LIKE CONCAT('%',#{carnumber},'%')
         </if>
         <if test="terminalid !=null and terminalid!=''">
             AND c.terminal_id=#{terminalid}
