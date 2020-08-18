@@ -9,7 +9,7 @@ select  * from device_last_position where deptid =#{pid}
     </select>
     <select id="selectLaspositionAlarm" resultType="com.example.car.entity.DeviceLasposition">
 SELECT
-	last.*
+	last.*,last.terminal_id AS terminalId
 FROM
 	device_last_position last
 	LEFT JOIN car_info car ON last.carnumber = car.carnumber

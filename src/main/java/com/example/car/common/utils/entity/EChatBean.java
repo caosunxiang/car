@@ -32,4 +32,6 @@ public class EChatBean {
     private String type;
 
     private String nowStatus;
+
+    private String endTime;
 }

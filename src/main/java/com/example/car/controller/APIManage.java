@@ -679,6 +679,26 @@ public class APIManage {
                 list.add(eChatBean);
             }
         }
+        if (list.size()>1){
+            for (int i = 0; i <list.size() ; i++) {
+              if (i==list.size()-1){
+                    list.get(list.size()-1).setEndTime(endTime);
+                }else {
+                    list.get(i).setEndTime(list.get(i+1).getCreateDate());
+                }
+            }
+            EChatBean eChatBean=new EChatBean();
+            eChatBean.setCreateDate(startTime);
+            eChatBean.setEndTime(list.get(0).getCreateDate());
+            if (list.get(0).getStatus()==1){
+                eChatBean.setType("下线");
+                eChatBean.setStatus(2);
+            }else {
+                eChatBean.setType("上线");
+                eChatBean.setStatus(1);
+            }
+            list.add(0,eChatBean);
+        }
         return Body.newInstance(list);
     }
 
