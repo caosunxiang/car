@@ -5,7 +5,7 @@
 insert into car_target (car_number) values (#{carNumber})
     </insert>
     <select id="selectCarTarget" resultType="com.example.car.entity.CarTarget">
-        select  * from car_target
+       select  id,car_number AS carNumber from car_target
     </select>
     <delete id="deleteCarTarget">
         delete from car_target

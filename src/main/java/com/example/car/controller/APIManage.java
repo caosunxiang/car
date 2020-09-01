@@ -54,23 +54,17 @@ public class APIManage {
     private final static String username = "yccgj";
     private final static String tradeno = "20180908180001";
     private final static String url = "http://101.132.236.6:8088/";
-    private  static Integer AlarmCount;
-    @Autowired
-    private CarTargetMapper carTargetMapper;
+    private static Integer AlarmCount;
     @Autowired
     private CarInfoMapper carInfoMapper;
     @Autowired
     private SysAuthDeptMapper sysAuthDeptMapper;
-    @Autowired
-    private MuckMapper muckMapper;
     @Autowired
     private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
     @Autowired
     private DeviceAlarmMapper deviceAlarmMapper;
     @Autowired
     private AreaSelect areaSelect;
-    @Autowired
-    private CarMileageMapper carMileageMapper;
     @Autowired
     private DeviceLaspositionMapper deviceLaspositionMapper;
     @Autowired
@@ -93,6 +87,52 @@ public class APIManage {
         return HttpUtils.doJsonPost(address, json);
     }
 
+
+    /**
+     * @Description: 历史轨迹
+     * @Param: []
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/6/16 12:00
+     */
+    @RequestMapping("carRecord")
+    public Body carRecord(String carnumber, String startTime,
+                          String endTime) {
+        String address = url + "cmsapi/getHistoryTrack";
+        String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
+        Map<String, String> map = new HashMap<>();
+        map.put("carnumber", carnumber);
+        map.put("endTime", endTime);
+        map.put("sign", sign);
+        map.put("startTime", startTime);
+        map.put("tradeno", tradeno);
+        map.put("username", username);
+        String json = JSON.toJSONString(map);
+        String result = HttpUtils.httpPostRaw(address, json, null, "UTF-8");
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        List<Map<String, Object>> list = (List<Map<String, Object>>) jsonObject.get("resultData");
+        if (list.size() > 0) {
+            String lat = list.get(0).get("lat").toString();
+            String lng = list.get(0).get("lng").toString();
+            List<Map<String, Object>> list1 = new ArrayList<>();
+            list1.add(list.get(0));
+            for (int i = 0; i < list.size(); i++) {
+                if (i != list.size() - 1) {
+                    if(!list.get(i + 1).get("lat").equals(0)&&!list.get(i + 1).get("lng").equals(0)){
+                        if (!lat.equals(list.get(i + 1).get("lat").toString()) || !lng.equals(list.get(i + 1).get("lng").toString())) {
+                            list1.add(list.get(i + 1));
+                            lat = list.get(i + 1).get("lat").toString();
+                            lng = list.get(i + 1).get("lng").toString();
+                        }
+                    }
+                }
+            }
+           // list.sort((o1, o2) -> Integer.compare(o1.get("createtime").toString().compareTo(o2.get("createtime").toString()), 0));
+            System.out.println(list1.toString());
+            return Body.newInstance(list1);
+        }
+        return Body.newInstance(list);
+    }
 
     /**
      * @Description: 报警信息处理
@@ -406,35 +446,43 @@ public class APIManage {
             }
         }
         List<EChatBean> carStatusChangeRecords = carStatusChangeRecordMapper.selectEChat(number, startTime, endTime);
-        for (EChatBean carStatusChangeRecord : carStatusChangeRecords) {
-            if (carStatusChangeRecord.getStatus().equals(0)) {
-                carStatusChangeRecord.setType("正常");
-                if (deviceLasposition.getCarstatus() == 1 || deviceLasposition.getCarstatus() == 2) {
-                    carStatusChangeRecord.setNowStatus("下线");
-                } else {
-                    carStatusChangeRecord.setNowStatus("上线");
-                }
-            } else {
-                carStatusChangeRecord.setType("报备");
-            }
-        }
-        list.addAll(deviceOnlineRecords);
-        list.addAll(carStatusChangeRecords);
-        list.sort((o1, o2) -> Integer.compare(o1.getCreateDate().compareTo(o2.getCreateDate()), 0));
-        if (list.size() <= 0) {
+        if (carInfo.getCarServiceStatus() != 0 && carStatusChangeRecords.size() <= 0) {
             EChatBean eChatBean = new EChatBean();
-            if (carInfo.getCarServiceStatus() == 0) {
-                if (!StringUtils.isEmpty(deviceLasposition)) {
+            eChatBean.setType("报备");
+            eChatBean.setEndTime(endTime);
+            eChatBean.setCreateDate(startTime);
+            list.add(eChatBean);
+        } else {
+            for (EChatBean carStatusChangeRecord : carStatusChangeRecords) {
+                if (carStatusChangeRecord.getStatus().equals(0)) {
+                    carStatusChangeRecord.setType("正常");
                     if (deviceLasposition.getCarstatus() == 1 || deviceLasposition.getCarstatus() == 2) {
-                        eChatBean.setNowStatus("下线");
+                        carStatusChangeRecord.setNowStatus("下线");
                     } else {
-                        eChatBean.setNowStatus("上线");
+                        carStatusChangeRecord.setNowStatus("上线");
                     }
+                } else {
+                    carStatusChangeRecord.setType("报备");
+                }
+            }
+            list.addAll(deviceOnlineRecords);
+            list.addAll(carStatusChangeRecords);
+            list.sort((o1, o2) -> Integer.compare(o1.getCreateDate().compareTo(o2.getCreateDate()), 0));
+            if (list.size() <= 0) {
+                EChatBean eChatBean = new EChatBean();
+                if (carInfo.getCarServiceStatus() == 0) {
+                    if (!StringUtils.isEmpty(deviceLasposition)) {
+                        if (deviceLasposition.getCarstatus() == 1 || deviceLasposition.getCarstatus() == 2) {
+                            eChatBean.setNowStatus("下线");
+                        } else {
+                            eChatBean.setNowStatus("上线");
+                        }
+                        list.add(eChatBean);
+                    }
+                } else {
+                    eChatBean.setType("报备");
                     list.add(eChatBean);
                 }
-            } else {
-                eChatBean.setType("报备");
-                list.add(eChatBean);
             }
         }
         System.out.println(list.toString());
@@ -620,8 +668,8 @@ public class APIManage {
         Integer count = eChatBean3sGps.size() + eChatBean3sOther.size() + eChatBean3sMuck.size();
         if (count.equals(AlarmCount)) {
             return Body.newInstance(0);
-        }else {
-            AlarmCount=count;
+        } else {
+            AlarmCount = count;
             return Body.newInstance(1);
         }
     }
@@ -648,57 +696,71 @@ public class APIManage {
             }
         }
         List<EChatBean> carStatusChangeRecords = carStatusChangeRecordMapper.selectEChat(number, startTime, endTime);
-        for (EChatBean carStatusChangeRecord : carStatusChangeRecords) {
-            if (carStatusChangeRecord.getStatus().equals(0)) {
-                carStatusChangeRecord.setType("正常");
-                if (deviceLasposition.getCarstatus() == 1 || deviceLasposition.getCarstatus() == 2) {
-                    carStatusChangeRecord.setNowStatus("下线");
-                } else {
-                    carStatusChangeRecord.setNowStatus("上线");
-                }
-            } else {
-                carStatusChangeRecord.setType("报备");
-            }
-        }
-        list.addAll(deviceOnlineRecords);
-        list.addAll(carStatusChangeRecords);
-        list.sort((o1, o2) -> Integer.compare(o1.getCreateDate().compareTo(o2.getCreateDate()), 0));
-        if (list.size() <= 0) {
+        if (carInfo.getCarServiceStatus() != 0 && carStatusChangeRecords.size() <= 0) {
             EChatBean eChatBean = new EChatBean();
-            if (carInfo.getCarServiceStatus() == 0) {
-                if (!StringUtils.isEmpty(deviceLasposition)) {
+            eChatBean.setType("报备");
+            eChatBean.setEndTime(endTime);
+            eChatBean.setCreateDate(startTime);
+            list.add(eChatBean);
+        } else {
+            for (EChatBean carStatusChangeRecord : carStatusChangeRecords) {
+                if (carStatusChangeRecord.getStatus().equals(0)) {
+                    carStatusChangeRecord.setType("正常");
                     if (deviceLasposition.getCarstatus() == 1 || deviceLasposition.getCarstatus() == 2) {
-                        eChatBean.setNowStatus("下线");
+                        carStatusChangeRecord.setNowStatus("下线");
                     } else {
-                        eChatBean.setNowStatus("上线");
+                        carStatusChangeRecord.setNowStatus("上线");
                     }
+                } else {
+                    carStatusChangeRecord.setType("报备");
+                }
+            }
+            list.addAll(deviceOnlineRecords);
+            list.addAll(carStatusChangeRecords);
+            if (list.size() <= 0) {
+                EChatBean eChatBean = new EChatBean();
+                if (carInfo.getCarServiceStatus() == 0) {
+                    if (!StringUtils.isEmpty(deviceLasposition)) {
+                        if (deviceLasposition.getCarstatus() == 1 || deviceLasposition.getCarstatus() == 2) {
+                            eChatBean.setNowStatus("下线");
+                        } else {
+                            eChatBean.setNowStatus("上线");
+                        }
+                        list.add(eChatBean);
+                    }
+                } else {
+                    eChatBean.setType("报备");
                     list.add(eChatBean);
                 }
-            } else {
-                eChatBean.setType("报备");
-                list.add(eChatBean);
             }
         }
-        if (list.size()>1){
-            for (int i = 0; i <list.size() ; i++) {
-              if (i==list.size()-1){
-                    list.get(list.size()-1).setEndTime(endTime);
-                }else {
-                    list.get(i).setEndTime(list.get(i+1).getCreateDate());
+
+        if (list.size() != 1) {
+            for (int i = 0; i < list.size(); i++) {
+                if (i == list.size() - 1) {
+                    list.get(list.size() - 1).setEndTime(endTime);
+                } else {
+                    list.get(i).setEndTime(list.get(i + 1).getCreateDate());
                 }
             }
-            EChatBean eChatBean=new EChatBean();
+            EChatBean eChatBean = new EChatBean();
             eChatBean.setCreateDate(startTime);
             eChatBean.setEndTime(list.get(0).getCreateDate());
-            if (list.get(0).getStatus()==1){
-                eChatBean.setType("下线");
-                eChatBean.setStatus(2);
-            }else {
-                eChatBean.setType("上线");
-                eChatBean.setStatus(1);
+            if (!StringUtils.isEmpty(list.get(0).getStatus())) {
+                if (list.get(0).getStatus() == 1) {
+                    eChatBean.setType("下线");
+                    eChatBean.setStatus(2);
+                } else {
+                    eChatBean.setType("上线");
+                    eChatBean.setStatus(1);
+                }
             }
-            list.add(0,eChatBean);
+            list.add(0, eChatBean);
+        } else {
+            list.get(0).setCreateDate(startTime);
+            list.get(0).setEndTime(endTime);
         }
+        list.sort((o1, o2) -> Integer.compare(o2.getCreateDate().compareTo(o1.getCreateDate()), 0));
         return Body.newInstance(list);
     }
 
@@ -715,26 +777,22 @@ public class APIManage {
         List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
         List<EChatBean1> eChatBean1s = new ArrayList<>();
         for (SysAuthDept sysAuthDept : deptList) {
-            Integer num = 0;
-            String temp = null;
             List<EChatBean3> eChatBean3sGps = deviceAlarmSeverityMapper.selectEChat1(null,
-                    0, null, sysAuthDept.getDeptid().toString(), "A", "离线告警");
+                    null, null, sysAuthDept.getDeptid().toString(), "A", "离线告警");
             List<EChatBean3> eChatBean3sOther = deviceAlarmSeverityMapper.selectEChat1(null,
-                    0, null, sysAuthDept.getDeptid().toString(), null, "超速告警");
+                    1, null, sysAuthDept.getDeptid().toString(), null, "超速告警");
             List<EChatBean3> eChatBean3sMuck = deviceAlarmSeverityMapper.selectEChat1(null,
-                    0, null, sysAuthDept.getDeptid().toString(), null, "无准运证行驶");
+                    1, null, sysAuthDept.getDeptid().toString(), null, "无准运证行驶");
             eChatBean3sGps.addAll(eChatBean3sOther);
             eChatBean3sGps.addAll(eChatBean3sMuck);
+            Set<String> str = new HashSet<>();
             for (EChatBean3 eChatBean3 : eChatBean3sGps) {
-                if (!eChatBean3.getCarnumber().equals(temp)) {
-                    num++;
-                    temp = eChatBean3.getCarnumber();
-                }
+                str.add(eChatBean3.getCarnumber());
             }
             EChatBean1 eChatBean1 = new EChatBean1();
             eChatBean1.setDept(sysAuthDept.getDeptname());
             eChatBean1.setDeptid(sysAuthDept.getDeptid().toString());
-            eChatBean1.setNumber(num);
+            eChatBean1.setNumber(str.size());
             eChatBean1.setDelete(sysAuthDept.getIsDelete());
             eChatBean1s.add(eChatBean1);
         }
@@ -778,7 +836,6 @@ public class APIManage {
             eChatBean2.setAlarm(alarm);
             eChatBean2s.add(eChatBean2);
         }
-
         return Body.newInstance(eChatBean2s);
     }
 
@@ -792,7 +849,7 @@ public class APIManage {
     @RequestMapping("EChat2")
     public Body EChat2(String number, Integer time, String type, String deptid) {
         List<EChatBean3> eChatBean3sGps = deviceAlarmSeverityMapper.selectEChat1(number,
-                time, type, deptid, "A", "离线告警");
+                time, type, deptid, null, "离线告警");
         List<EChatBean3> eChatBean3sOther = deviceAlarmSeverityMapper.selectEChat1(number,
                 time, type, deptid, null, "超速告警");
         List<EChatBean3> eChatBean3sMuck = deviceAlarmSeverityMapper.selectEChat1(number,
@@ -804,7 +861,7 @@ public class APIManage {
 
     /**
      * @Description: 所有车队的车辆情况
-     * @Param: []
+     * @Param:
      * @return: com.example.car.common.utils.json.Body
      * @Author: 冷酷的苹果
      * @Date: 2020/8/12 14:03

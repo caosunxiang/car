@@ -10,14 +10,13 @@
  */
 package com.example.car.task;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.example.car.common.utils.DateUtil;
-import com.example.car.common.utils.HttpUtils;
 import com.example.car.common.utils.ListUtils;
-import com.example.car.common.utils.Md5Util;
 import com.example.car.common.utils.entity.EChatBean3;
-import com.example.car.entity.*;
+import com.example.car.entity.CarTarget;
+import com.example.car.entity.DeviceAlarmSeverity;
+import com.example.car.entity.DeviceLasposition;
+import com.example.car.entity.SysAuthDept;
 import com.example.car.mapper.mysql.*;
 import com.example.car.mapper.sqlserver.MuckMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +41,6 @@ import java.util.*;
 @Configurable             //注入bean
 @EnableScheduling         //开启计划任务
 public class Task {
-    private final static String username = "yccgj";
-    private final static String tradeno = "20180908180001";
-    private final static String url = "http://101.132.236.6:8088/";
 
     @Autowired
     private SysAuthDeptMapper sysAuthDeptMapper;
@@ -81,11 +77,8 @@ public class Task {
         for (CarTarget carTarget : carTargets) {
             DeviceLasposition deviceLasposition =
                     deviceLaspositionMapper.selectLaspositionByCarNo(carTarget.getCarNumber());
-            if (StringUtils.isEmpty(deviceLasposition) || StringUtils.isEmpty(deviceLasposition.getCarnumber())) {
-                continue;
-            }
             DeviceAlarmSeverity deviceAlarmSeverity = deviceAlarmSeverityMapper.selectAlarmSeverityTask(null,
-                    deviceLasposition.getCarnumber(), null, "无准运证行驶", "A");
+                    carTarget.getCarNumber(), null, "无准运证行驶", "A");
             if (Double.parseDouble(deviceLasposition.getSpeed()) > 35.00) {//分行驶和停止两个情况
                 if (StringUtils.isEmpty(deviceAlarmSeverity)) {//无准运证情况并且没有无证运输的当天记录
                     DeviceAlarmSeverity deviceAlarmSeverity1 = new DeviceAlarmSeverity();
@@ -168,16 +161,13 @@ public class Task {
         for (DeviceLasposition resultDatum : deviceLaspositions) {
             DeviceAlarmSeverity deviceAlarmSeverity = deviceAlarmSeverityMapper.selectAlarmSeverityTask(null,
                     resultDatum.getCarnumber(), null, "离线告警", "A");
-            if (StringUtils.isEmpty(resultDatum) || StringUtils.isEmpty(resultDatum.getCarnumber())) {
-                continue;
-            }
             if (resultDatum.getCarstatus() == 1 || resultDatum.getCarstatus() == 2) {//分离线状态，在线状态
                 if (StringUtils.isEmpty(deviceAlarmSeverity)) {//离线状态下没有未完成的报警记录
                     //车辆下线时间
                     Long time = 0L;
                     List<Map<String, Object>> maps =
                             deviceOnlineRecordMapper.selectDeviceOnlineRecord(resultDatum.getTerminalId().toString(),
-                                    1, 1);
+                                    2, 1);
                     if (maps.size() > 0) {
                         for (Map<String, Object> map : maps) {
                             time = DateUtil.datetime(map.get("create_date").toString(),
@@ -267,7 +257,7 @@ public class Task {
 
 
     @Scheduled(cron = " 0 0 1,13 * * ? ")
-    public void targetCar() {
+    public void targetCar() {//查询当天没有准运证的车辆
         carTargetMapper.deleteCarTarget();
         List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
         List<DeviceLasposition> list = new ArrayList<>();

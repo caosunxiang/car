@@ -121,7 +121,7 @@ public class CarInfo {
     /**
      * 创建时间
      */
-    private Date createDate;
+    private String createDate;
 
     /**
      * 创建人

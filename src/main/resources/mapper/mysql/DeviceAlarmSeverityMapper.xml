@@ -301,7 +301,7 @@ GROUP BY
         from device_alarm_severity alarm LEFT JOIN sys_auth_dept dept ON dept.deptid=alarm.deptid where
         1=1
         <if test="number !=null and number !=''">
-            and alarm.car_number LIKE CONCAT('%',#{number},'%')
+            and alarm.car_number LIKE CONCAT(#{number},'%')
         </if>
         <if test="time !=null and time !=''">
             AND TO_DAYS(NOW())-TO_DAYS(alarm.alarm_end_time)<![CDATA[ <= ]]>#{time}

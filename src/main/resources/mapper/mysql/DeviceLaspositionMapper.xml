@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.car.mapper.mysql.DeviceLaspositionMapper">
-<select id="selectLasposition" resultType="com.example.car.entity.DeviceLasposition">
+    <select id="selectLasposition" resultType="com.example.car.entity.DeviceLasposition">
 select  * from device_last_position where deptid =#{pid}
 </select>
     <select id="selectLaspositionByCarNo" resultType="com.example.car.entity.DeviceLasposition">
@@ -18,17 +18,17 @@ WHERE
 	and last.deptid =#{pid}
     </select>
     <select id="selectposition" resultType="com.example.car.entity.DeviceLasposition">
-SELECT
-	last.*
-FROM
-	device_last_position last
-	LEFT JOIN car_info car ON last.carnumber = car.carnumber
-WHERE
-	car.car_service_status = 0
-	and last.deptid =#{pid}
-	<if test="number !=null and number !=''">
-        and last.carnumber LIKE CONCAT('%',#{number},'%')
-    </if>
+        SELECT
+        last.*
+        FROM
+        device_last_position last
+        LEFT JOIN car_info car ON last.carnumber = car.carnumber
+        WHERE
+        car.car_service_status = 0
+        and last.deptid =#{pid}
+        <if test="number !=null and number !=''">
+            and last.carnumber LIKE CONCAT('%',#{number},'%')
+        </if>
     </select>
 
 </mapper>
