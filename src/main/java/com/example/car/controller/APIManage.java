@@ -114,20 +114,26 @@ public class APIManage {
         if (list.size() > 0) {
             String lat = list.get(0).get("lat").toString();
             String lng = list.get(0).get("lng").toString();
+            String direction = list.get(0).get("direction").toString();
             List<Map<String, Object>> list1 = new ArrayList<>();
             list1.add(list.get(0));
             for (int i = 0; i < list.size(); i++) {
                 if (i != list.size() - 1) {
-                    if(!list.get(i + 1).get("lat").equals(0)&&!list.get(i + 1).get("lng").equals(0)){
-                        if (!lat.equals(list.get(i + 1).get("lat").toString()) || !lng.equals(list.get(i + 1).get("lng").toString())) {
-                            list1.add(list.get(i + 1));
+                    if (!list.get(i + 1).get("lat").equals(0) && !list.get(i + 1).get("lng").equals(0)) {
+                        if (!lat.equals(list.get(i + 1).get("lat").toString()) || !lng.equals(list.get(i + 1).get(
+                                "lng").toString())) {
+                            if (Direction.directionGap(Double.parseDouble(direction),
+                                    Double.parseDouble(list.get(i + 1).get("direction").toString()))) {
+                                list1.add(list.get(i + 1));
+                            }
                             lat = list.get(i + 1).get("lat").toString();
                             lng = list.get(i + 1).get("lng").toString();
                         }
                     }
                 }
             }
-           // list.sort((o1, o2) -> Integer.compare(o1.get("createtime").toString().compareTo(o2.get("createtime").toString()), 0));
+            // list.sort((o1, o2) -> Integer.compare(o1.get("createtime").toString().compareTo(o2.get("createtime")
+            // .toString()), 0));
             System.out.println(list1.toString());
             return Body.newInstance(list1);
         }
@@ -298,13 +304,13 @@ public class APIManage {
         List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
         List<DeviceLasposition> deviceLaspositions = new ArrayList<>();
         List<DeviceLasposition> list = new ArrayList<>();
-        System.currentTimeMillis();
         for (SysAuthDept sysAuthDept : deptList) {
             List<DeviceLasposition> deviceLasposition =
                     deviceLaspositionMapper.selectLasposition(sysAuthDept.getDeptid().toString());
             for (DeviceLasposition lasposition : deviceLasposition) {
                 if (sysAuthDept.getDeptid().equals(lasposition.getDeptid())) {
                     lasposition.setDept(sysAuthDept.getDeptname());
+                    lasposition.setBk1(lasposition.getDeptid().toString());
                 }
             }
             deviceLaspositions.addAll(deviceLasposition);
@@ -778,13 +784,13 @@ public class APIManage {
         List<EChatBean1> eChatBean1s = new ArrayList<>();
         for (SysAuthDept sysAuthDept : deptList) {
             List<EChatBean3> eChatBean3sGps = deviceAlarmSeverityMapper.selectEChat1(null,
-                    null, null, sysAuthDept.getDeptid().toString(), "A", "离线告警");
-            List<EChatBean3> eChatBean3sOther = deviceAlarmSeverityMapper.selectEChat1(null,
-                    1, null, sysAuthDept.getDeptid().toString(), null, "超速告警");
-            List<EChatBean3> eChatBean3sMuck = deviceAlarmSeverityMapper.selectEChat1(null,
-                    1, null, sysAuthDept.getDeptid().toString(), null, "无准运证行驶");
-            eChatBean3sGps.addAll(eChatBean3sOther);
-            eChatBean3sGps.addAll(eChatBean3sMuck);
+                    null, null, sysAuthDept.getDeptid().toString(), "A", null);
+//            List<EChatBean3> eChatBean3sOther = deviceAlarmSeverityMapper.selectEChat1(null,
+//                    1, null, sysAuthDept.getDeptid().toString(), null, null);
+//            List<EChatBean3> eChatBean3sMuck = deviceAlarmSeverityMapper.selectEChat1(null,
+//                    1, null, sysAuthDept.getDeptid().toString(), null, "无准运证行驶");
+//            eChatBean3sGps.addAll(eChatBean3sOther);
+//            eChatBean3sGps.addAll(eChatBean3sMuck);
             Set<String> str = new HashSet<>();
             for (EChatBean3 eChatBean3 : eChatBean3sGps) {
                 str.add(eChatBean3.getCarnumber());

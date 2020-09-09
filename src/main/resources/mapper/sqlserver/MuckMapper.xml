@@ -133,7 +133,7 @@
         <if test="name !=null and name!=''">
             and pt.CarNo LIKE '%'+ #{name}+'%'
         </if>
-        GROUP BY
+        GROUP BY 
         p.PermitNo
         ) AS c
     </select>
