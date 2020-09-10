@@ -13,6 +13,9 @@
         <if test="sim !=null and sim!=''">
             AND d.terminal=#{sim}
         </if>
+        <if test="deptid !=null and deptid !=''">
+            AND c.deptid = #{deptid}
+        </if>
         ;
     </select>
     <select id="selectCarByDeptName" resultType="java.util.Map">

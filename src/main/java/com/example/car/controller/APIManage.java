@@ -21,7 +21,6 @@ import com.example.car.entity.DeviceAlarmSeverity;
 import com.example.car.entity.DeviceLasposition;
 import com.example.car.entity.SysAuthDept;
 import com.example.car.mapper.mysql.*;
-import com.example.car.mapper.sqlserver.MuckMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -315,7 +314,6 @@ public class APIManage {
             }
             deviceLaspositions.addAll(deviceLasposition);
         }
-        System.currentTimeMillis();
         for (DeviceLasposition resultDatum : deviceLaspositions) {
             Double latCar = resultDatum.getLat();
             Double lngCar = resultDatum.getLng();
@@ -336,47 +334,9 @@ public class APIManage {
      */
     @RequestMapping("homeSelect")
     public Body homeSelect(String number) {
-        String terminal = null;
-        Map<String, String> map = new HashMap<>();
-        map.put("carnumber", number);
-        map.put("tradeno", tradeno);
-        map.put("username", username);
-        String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
-        System.out.println(sign);
-        map.put("sign", sign);
-        String json = JSON.toJSONString(map);
-        String address = url + "cmsapi/getTerminalList";
-        String result = HttpUtils.doJsonPost(address, json);
-        JSONObject jsonObject = JSONObject.parseObject(result);
-        List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
-        if (resultData.size() > 0) {
-            terminal = resultData.get(0).get("terminal").toString();
-        }
-        System.out.println(terminal);
-        Map<String, String> map1 = new HashMap<>();
-        map1.put("terminal", terminal);
-        map1.put("tradeno", tradeno);
-        map1.put("username", username);
-        String sign1 = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
-        System.out.println(sign1);
-        map1.put("sign", sign1);
-        String json1 = JSON.toJSONString(map1);
-        String address1 = url + "cmsapi/getTerminalGpsStatus";
-        String result1 = HttpUtils.doJsonPost(address1, json1);
-        JSONObject jsonObject1 = JSONObject.parseObject(result1);
-        List<Map<String, Object>> resultData1 = (List<Map<String, Object>>) jsonObject1.get("resultData");
-        if (jsonObject1.get("errCode").equals(500)) {
-            return Body.newInstance(jsonObject1.get("resultMsg"));
-        }
-        if (resultData1.size() > 0) {
-            for (Map<String, Object> stringObjectMap : resultData1) {
-                CarInfo carInfo = carInfoMapper.selectCarOnly(stringObjectMap.get("carnumber").toString());
-                Long deptid = carInfo.getDeptid();
-                SysAuthDept sysAuthDept = sysAuthDeptMapper.selectSysAuthDeptById(deptid);
-                stringObjectMap.put("dept", sysAuthDept.getDeptname());
-            }
-        }
-        return Body.newInstance(resultData1);
+        DeviceLasposition deviceLasposition = deviceLaspositionMapper.selectLaspositionByCarNo(number);
+        deviceLasposition.setDept(sysAuthDeptMapper.selectSysAuthDeptById(deviceLasposition.getDeptid()).getDeptname());
+        return Body.newInstance(deviceLasposition);
     }
 
     /**
@@ -571,28 +531,6 @@ public class APIManage {
         return Body.newInstance(time);
     }
 
-
-    /**
-     * 判断时间是否在时间段内
-     *
-     * @param nowTime
-     * @param beginTime
-     * @param endTime
-     * @return
-     */
-    public static boolean belongCalendar(Date nowTime, Date beginTime, Date endTime) {
-        Calendar date = Calendar.getInstance();
-        date.setTime(nowTime);
-        Calendar begin = Calendar.getInstance();
-        begin.setTime(beginTime);
-        Calendar end = Calendar.getInstance();
-        end.setTime(endTime);
-        if (date.after(begin) && date.before(end)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 
     @RequestMapping("test1")
     public void getTradeno() {

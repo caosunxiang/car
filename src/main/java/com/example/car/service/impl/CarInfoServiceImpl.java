@@ -3,8 +3,11 @@ package com.example.car.service.impl;
 import com.example.car.common.utils.DateUtil;
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.CarInfo;
-import com.example.car.entity.DeviceLasposition;
-import com.example.car.mapper.mysql.*;
+import com.example.car.entity.SysAuthDept;
+import com.example.car.mapper.mysql.CarInfoMapper;
+import com.example.car.mapper.mysql.CarStatusChangeRecordMapper;
+import com.example.car.mapper.mysql.DeviceOnlineRecordMapper;
+import com.example.car.mapper.mysql.SysAuthDeptMapper;
 import com.example.car.service.ICarInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -38,14 +42,15 @@ public class CarInfoServiceImpl implements ICarInfoService {
     private CarStatusChangeRecordMapper carStatusChangeRecordMapper;
 
     @Autowired
-    private CarMileageMapper carMileageMapper;
-
-    @Autowired
-    private DeviceLaspositionMapper deviceLaspositionMapper;
+    private SysAuthDeptMapper sysAuthDeptMapper;
 
     @Override
     public Body selectCar(String carnumber, String terminalId, String sim) {
-        List<Map<String, Object>> list = this.carInfoMapper.selectCar(carnumber, terminalId, sim);
+        List<Map<String, Object>> list=new ArrayList<>();
+        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
+        for (SysAuthDept sysAuthDept : deptList) {
+             list.addAll(this.carInfoMapper.selectCar(carnumber, terminalId, sim,sysAuthDept.getDeptid()));
+        }
         return Body.newInstance(list);
     }
 
