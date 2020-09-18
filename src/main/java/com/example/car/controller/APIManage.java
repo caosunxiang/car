@@ -301,6 +301,7 @@ public class APIManage {
             return Body.BODY_451;
         }
         List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
+        List<DeviceAlarmSeverity> deviceAlarmSeverity = deviceAlarmSeverityMapper.selectAlarmGroupCar();
         List<DeviceLasposition> deviceLaspositions = new ArrayList<>();
         List<DeviceLasposition> list = new ArrayList<>();
         for (SysAuthDept sysAuthDept : deptList) {
@@ -319,6 +320,17 @@ public class APIManage {
             Double lngCar = resultDatum.getLng();
             boolean isIn = Distance.coordinateToDistance(lat, lng, latCar, lngCar, distance);
             if (!isIn) {
+                if (!StringUtils.isEmpty(resultDatum.getCarnumber())){
+                    for (DeviceAlarmSeverity alarmSeverity : deviceAlarmSeverity) {
+                        if (resultDatum.getCarnumber().equals(alarmSeverity.getCarNumber())){
+                            resultDatum.setHint(true);
+                        }else {
+                            resultDatum.setHint(false);
+                        }
+                    }
+                }else {
+                    resultDatum.setHint(false);
+                }
                 list.add(resultDatum);
             }
         }
@@ -336,6 +348,9 @@ public class APIManage {
     public Body homeSelect(String number) {
         DeviceLasposition deviceLasposition = deviceLaspositionMapper.selectLaspositionByCarNo(number);
         deviceLasposition.setDept(sysAuthDeptMapper.selectSysAuthDeptById(deviceLasposition.getDeptid()).getDeptname());
+        List<EChatBean3> EChatBean3 = deviceAlarmSeverityMapper.selectEChat1(number,
+                null, null, deviceLasposition.getDeptid().toString(), "A", null);
+        deviceLasposition.setAlarm(EChatBean3);
         return Body.newInstance(deviceLasposition);
     }
 

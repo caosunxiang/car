@@ -137,5 +137,9 @@
         p.PermitNo
         ) AS c
     </select>
-
+<select id="selectCarInfo" resultType="java.util.Map">
+SELECT t.* FROM View_TruckInfo t
+WHERE
+t.CarNo=#{carNo}
+</select>
 </mapper>

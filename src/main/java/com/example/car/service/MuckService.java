@@ -10,4 +10,6 @@ public interface MuckService {
     Body selectMuckByProject(String projectId,String time);
 
     Body selectMuckCount(String projectName,String time,String name,String endTime);
+
+    Body selectCarInfo(String carNo);
 }

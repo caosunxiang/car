@@ -71,4 +71,10 @@ public class MuckServiceImpl implements MuckService {
         Integer count =this.muckMapper.selectMuckCount(projectName,time,name,endTime);
         return Body.newInstance(count);
     }
+
+    @Override
+    public Body selectCarInfo(String carNo) {
+        List<Map<String,String>>list=this.muckMapper.selectCarInfo(carNo);
+        return Body.newInstance(list);
+    }
 }

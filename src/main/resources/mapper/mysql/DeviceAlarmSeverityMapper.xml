@@ -332,4 +332,28 @@ FROM
 	car.carnumber
 )a
     </select>
+    <select id="selectAlarmGroupCar" resultType="com.example.car.entity.DeviceAlarmSeverity">
+         select
+        alarm_id AS alarmId,
+        alarm_name AS alarmName,
+        car_number AS carNumber,
+        alarm_start_time AS alarmStartTime,
+        alarm_start_speed as alarmStartSpeed,
+        alarm_end_time AS alarmEndTime,
+        alarm_end_speed as alarmEndSpeed,
+        alarm_end_lat AS alarmEndLat,
+        alarm_end_lng as alarmEndLng,
+        alarm_mileage as alarmMileage,
+        alarm_lat AS alarmLat,
+        handle_by AS handleBy,
+        handle_type AS handleType,
+        handle_time AS handleTime,
+        deptid AS deptid,
+        alarm_lng AS alarmLng
+        from device_alarm_severity where
+        1=1
+				and TO_DAYS(alarm_start_time) = TO_DAYS(NOW())
+				GROUP BY
+				carNumber
+    </select>
 </mapper>

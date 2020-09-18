@@ -82,5 +82,17 @@ public class MuckController {
     public Body selectMuckCount(String projectName, String time, String name, String endTime) {
         return this.muckService.selectMuckCount(projectName, time, name, endTime);
     }
+
+    /** 
+    * @Description: 查询车辆详情
+    * @Param: [carNo]
+    * @return: com.example.car.common.utils.json.Body
+    * @Author: 冷酷的苹果
+    * @Date: 2020/9/17 13:48
+    */
+    @RequestMapping("selectCarInfo")
+    public Body selectCarInfo(String carNo){
+        return this.muckService.selectCarInfo(carNo);
+    }
 }
 

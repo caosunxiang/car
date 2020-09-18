@@ -1,7 +1,9 @@
 package com.example.car.entity;
 
 import java.util.Date;
+import java.util.List;
 
+import com.example.car.common.utils.entity.EChatBean3;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -246,5 +248,16 @@ public class DeviceLasposition {
     @TableField(exist = false)
     private String dept;
 
+    /**
+     * 附加信息
+     */
+    @TableField(exist = false)
+    private List<EChatBean3> alarm;
+
+    /**
+     * 附加信息
+     */
+    @TableField(exist = false)
+    private boolean hint;
 
 }

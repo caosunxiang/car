@@ -16,4 +16,6 @@ public interface MuckMapper {
 
     Integer selectMuckCount(@Param("projectName") String projectName,@Param("time")String time,@Param("name")String name,
                             @Param("endTime")String endTime);
+
+    List<Map<String, String>> selectCarInfo(@Param("carNo") String carNo);
 }

@@ -46,4 +46,6 @@ public interface DeviceAlarmSeverityMapper {
                                   @Param("type") String type, @Param("deptid") String deptid,
                                   @Param("day") String day, @Param("name") String name);
 
+    List<DeviceAlarmSeverity> selectAlarmGroupCar();
+
 }
