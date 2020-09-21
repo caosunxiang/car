@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.car.mapper.mysql.HistoricalRouteMapper">
+    <insert id="insertHistoricalRoute">
+        INSERT INTO historical_route (
+        id,
+        city,
+        deptid,
+        speed,
+        carid,
+        blat,
+        gpsflag,
+        province,
+        tName,
+        carstatus,
+        gaddress,
+        lat,
+        seq,
+        direction,
+        mileage,
+        createtime,
+        address,
+        lng,
+        summileage,
+        glat,
+        msgid,
+        terminal,
+        blng,
+        glng,
+        deptname,
+        carnumber,
+        district,
+        gpstime,
+        altitude
+        )
+        VALUES
+        <foreach collection="list" item="it" separator=",">
+
+
+            (#{it.id},#{it.city},#{it.deptid},#{it.speed},#{it.carid},#{it.blat},#{it.gpsflag},
+            #{it.province},#{it.tName},#{it.carstatus},#{it.gaddress},#{it.lat},#{it.seq},#{it.direction},
+            #{it.mileage},#{it.createtime},#{it.address},#{it.lng},#{it.summileage},#{it.glat},#{it.msgid},
+            #{it.terminal},#{it.blng},#{it.glng},#{it.deptname},#{it.carnumber},#{it.district},#{it.gpstime},
+            #{it.altitude})
+
+
+        </foreach>
+
+    </insert>
+
+    <select id="selectHistoricalRoute" resultType="com.example.car.entity.HistoricalRoute">
+        SELECT * FROM historical_route WHERE createtime BETWEEN #{startTime} AND #{endTime}
+        <if test="name !=null and name!=''">
+            and carnumber = #{name}
+        </if>
+    </select>
+</mapper>

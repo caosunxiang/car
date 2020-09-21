@@ -52,6 +52,7 @@
         record.create_date as createDate
         FROM
         device_online_record record
+
         LEFT JOIN car_info car ON record.terminal_id = car.terminal_id
         WHERE
         1 = 1

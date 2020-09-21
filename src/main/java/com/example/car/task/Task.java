@@ -10,13 +10,14 @@
  */
 package com.example.car.task;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.car.common.utils.DateUtil;
+import com.example.car.common.utils.Distance;
+import com.example.car.common.utils.HttpUtils;
 import com.example.car.common.utils.ListUtils;
 import com.example.car.common.utils.entity.EChatBean3;
-import com.example.car.entity.CarTarget;
-import com.example.car.entity.DeviceAlarmSeverity;
-import com.example.car.entity.DeviceLasposition;
-import com.example.car.entity.SysAuthDept;
+import com.example.car.entity.*;
 import com.example.car.mapper.mysql.*;
 import com.example.car.mapper.sqlserver.MuckMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class Task {
     private CarMileageMapper carMileageMapper;
 
     @Autowired
-    private CarInfoMapper carInfoMapper;
+    private HistoricalRouteMapper historicalRouteMapper;
 
     @Autowired
     private DeviceLaspositionMapper deviceLaspositionMapper;
@@ -279,42 +280,39 @@ public class Task {
 
     }
 
-//    @Scheduled(cron = " * 0/13 * * * ? ")
-//    public void GPSDown() throws IOException {//gps不在线报警推送
-//        List<DeviceAlarmSeverity> list = new ArrayList<>();
-//        String terminals = Task.getCarTerminal();
-//        String address = url + "cmsapi/getTerminalGpsStatus";
-//        String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
-//        System.out.println(sign);
-//        Map<String, String> map = new HashMap<>();
-//        map.put("sign", sign);
-//        map.put("tradeno", tradeno);
-//        map.put("username", username);
-//        map.put("terminal", terminals);
-//        String json = JSON.toJSONString(map);
-//        String result = HttpUtils.doJsonPost(address, json);
-//        JSONObject jsonObject = JSONObject.parseObject(result);
-//        List<Map<String, Object>> resultData = (List<Map<String, Object>>) jsonObject.get("resultData");
-//        for (Map<String, Object> resultDatum : resultData) {
-//            if (StringUtils.isEmpty(resultDatum.get("gpsflag")) && Double.parseDouble(resultDatum.get("speed")
-//            .toString()) > 5) {
-//                if (resultDatum.get("gpsflag").toString().equals("0")) {
-//                    DeviceAlarmSeverity deviceAlarmSeverity = new DeviceAlarmSeverity();
-//                    deviceAlarmSeverity.setAlarmLng(resultDatum.get("lng").toString());
-//                    deviceAlarmSeverity.setAlarmLat(resultDatum.get("lat").toString());
-//                    deviceAlarmSeverity.setAlarmName("GPS不在线");
-//                    deviceAlarmSeverity.setAlarmStartSpeed(resultDatum.get("speed").toString());
-//                    deviceAlarmSeverity.setCarNumber(resultDatum.get("carnumber").toString());
-//                    deviceAlarmSeverity.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
-//                            DateUtil.FULL_TIME_SPLIT_PATTERN));
-//                    System.out.println("不好啦！报警了，这个人GPS不在线");
-//                    list.add(deviceAlarmSeverity);
-//                }
-//            }
-//        }
-//        WebSocket webSocket = new WebSocket();
-//        webSocket.sendMessageAll(list.toString());
-//    }
+    /**
+    * @Description: 同步历史轨迹
+    * @Param: []
+    * @return: void
+    * @Author: 冷酷的苹果
+    * @Date: 2020/9/21 8:38
+    */
+    @Scheduled(cron = " 0 0 0 * * ? ")
+    public void historicalRoute () {
+        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
+        List<DeviceLasposition> list = new ArrayList<>();
+        for (SysAuthDept sysAuthDept : deptList) {
+            List<DeviceLasposition> deviceLasposition =
+                    deviceLaspositionMapper.selectLaspositionAlarm(sysAuthDept.getDeptid().toString());
+            list.addAll(deviceLasposition);
+        }
+        for (DeviceLasposition s : list) {
+            Map<String, String> map = new HashMap<>();
+            map.put("carnumber", s.getCarnumber());
+            map.put("tradeno", "20180908180001");
+            map.put("startTime", DateUtil.timeVariousTypes(2));
+            map.put("endTime", DateUtil.timeVariousTypes(1));
+            map.put("username", "yccgj");
+            map.put("sign", "4DEB2D8E22EDB820A88FBFE2F597E086");
+            String json = JSON.toJSONString(map);
+            String address = "http://101.132.236.6:8088/cmsapi/getHistoryTrack";
+            String result = HttpUtils.doJsonPost(address, json);
+            List<HistoricalRoute> resultData =JSON.parseArray(JSON.parseObject(result).getString("resultData"),HistoricalRoute.class);
+            if (resultData.size() > 0) {
+                historicalRouteMapper.insertHistoricalRoute(resultData);
+            }
+        }
+    }
 
 //    @Scheduled(cron = " 0 30 7,19 * * ?")
 //    public void timeOut() throws IOException {//运输超时

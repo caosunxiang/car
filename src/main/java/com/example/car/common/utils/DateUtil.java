@@ -1,5 +1,7 @@
 package com.example.car.common.utils;
 
+import org.apache.ibatis.annotations.Case;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -48,7 +50,7 @@ public class DateUtil {
         return localDateTime.format(DateTimeFormatter.ofPattern(format));
     }
 
-    public static String dateDiff(String startTime, String endTime,  String format, String str) {
+    public static String dateDiff(String startTime, String endTime, String format, String str) {
         // 按照传入的格式生成一个simpledateformate对象
         SimpleDateFormat sd = new SimpleDateFormat(format);
         long nd = 1000 * 24 * 60 * 60;// 一天的毫秒数
@@ -72,9 +74,9 @@ public class DateUtil {
                     + (min - day * 24 * 60) + "分钟" + sec + "秒。");
             System.out.println("hour=" + hour + ",min=" + min);
             if (str.equalsIgnoreCase("h")) {
-                return hour+"小时"+(min - day * 24 * 60) +"分";
+                return hour + "小时" + (min - day * 24 * 60) + "分";
             } else {
-                return min+"分";
+                return min + "分";
             }
 
         } catch (ParseException e) {
@@ -82,14 +84,14 @@ public class DateUtil {
             e.printStackTrace();
         }
         if (str.equalsIgnoreCase("h")) {
-            return hour+"小时"+(min - day * 24 * 60) +"分";
+            return hour + "小时" + (min - day * 24 * 60) + "分";
         } else {
-            return min+"分";
+            return min + "分";
         }
     }
 
 
-    public static long datetime(String startTime, String endTime,  String format, String str) {
+    public static long datetime(String startTime, String endTime, String format, String str) {
         // 按照传入的格式生成一个simpledateformate对象
         SimpleDateFormat sd = new SimpleDateFormat(format);
         long nd = 1000 * 24 * 60 * 60;// 一天的毫秒数
@@ -107,7 +109,7 @@ public class DateUtil {
             day = diff / nd;// 计算差多少天
             hour = diff % nd / nh + day * 24;// 计算差多少小时
             min = diff % nd % nh / nm + hour * 60;// 计算差多少分钟
-            System.out.println(">>>>>>>>>>>>"+min);
+            System.out.println(">>>>>>>>>>>>" + min);
             sec = diff % nd % nh % nm / ns;// 计算差多少秒
             // 输出结果
             System.out.println("时间相差：" + day + "天" + (hour - day * 24) + "小时"
@@ -118,7 +120,6 @@ public class DateUtil {
             } else {
                 return min;
             }
-
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -129,10 +130,11 @@ public class DateUtil {
             return min;
         }
     }
+
     /*
      * 将时间转换为时间戳
      */
-    public static String dateToStamp(String s) throws ParseException{
+    public static String dateToStamp(String s) throws ParseException {
         String res;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = simpleDateFormat.parse(s);
@@ -163,4 +165,32 @@ public class DateUtil {
         }
     }
 
+    public static String timeVariousTypes(Integer type) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        Calendar c = Calendar.getInstance();
+        switch (type) {
+            case 1:
+                c.setTime(new Date());
+                date = c.getTime();
+                return format.format(date);
+            case 2:
+                c.add(Calendar.DATE, -1);
+                date = c.getTime();
+                return format.format(date);
+            case 3:
+                c.add(Calendar.MONTH, -1);
+                date = c.getTime();
+                return format.format(date);       //前一月
+            default:
+                c.add(Calendar.YEAR, -1);
+                date = c.getTime();
+                return format.format(date);//前一年
+        }
+    }
+
+    public static void main(String[] args) {
+        String var=DateUtil.timeVariousTypes(5);
+        System.out.println(var);
+    }
 }

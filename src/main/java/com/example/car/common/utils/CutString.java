@@ -34,14 +34,12 @@ public class CutString {
         msg = msg + ",";
         char a[] = msg.toCharArray();
         Integer c = 0;
-        Integer changeCount = 0;
         for (int i = 0; i < a.length; i++) {
             if (a[i] == ',') {
                 String string = msg.substring(c, i);
                 c = i + 1;
                 System.out.println(string);
                 list.add(string);
-                changeCount++;
             }
         }
         return list;

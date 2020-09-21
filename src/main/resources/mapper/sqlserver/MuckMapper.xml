@@ -138,7 +138,24 @@
         ) AS c
     </select>
 <select id="selectCarInfo" resultType="java.util.Map">
-SELECT t.* FROM View_TruckInfo t
+SELECT
+	ISNULL(t.Capacity,'') Capacity,
+	ISNULL(t.CarNo,'')CarNo,
+	ISNULL(t.CarType,'')CarType,
+	ISNULL(t.CarframeNo,'')CarframeNo,
+	ISNULL(t.CompanyName,'')CompanyName,
+	ISNULL(t.DriverCardNo,'')DriverCardNo,
+	ISNULL(t.DriverMobile,'')DriverMobile,
+	ISNULL(t.DriverName,'')DriverName,
+	ISNULL(t.EngineNo,'')EngineNo,
+	ISNULL(t.ExpiryTime,'')ExpiryTime,
+	ISNULL(t.GPSSFYC,'')GPSSFYC,
+	ISNULL(t.OriginalCarNo,'')OriginalCarNo,
+	ISNULL(t.RegisterTime,'')RegisterTime,
+	ISNULL(t.SXSFQQ,'')SXSFQQ,
+	ISNULL(t.ZYZG,'')ZYZG
+FROM
+	View_TruckInfo t
 WHERE
 t.CarNo=#{carNo}
 </select>

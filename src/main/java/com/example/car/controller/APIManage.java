@@ -16,10 +16,7 @@ import com.example.car.common.utils.*;
 import com.example.car.common.utils.async.service.AreaSelect;
 import com.example.car.common.utils.entity.*;
 import com.example.car.common.utils.json.Body;
-import com.example.car.entity.CarInfo;
-import com.example.car.entity.DeviceAlarmSeverity;
-import com.example.car.entity.DeviceLasposition;
-import com.example.car.entity.SysAuthDept;
+import com.example.car.entity.*;
 import com.example.car.mapper.mysql.*;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -70,6 +67,8 @@ public class APIManage {
     private DeviceOnlineRecordMapper deviceOnlineRecordMapper;
     @Autowired
     private CarStatusChangeRecordMapper carStatusChangeRecordMapper;
+    @Autowired
+    private HistoricalRouteMapper historicalRouteMapper;
 
     /**
      * @Description: 接口转发
@@ -320,15 +319,15 @@ public class APIManage {
             Double lngCar = resultDatum.getLng();
             boolean isIn = Distance.coordinateToDistance(lat, lng, latCar, lngCar, distance);
             if (!isIn) {
-                if (!StringUtils.isEmpty(resultDatum.getCarnumber())){
+                if (!StringUtils.isEmpty(resultDatum.getCarnumber())) {
                     for (DeviceAlarmSeverity alarmSeverity : deviceAlarmSeverity) {
-                        if (resultDatum.getCarnumber().equals(alarmSeverity.getCarNumber())){
+                        if (resultDatum.getCarnumber().equals(alarmSeverity.getCarNumber())) {
                             resultDatum.setHint(true);
-                        }else {
+                        } else {
                             resultDatum.setHint(false);
                         }
                     }
-                }else {
+                } else {
                     resultDatum.setHint(false);
                 }
                 list.add(resultDatum);
@@ -347,10 +346,14 @@ public class APIManage {
     @RequestMapping("homeSelect")
     public Body homeSelect(String number) {
         DeviceLasposition deviceLasposition = deviceLaspositionMapper.selectLaspositionByCarNo(number);
-        deviceLasposition.setDept(sysAuthDeptMapper.selectSysAuthDeptById(deviceLasposition.getDeptid()).getDeptname());
-        List<EChatBean3> EChatBean3 = deviceAlarmSeverityMapper.selectEChat1(number,
-                null, null, deviceLasposition.getDeptid().toString(), "A", null);
-        deviceLasposition.setAlarm(EChatBean3);
+        if (StringUtils.isEmpty(deviceLasposition)) {
+            return Body.newInstance("车辆未定位");
+        } else {
+            deviceLasposition.setDept(sysAuthDeptMapper.selectSysAuthDeptById(deviceLasposition.getDeptid()).getDeptname());
+            List<EChatBean3> EChatBean3 = deviceAlarmSeverityMapper.selectEChat1(number,
+                    null, null, deviceLasposition.getDeptid().toString(), "A", null);
+            deviceLasposition.setAlarm(EChatBean3);
+        }
         return Body.newInstance(deviceLasposition);
     }
 
@@ -363,42 +366,15 @@ public class APIManage {
      */
     @RequestMapping("areaSelect")
     public Body areaSelect(Double lat1, Double lng1, String startTime, String endTime,
-                           String numbers) throws ExecutionException, InterruptedException {
-        long start = System.currentTimeMillis();
-        List<String> list = CutString.divide(numbers);
-        List<List<String>> lists = ListUtils.averageAssign(list, 6);
-        List<Map<String, String>> mapList = new ArrayList<>();
-        CompletableFuture<List<Map<String, String>>> page1 = areaSelect.areaSelect(lat1, lng1, startTime,
-                endTime, lists.get(0));
-        CompletableFuture<List<Map<String, String>>> page2 = areaSelect.areaSelect(lat1, lng1, startTime,
-                endTime, lists.get(1));
-        CompletableFuture<List<Map<String, String>>> page3 = areaSelect.areaSelect(lat1, lng1, startTime,
-                endTime, lists.get(2));
-        CompletableFuture<List<Map<String, String>>> page4 = areaSelect.areaSelect(lat1, lng1, startTime,
-                endTime, lists.get(3));
-        CompletableFuture<List<Map<String, String>>> page5 = areaSelect.areaSelect(lat1, lng1, startTime,
-                endTime, lists.get(4));
-        CompletableFuture<List<Map<String, String>>> page6 = areaSelect.areaSelect(lat1, lng1, startTime,
-                endTime, lists.get(5));
-        // Wait until they are all done
-        //join() 的作用：让“主线程”等待“子线程”结束之后才能继续运行
-        CompletableFuture.allOf(page1, page2, page3, page4, page5, page6).join();
-        // Print results, including elapsed time
-        float exc = (float) (System.currentTimeMillis() - start) / 1000;
-        logger.info("Elapsed time: " + exc + " seconds");
-        logger.info("--> " + page1.get());
-        logger.info("--> " + page2.get());
-        logger.info("--> " + page3.get());
-        logger.info("--> " + page4.get());
-        logger.info("--> " + page5.get());
-        logger.info("--> " + page6.get());
-        mapList.addAll(page1.get());
-        mapList.addAll(page2.get());
-        mapList.addAll(page3.get());
-        mapList.addAll(page4.get());
-        mapList.addAll(page5.get());
-        mapList.addAll(page6.get());
-        return Body.newInstance(mapList);
+                           String numbers, Double dic) {
+        List<String> str = CutString.divide(numbers);
+        List<String> carNo = new ArrayList<>();
+        for (String s : str) {
+            if (areaSelect.areaSelect(lat1, lng1, startTime, endTime, s, dic)) {
+                carNo.add(s);
+            }
+        }
+        return Body.newInstance(carNo);
     }
 
     /**
@@ -549,71 +525,28 @@ public class APIManage {
 
     @RequestMapping("test1")
     public void getTradeno() {
-//        long up = 0;
-//        long down = 0;
-//        long other = 0;
-//        Map<String, Long> map = new HashMap<>();
-//        List<DeviceOnlineRecord> deviceOnlineRecords = deviceOnlineRecordMapper.selectOnlineRecord(number, time);
-//        List<CarStatusChangeRecord> carStatusChangeRecords = carStatusChangeRecordMapper.selectCarStatusRecord(number
-//                , time);
-//        CarInfo carInfo = carInfoMapper.selectCarOnly(number);
-//            if (carStatusChangeRecords.size() > 0) {
-//                String temp = day;
-//                for (CarStatusChangeRecord carStatusChangeRecord : carStatusChangeRecords) {
-//                    if (!carInfo.getCarServiceStatus().equals(0)){
-//                        other += DateUtil.datetime(temp, carStatusChangeRecord.getModifyDate(),
-//                                DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
-//                        temp = carStatusChangeRecord.getModifyDate();
-//                    }
-//
-//                }
-//                other += DateUtil.datetime(temp, DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN),
-//                        DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
-//            } else {
-//                other += DateUtil.datetime(day, DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN),
-//                        DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
-//            }
-//        if (deviceOnlineRecords.size() > 0) {
-//            String temp = day;
-//            for (DeviceOnlineRecord deviceOnlineRecord : deviceOnlineRecords) {
-//                if (deviceOnlineRecord.getStatus().equals(2)) {
-//                    up += DateUtil.datetime(temp, deviceOnlineRecord.getCreateDate(),
-//                            DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
-//                    temp = deviceOnlineRecord.getCreateDate();
-//                } else {
-//                    down += DateUtil.datetime(temp, deviceOnlineRecord.getCreateDate(), DateUtil
-//                    .FULL_TIME_SPLIT_PATTERN
-//                            , "m");
-//                    temp = deviceOnlineRecord.getCreateDate();
-//                }
-//            }
-//            if (ListUtils.getLastElement(deviceOnlineRecords).getStatus().equals(2)) {
-//                down += DateUtil.datetime(temp, DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN),
-//                        DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
-//            } else {
-//                up += DateUtil.datetime(temp, DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN),
-//                        DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
-//            }
-//        } else {
-//            DeviceOnlineRecord deviceOnlineRecord = deviceOnlineRecordMapper.selectOnlineRecordOnly();
-//            if (StringUtils.isEmpty(deviceOnlineRecord)) {
-//                up += DateUtil.datetime(day, DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN),
-//                        DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
-//            } else {
-//                if (deviceOnlineRecord.getStatus().equals(1)) {
-//                    up += DateUtil.datetime(day, DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN),
-//                            DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
-//                } else {
-//                    down += DateUtil.datetime(day, DateUtil.getDateFormat(new Date(), DateUtil
-//                    .FULL_TIME_SPLIT_PATTERN),
-//                            DateUtil.FULL_TIME_SPLIT_PATTERN, "m");
-//                }
-//            }
-//        }
-//        map.put("up", up);
-//        map.put("down", down);
-//        map.put("other", other);
-//        return Body.newInstance(map);
+        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
+        List<HistoricalRoute> resultData = new ArrayList<>();
+        List<DeviceLasposition> list = new ArrayList<>();
+        for (SysAuthDept sysAuthDept : deptList) {
+            List<DeviceLasposition> deviceLasposition =
+                    deviceLaspositionMapper.selectLaspositionAlarm(sysAuthDept.getDeptid().toString());
+            list.addAll(deviceLasposition);
+        }
+        for (DeviceLasposition s : list) {
+            Map<String, String> map = new HashMap<>();
+            map.put("carnumber", s.getCarnumber());
+            map.put("tradeno", "20180908180001");
+            map.put("startTime", DateUtil.timeVariousTypes(2));
+            map.put("endTime", DateUtil.timeVariousTypes(1));
+            map.put("username", "yccgj");
+            map.put("sign", "4DEB2D8E22EDB820A88FBFE2F597E086");
+            String json = JSON.toJSONString(map);
+            String address = "http://101.132.236.6:8088/cmsapi/getHistoryTrack";
+            String result = HttpUtils.doJsonPost(address, json);
+            resultData.addAll(JSON.parseArray(JSON.parseObject(result).getString("resultData"), HistoricalRoute.class));
+            System.out.println(resultData.toString());
+        }
     }
 
     @RequestMapping("test")

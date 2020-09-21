@@ -1,0 +1,525 @@
+2020-09-21 09:48:04 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 27760 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 09:48:04 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 09:48:05 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 09:48:05 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 09:48:05 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 31ms. Found 0 JPA repository interfaces.
+2020-09-21 09:48:05 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 09:48:05 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 09:48:05 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 6ms. Found 0 Redis repository interfaces.
+2020-09-21 09:48:06 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 09:48:06 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 09:48:06 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 09:48:06 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 09:48:06 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 09:48:06 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1607 ms
+2020-09-21 09:48:06 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 09:48:06 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 09:48:07 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 09:48:07 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 09:48:07 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 09:48:07 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 09:48:07 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 09:48:07 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 09:48:08 INFO  main com.example.car.CarApplication Started CarApplication in 4.079 seconds (JVM running for 6.341)
+2020-09-21 09:48:08 INFO  RMI TCP Connection(4)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 09:48:08 INFO  RMI TCP Connection(4)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 09:48:08 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 09:48:08 INFO  RMI TCP Connection(4)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 8 ms
+2020-09-21 09:48:09 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 09:48:09 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 09:48:09 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 09:51:11 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 29168 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 09:51:11 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 09:51:12 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 09:51:12 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 09:51:12 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 22ms. Found 0 JPA repository interfaces.
+2020-09-21 09:51:12 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 09:51:12 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 09:51:12 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 4ms. Found 0 Redis repository interfaces.
+2020-09-21 09:51:12 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 09:51:12 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 09:51:12 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 09:51:12 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 09:51:12 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 09:51:12 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1259 ms
+2020-09-21 09:51:13 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 09:51:13 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 09:51:13 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 09:51:13 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 09:51:13 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 09:51:14 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 09:51:14 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 09:51:14 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 09:51:14 INFO  main com.example.car.CarApplication Started CarApplication in 3.378 seconds (JVM running for 5.151)
+2020-09-21 09:51:14 INFO  RMI TCP Connection(2)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 09:51:14 INFO  RMI TCP Connection(2)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 09:51:14 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 09:51:14 INFO  RMI TCP Connection(2)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 6 ms
+2020-09-21 09:51:14 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 09:51:14 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 09:51:15 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 10:01:20 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 26228 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 10:01:20 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 10:01:21 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:01:21 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 10:01:21 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 30ms. Found 0 JPA repository interfaces.
+2020-09-21 10:01:21 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:01:21 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 10:01:21 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 5ms. Found 0 Redis repository interfaces.
+2020-09-21 10:01:22 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 10:01:22 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:01:22 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 10:01:22 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 10:01:22 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 10:01:22 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1482 ms
+2020-09-21 10:01:22 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 10:01:22 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 10:01:23 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 10:01:23 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 10:01:23 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:01:23 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 10:01:23 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 10:01:23 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 10:01:23 INFO  main com.example.car.CarApplication Started CarApplication in 3.829 seconds (JVM running for 5.561)
+2020-09-21 10:01:24 INFO  RMI TCP Connection(2)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 10:01:24 INFO  RMI TCP Connection(2)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 10:01:24 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 10:01:24 INFO  RMI TCP Connection(2)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 6 ms
+2020-09-21 10:01:24 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 10:01:24 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 10:01:24 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 10:17:29 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 31236 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 10:17:29 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 10:17:31 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:17:31 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 10:17:31 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 33ms. Found 0 JPA repository interfaces.
+2020-09-21 10:17:31 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:17:31 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 10:17:31 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 5ms. Found 0 Redis repository interfaces.
+2020-09-21 10:17:32 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 10:17:32 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:17:32 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 10:17:32 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 10:17:32 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 10:17:32 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 2368 ms
+2020-09-21 10:17:32 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 10:17:32 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 10:17:33 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 10:17:33 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 10:17:33 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:17:34 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 10:17:34 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 10:17:34 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 10:17:34 INFO  main com.example.car.CarApplication Started CarApplication in 4.921 seconds (JVM running for 6.489)
+2020-09-21 10:17:34 INFO  RMI TCP Connection(6)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 10:17:34 INFO  RMI TCP Connection(6)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 10:17:34 INFO  RMI TCP Connection(5)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 10:17:34 INFO  RMI TCP Connection(6)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 9 ms
+2020-09-21 10:17:35 INFO  RMI TCP Connection(5)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 10:17:35 INFO  RMI TCP Connection(5)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 10:17:35 INFO  RMI TCP Connection(5)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 10:18:55 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 30112 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 10:18:55 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 10:18:56 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:18:56 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 10:18:56 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 26ms. Found 0 JPA repository interfaces.
+2020-09-21 10:18:56 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:18:56 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 10:18:56 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 5ms. Found 0 Redis repository interfaces.
+2020-09-21 10:18:57 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 10:18:57 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:18:57 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 10:18:57 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 10:18:57 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 10:18:57 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1869 ms
+2020-09-21 10:18:58 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 10:18:58 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 10:18:59 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 10:18:59 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 10:18:59 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:18:59 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 10:18:59 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 10:18:59 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 10:18:59 INFO  main com.example.car.CarApplication Started CarApplication in 4.258 seconds (JVM running for 5.176)
+2020-09-21 10:18:59 INFO  RMI TCP Connection(3)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 10:18:59 INFO  RMI TCP Connection(3)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 10:18:59 INFO  RMI TCP Connection(3)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 6 ms
+2020-09-21 10:19:00 INFO  RMI TCP Connection(5)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 10:19:00 INFO  RMI TCP Connection(5)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 10:19:00 INFO  RMI TCP Connection(5)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 10:19:01 INFO  RMI TCP Connection(5)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 10:22:21 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 30732 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 10:22:21 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 10:22:21 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:22:21 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 10:22:21 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 24ms. Found 0 JPA repository interfaces.
+2020-09-21 10:22:21 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:22:21 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 10:22:21 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 5ms. Found 0 Redis repository interfaces.
+2020-09-21 10:22:22 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 10:22:22 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:22:22 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 10:22:22 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 10:22:22 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 10:22:22 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1412 ms
+2020-09-21 10:22:23 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 10:22:23 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 10:22:23 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Shutting down ExecutorService 'area'
+2020-09-21 10:22:23 INFO  main org.apache.catalina.core.StandardService Stopping service [Tomcat]
+2020-09-21 10:22:23 INFO  main org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2020-09-21 10:23:48 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 26748 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 10:23:48 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 10:23:49 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:23:49 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 10:23:49 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 25ms. Found 0 JPA repository interfaces.
+2020-09-21 10:23:49 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:23:49 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 10:23:49 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 5ms. Found 0 Redis repository interfaces.
+2020-09-21 10:23:50 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 10:23:50 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:23:50 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 10:23:50 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 10:23:50 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 10:23:50 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1744 ms
+2020-09-21 10:23:50 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 10:23:50 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 10:23:51 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Shutting down ExecutorService 'area'
+2020-09-21 10:23:51 INFO  main org.apache.catalina.core.StandardService Stopping service [Tomcat]
+2020-09-21 10:23:51 INFO  main org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2020-09-21 10:26:52 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 20492 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 10:26:52 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 10:26:53 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:26:53 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 10:26:53 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 31ms. Found 0 JPA repository interfaces.
+2020-09-21 10:26:53 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:26:53 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 10:26:53 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 5ms. Found 0 Redis repository interfaces.
+2020-09-21 10:26:53 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 10:26:53 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:26:53 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 10:26:53 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 10:26:53 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 10:26:53 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1571 ms
+2020-09-21 10:26:54 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 10:26:54 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 10:26:54 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Shutting down ExecutorService 'area'
+2020-09-21 10:26:54 INFO  main org.apache.catalina.core.StandardService Stopping service [Tomcat]
+2020-09-21 10:26:54 INFO  main org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2020-09-21 10:31:26 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 30560 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 10:31:26 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 10:31:27 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:31:27 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 10:31:28 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 32ms. Found 0 JPA repository interfaces.
+2020-09-21 10:31:28 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:31:28 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 10:31:28 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 6ms. Found 0 Redis repository interfaces.
+2020-09-21 10:31:28 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 10:31:28 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:31:28 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 10:31:28 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 10:31:28 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 10:31:28 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1983 ms
+2020-09-21 10:31:29 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 10:31:29 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 10:31:30 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 10:31:30 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 10:31:30 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:31:31 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 10:31:31 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 10:31:31 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 10:31:31 INFO  main com.example.car.CarApplication Started CarApplication in 5.013 seconds (JVM running for 6.709)
+2020-09-21 10:31:31 INFO  RMI TCP Connection(1)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 10:31:31 INFO  RMI TCP Connection(1)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 10:31:31 INFO  RMI TCP Connection(1)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 11 ms
+2020-09-21 10:31:32 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 10:31:33 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 10:31:33 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 10:31:33 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 10:34:34 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 29232 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 10:34:34 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 10:34:36 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:34:36 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 10:34:36 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 36ms. Found 0 JPA repository interfaces.
+2020-09-21 10:34:36 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:34:36 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 10:34:36 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 6ms. Found 0 Redis repository interfaces.
+2020-09-21 10:34:36 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 10:34:36 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:34:36 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 10:34:36 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 10:34:36 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 10:34:36 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1965 ms
+2020-09-21 10:34:37 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 10:34:37 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 10:34:38 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 10:34:38 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 10:34:38 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:34:39 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 10:34:39 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 10:34:39 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 10:34:39 INFO  main com.example.car.CarApplication Started CarApplication in 5.374 seconds (JVM running for 7.228)
+2020-09-21 10:34:39 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 10:34:40 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 10:34:40 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 10:34:40 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 10:34:40 INFO  RMI TCP Connection(5)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 10:34:40 INFO  RMI TCP Connection(5)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 10:34:40 INFO  RMI TCP Connection(5)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 10 ms
+2020-09-21 10:36:30 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 28456 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 10:36:30 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 10:36:31 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:36:31 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 10:36:31 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 33ms. Found 0 JPA repository interfaces.
+2020-09-21 10:36:31 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:36:31 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 10:36:31 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 9ms. Found 0 Redis repository interfaces.
+2020-09-21 10:36:31 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 10:36:31 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:36:31 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 10:36:31 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 10:36:31 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 10:36:31 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1395 ms
+2020-09-21 10:36:32 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 10:36:32 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 10:36:32 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 10:36:32 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 10:36:32 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:36:33 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 10:36:33 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 10:36:33 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 10:36:33 INFO  main com.example.car.CarApplication Started CarApplication in 3.722 seconds (JVM running for 4.578)
+2020-09-21 10:36:33 INFO  RMI TCP Connection(1)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 10:36:33 INFO  RMI TCP Connection(1)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 10:36:33 INFO  RMI TCP Connection(1)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 6 ms
+2020-09-21 10:36:33 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 10:36:34 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 10:36:34 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 10:36:34 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 10:39:36 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 29632 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 10:39:36 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 10:39:37 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:39:37 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 10:39:37 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 26ms. Found 0 JPA repository interfaces.
+2020-09-21 10:39:37 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:39:37 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 10:39:37 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 6ms. Found 0 Redis repository interfaces.
+2020-09-21 10:39:37 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 10:39:37 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:39:37 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 10:39:37 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 10:39:37 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 10:39:37 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1510 ms
+2020-09-21 10:39:38 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 10:39:38 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 10:39:39 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 10:39:39 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 10:39:39 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:39:39 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 10:39:39 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 10:39:39 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 10:39:39 INFO  main com.example.car.CarApplication Started CarApplication in 3.859 seconds (JVM running for 4.712)
+2020-09-21 10:39:40 INFO  RMI TCP Connection(1)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 10:39:40 INFO  RMI TCP Connection(1)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 10:39:40 INFO  RMI TCP Connection(2)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 10:39:40 INFO  RMI TCP Connection(1)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 6 ms
+2020-09-21 10:39:40 INFO  RMI TCP Connection(2)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 10:39:40 INFO  RMI TCP Connection(2)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 10:39:40 INFO  RMI TCP Connection(2)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 10:40:29 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 27032 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 10:40:29 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 10:40:30 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:40:30 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 10:40:30 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 34ms. Found 0 JPA repository interfaces.
+2020-09-21 10:40:30 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 10:40:30 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 10:40:30 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 6ms. Found 0 Redis repository interfaces.
+2020-09-21 10:40:30 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 10:40:30 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:40:30 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 10:40:30 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 10:40:30 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 10:40:30 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1456 ms
+2020-09-21 10:40:31 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 10:40:31 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 10:40:32 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 10:40:32 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 10:40:32 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 10:40:32 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 10:40:32 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 10:40:32 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 10:40:32 INFO  main com.example.car.CarApplication Started CarApplication in 3.845 seconds (JVM running for 4.92)
+2020-09-21 10:40:33 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 10:40:33 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 10:40:33 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 10:40:33 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 10:40:33 INFO  RMI TCP Connection(3)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 10:40:33 INFO  RMI TCP Connection(3)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 10:40:33 INFO  RMI TCP Connection(3)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 5 ms
+2020-09-21 11:01:42 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 31164 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 11:01:42 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 11:01:43 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 11:01:43 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 11:01:43 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 18ms. Found 0 JPA repository interfaces.
+2020-09-21 11:01:43 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 11:01:43 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 11:01:43 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 5ms. Found 0 Redis repository interfaces.
+2020-09-21 11:01:43 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 11:01:43 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 11:01:43 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 11:01:43 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 11:01:43 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 11:01:43 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1532 ms
+2020-09-21 11:01:44 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 11:01:44 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 11:01:44 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 11:01:44 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 11:01:45 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 11:01:45 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 11:01:45 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 11:01:45 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 11:01:45 INFO  main com.example.car.CarApplication Started CarApplication in 3.879 seconds (JVM running for 4.794)
+2020-09-21 11:01:45 INFO  RMI TCP Connection(4)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 11:01:45 INFO  RMI TCP Connection(4)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 11:01:45 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 11:01:45 INFO  RMI TCP Connection(4)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 6 ms
+2020-09-21 11:01:46 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 11:01:46 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 11:01:46 INFO  RMI TCP Connection(3)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 11:04:18 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 28076 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 11:04:18 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 11:04:19 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 11:04:19 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 11:04:19 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 16ms. Found 0 JPA repository interfaces.
+2020-09-21 11:04:19 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 11:04:19 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 11:04:19 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 5ms. Found 0 Redis repository interfaces.
+2020-09-21 11:04:20 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 11:04:20 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 11:04:20 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 11:04:20 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 11:04:20 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 11:04:20 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1334 ms
+2020-09-21 11:04:20 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 11:04:21 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 11:04:21 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 11:04:21 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 11:04:21 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 11:04:21 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 11:04:21 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 11:04:21 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 11:04:21 INFO  main com.example.car.CarApplication Started CarApplication in 3.666 seconds (JVM running for 4.547)
+2020-09-21 11:04:22 INFO  RMI TCP Connection(3)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 11:04:22 INFO  RMI TCP Connection(3)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 11:04:22 INFO  RMI TCP Connection(4)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 11:04:22 INFO  RMI TCP Connection(3)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 6 ms
+2020-09-21 11:04:22 INFO  RMI TCP Connection(4)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 11:04:22 INFO  RMI TCP Connection(4)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 11:04:22 INFO  RMI TCP Connection(4)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 13:23:55 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 20760 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 13:23:55 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 13:23:56 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 13:23:56 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 13:23:56 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 16ms. Found 0 JPA repository interfaces.
+2020-09-21 13:23:56 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 13:23:56 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 13:23:56 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 4ms. Found 0 Redis repository interfaces.
+2020-09-21 13:23:57 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 13:23:57 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 13:23:57 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 13:23:57 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 13:23:57 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 13:23:57 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1544 ms
+2020-09-21 13:23:58 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 13:23:58 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 13:23:58 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 13:23:58 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 13:23:58 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 13:23:59 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 13:23:59 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 13:23:59 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 13:23:59 INFO  main com.example.car.CarApplication Started CarApplication in 3.865 seconds (JVM running for 5.818)
+2020-09-21 13:23:59 INFO  RMI TCP Connection(3)-192.168.2.145 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 13:23:59 INFO  RMI TCP Connection(3)-192.168.2.145 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 13:23:59 INFO  RMI TCP Connection(4)-192.168.2.145 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 13:23:59 INFO  RMI TCP Connection(3)-192.168.2.145 org.springframework.web.servlet.DispatcherServlet Completed initialization in 6 ms
+2020-09-21 13:24:00 INFO  RMI TCP Connection(4)-192.168.2.145 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 13:24:00 INFO  RMI TCP Connection(4)-192.168.2.145 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 13:24:00 INFO  RMI TCP Connection(4)-192.168.2.145 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 13:32:28 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 10232 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 13:32:28 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 13:32:28 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 13:32:28 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 13:32:28 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 17ms. Found 0 JPA repository interfaces.
+2020-09-21 13:32:28 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 13:32:28 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 13:32:28 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 4ms. Found 0 Redis repository interfaces.
+2020-09-21 13:32:29 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 13:32:29 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 13:32:29 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 13:32:29 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 13:32:29 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 13:32:29 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1484 ms
+2020-09-21 13:32:30 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 13:32:30 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 13:32:30 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 13:32:30 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 13:32:30 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 13:32:31 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 13:32:31 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 13:32:31 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 13:32:31 INFO  main com.example.car.CarApplication Started CarApplication in 4.292 seconds (JVM running for 7.313)
+2020-09-21 13:32:32 INFO  RMI TCP Connection(1)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 13:32:32 INFO  RMI TCP Connection(1)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 13:32:32 INFO  RMI TCP Connection(2)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 13:32:32 INFO  RMI TCP Connection(1)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 8 ms
+2020-09-21 13:32:32 INFO  RMI TCP Connection(2)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 13:32:32 INFO  RMI TCP Connection(2)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 13:32:33 INFO  RMI TCP Connection(2)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
+2020-09-21 14:16:30 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 9692 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 14:16:30 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 14:16:32 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 14:16:32 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 14:16:32 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 16ms. Found 0 JPA repository interfaces.
+2020-09-21 14:16:32 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 14:16:32 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 14:16:32 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 4ms. Found 0 Redis repository interfaces.
+2020-09-21 14:16:32 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 14:16:32 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 14:16:32 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 14:16:32 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 14:16:38 INFO  main com.example.car.CarApplication Starting CarApplication on ADM-2020LTSC512 with PID 4044 (D:\project\car_manage\target\classes started by Administrator in D:\project\car_manage)
+2020-09-21 14:16:38 INFO  main com.example.car.CarApplication No active profile set, falling back to default profiles: default
+2020-09-21 14:16:39 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 14:16:39 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data JPA repositories in DEFERRED mode.
+2020-09-21 14:16:39 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 15ms. Found 0 JPA repository interfaces.
+2020-09-21 14:16:39 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Multiple Spring Data modules found, entering strict repository configuration mode!
+2020-09-21 14:16:39 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2020-09-21 14:16:39 INFO  main org.springframework.data.repository.config.RepositoryConfigurationDelegate Finished Spring Data repository scanning in 4ms. Found 0 Redis repository interfaces.
+2020-09-21 14:16:39 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat initialized with port(s): 8081 (https)
+2020-09-21 14:16:39 INFO  main org.apache.coyote.http11.Http11NioProtocol Initializing ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 14:16:39 INFO  main org.apache.catalina.core.StandardService Starting service [Tomcat]
+2020-09-21 14:16:39 INFO  main org.apache.catalina.core.StandardEngine Starting Servlet engine: [Apache Tomcat/9.0.36]
+2020-09-21 14:16:40 INFO  main org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring embedded WebApplicationContext
+2020-09-21 14:16:40 INFO  main org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext Root WebApplicationContext: initialization completed in 1230 ms
+2020-09-21 14:16:40 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService
+2020-09-21 14:16:40 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor Initializing ExecutorService 'area'
+2020-09-21 14:16:41 INFO  main org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler Initializing ExecutorService 'taskScheduler'
+2020-09-21 14:16:41 INFO  main org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver Exposing 2 endpoint(s) beneath base path '/actuator'
+2020-09-21 14:16:41 INFO  main org.apache.coyote.http11.Http11NioProtocol Starting ProtocolHandler ["https-jsse-nio-8081"]
+2020-09-21 14:16:41 INFO  main org.springframework.boot.web.embedded.tomcat.TomcatWebServer Tomcat started on port(s): 8081 (https) with context path ''
+2020-09-21 14:16:41 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Triggering deferred initialization of Spring Data repositories…
+2020-09-21 14:16:41 INFO  main org.springframework.data.repository.config.DeferredRepositoryInitializationListener Spring Data repositories initialized!
+2020-09-21 14:16:41 INFO  main com.example.car.CarApplication Started CarApplication in 3.416 seconds (JVM running for 4.837)
+2020-09-21 14:16:42 INFO  RMI TCP Connection(2)-192.168.124.7 org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-21 14:16:42 INFO  RMI TCP Connection(2)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Initializing Servlet 'dispatcherServlet'
+2020-09-21 14:16:42 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Starting...
+2020-09-21 14:16:42 INFO  RMI TCP Connection(2)-192.168.124.7 org.springframework.web.servlet.DispatcherServlet Completed initialization in 5 ms
+2020-09-21 14:16:42 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-1 - Start completed.
+2020-09-21 14:16:42 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Starting...
+2020-09-21 14:16:42 INFO  RMI TCP Connection(1)-192.168.124.7 com.zaxxer.hikari.HikariDataSource HikariPool-2 - Start completed.
