@@ -45,7 +45,7 @@
 
 
         </foreach>
-
+ 
     </insert>
 
     <select id="selectHistoricalRoute" resultType="com.example.car.entity.HistoricalRoute">
