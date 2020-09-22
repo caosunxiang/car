@@ -96,36 +96,23 @@ public class APIManage {
     @RequestMapping("carRecord")
     public Body carRecord(String carnumber, String startTime,
                           String endTime) {
-        String address = url + "cmsapi/getHistoryTrack";
-        String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
-        Map<String, String> map = new HashMap<>();
-        map.put("carnumber", carnumber);
-        map.put("endTime", endTime);
-        map.put("sign", sign);
-        map.put("startTime", startTime);
-        map.put("tradeno", tradeno);
-        map.put("username", username);
-        String json = JSON.toJSONString(map);
-        String result = HttpUtils.httpPostRaw(address, json, null, "UTF-8");
-        JSONObject jsonObject = JSONObject.parseObject(result);
-        List<Map<String, Object>> list = (List<Map<String, Object>>) jsonObject.get("resultData");
+        List<HistoricalRoute> list = historicalRouteMapper.selectHistoricalRoute(startTime, endTime, carnumber);
         if (list.size() > 0) {
-            String lat = list.get(0).get("lat").toString();
-            String lng = list.get(0).get("lng").toString();
-            String direction = list.get(0).get("direction").toString();
-            List<Map<String, Object>> list1 = new ArrayList<>();
+            String lat = list.get(0).getLat();
+            String lng = list.get(0).getLng();
+            String direction = list.get(0).getDirection();
+            List<HistoricalRoute> list1 = new ArrayList<>();
             list1.add(list.get(0));
             for (int i = 0; i < list.size(); i++) {
                 if (i != list.size() - 1) {
-                    if (!list.get(i + 1).get("lat").equals(0) && !list.get(i + 1).get("lng").equals(0)) {
-                        if (!lat.equals(list.get(i + 1).get("lat").toString()) || !lng.equals(list.get(i + 1).get(
-                                "lng").toString())) {
+                    if (!list.get(i + 1).getLat().equals("0.00") && !list.get(i + 1).getLng().equals("0.00")) {
+                        if (!lat.equals(list.get(i + 1).getLat()) || !lng.equals(list.get(i + 1).getLng())) {
                             if (Direction.directionGap(Double.parseDouble(direction),
-                                    Double.parseDouble(list.get(i + 1).get("direction").toString()))) {
+                                    Double.parseDouble(list.get(i + 1).getDirection()))) {
                                 list1.add(list.get(i + 1));
                             }
-                            lat = list.get(i + 1).get("lat").toString();
-                            lng = list.get(i + 1).get("lng").toString();
+                            lat = list.get(i + 1).getLat();
+                            lng = list.get(i + 1).getLng();
                         }
                     }
                 }
@@ -367,14 +354,19 @@ public class APIManage {
     @RequestMapping("areaSelect")
     public Body areaSelect(Double lat1, Double lng1, String startTime, String endTime,
                            String numbers, Double dic) {
-        List<String> str = CutString.divide(numbers);
-        List<String> carNo = new ArrayList<>();
-        for (String s : str) {
-            if (areaSelect.areaSelect(lat1, lng1, startTime, endTime, s, dic)) {
-                carNo.add(s);
+        if (StringUtils.isEmpty(numbers)) {
+            List<String> list = areaSelect.areaSelect(lat1, lng1, startTime, endTime, dic);
+            return Body.newInstance(list);
+        } else {
+            List<String> str = CutString.divide(numbers);
+            List<String> carNo = new ArrayList<>();
+            for (String s : str) {
+                if (areaSelect.areaSelect(lat1, lng1, startTime, endTime, s, dic)) {
+                    carNo.add(s);
+                }
             }
+            return Body.newInstance(carNo);
         }
-        return Body.newInstance(carNo);
     }
 
     /**

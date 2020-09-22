@@ -10,4 +10,6 @@ public interface DeviceAlarmSeverityService {
     Body selectAlarmSeverityValid(String startTime,String number, String endTime,String name);
 
     Body selectAlarmMuck(String number,String name);
+
+    Body selectNewAlarm(String name,String time,Integer type);
 }

@@ -10,6 +10,7 @@
  */
 package com.example.car.service.impl;
 
+import com.example.car.common.utils.CutString;
 import com.example.car.common.utils.entity.EChatBean3;
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.DeviceAlarmSeverity;
@@ -87,6 +88,13 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
         List<EChatBean3> alarmSeverity = deviceAlarmSeverityMapper.selectEChat1(number, null, null,
                 null, "A", name);
         return Body.newInstance(alarmSeverity);
+    }
+
+    @Override
+    public Body selectNewAlarm(String name, String time, Integer type) {
+        List<String> list=CutString.divide(name);
+        List<DeviceAlarmSeverity> deviceAlarmSeverities=deviceAlarmSeverityMapper.selectNewAlarm(time,list,type);
+        return Body.newInstance(deviceAlarmSeverities);
     }
 
 }

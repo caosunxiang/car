@@ -252,19 +252,32 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         ORDER BY
         a.alarmStartTime DESC
     </select>
-    <select id="selectAlarmCar" resultType="java.lang.String">
-        SELECT
-        alarm.car_number AS carNumber
-FROM
-	device_alarm_severity alarm
-	LEFT JOIN car_info car ON car.carnumber = alarm.car_number
-WHERE
-	car.deptid = #{deptid}
-	<if test="number != null and number!=''">
-        AND alarm.car_number LIKE CONCAT('%',#{number},'%')
-    </if>
-GROUP BY
-        carNumber
+    <select id="selectNewAlarm" resultType="com.example.car.entity.DeviceAlarmSeverity">
+        SELECT alarm_id AS alarmId,
+        alarm_name AS alarmName,
+        car_number AS carNumber,
+        alarm_start_time AS alarmStartTime,
+        alarm_start_speed as alarmStartSpeed,
+        alarm_end_time AS alarmEndTime,
+        alarm_end_speed as alarmEndSpeed,
+        alarm_end_lat AS alarmEndLat,
+        alarm_end_lng as alarmEndLng,
+        alarm_mileage as alarmMileage,
+        alarm_lat AS alarmLat,
+        handle_by AS handleBy,
+        handle_type AS handleType,
+        handle_time AS handleTime,
+        alarm_lng AS alarmLng from device_alarm_severity a WHERE DATE_FORMAT(a.alarm_start_time,'%Y-%m-%d')=#{time}
+        <if test="list != null and list.size() >0">
+        and a.alarm_name in
+        <foreach collection="list" item="name" index="index" open="(" close=")" separator=",">
+            #{name}
+        </foreach>
+        </if>
+        <if test="type !=null and type !=''">
+            and
+            a.handle_type =#{type}
+        </if>
     </select>
     <select id="selectEChat" resultType="java.lang.String">
         SELECT

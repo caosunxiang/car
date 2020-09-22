@@ -35,23 +35,17 @@
         )
         VALUES
         <foreach collection="list" item="it" separator=",">
-
-
             (#{it.id},#{it.city},#{it.deptid},#{it.speed},#{it.carid},#{it.blat},#{it.gpsflag},
             #{it.province},#{it.tName},#{it.carstatus},#{it.gaddress},#{it.lat},#{it.seq},#{it.direction},
             #{it.mileage},#{it.createtime},#{it.address},#{it.lng},#{it.summileage},#{it.glat},#{it.msgid},
             #{it.terminal},#{it.blng},#{it.glng},#{it.deptname},#{it.carnumber},#{it.district},#{it.gpstime},
             #{it.altitude})
-
-
         </foreach>
-
- 
     </insert>
 
     <select id="selectHistoricalRoute" resultType="com.example.car.entity.HistoricalRoute">
         SELECT * FROM historical_route WHERE createtime BETWEEN #{startTime} AND #{endTime}
-        <if test="name !=null and name!=''">
+        <if test="name !=null and name !=''">
             and carnumber = #{name}
         </if>
     </select>

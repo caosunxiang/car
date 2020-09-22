@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,12 +41,29 @@ public class AreaSelect {
         List<HistoricalRoute> list = historicalRouteMapper.selectHistoricalRoute(startTime, endTime, number);
         boolean isArea=false;
         for (HistoricalRoute historicalRoute : list) {
-            if ( Distance.coordinateToDistance(lat1, lng1, Double.parseDouble(historicalRoute.getLat()),
+            System.out.println(historicalRoute.toString());
+            if ( !Distance.coordinateToDistance(lat1, lng1, Double.parseDouble(historicalRoute.getLat()),
                     Double.parseDouble(historicalRoute.getLng()), distance)){
                 isArea=true;
                 break;
             }
         }
         return isArea;
+    }
+
+    public List<String> areaSelect(Double lat1, Double lng1, String startTime,
+                              String endTime, Double distance) {
+        List<String> numbers=new ArrayList<>();
+        List<HistoricalRoute> list = historicalRouteMapper.selectHistoricalRoute(startTime, endTime,null);
+        for (HistoricalRoute historicalRoute : list) {
+            System.out.println(historicalRoute.toString());
+            if (!numbers.contains(historicalRoute.getCarnumber())){
+                if ( !Distance.coordinateToDistance(lat1, lng1, Double.parseDouble(historicalRoute.getLat()),
+                        Double.parseDouble(historicalRoute.getLng()), distance)){
+                    numbers.add(historicalRoute.getCarnumber());
+                }
+            }
+        }
+        return numbers;
     }
 }
