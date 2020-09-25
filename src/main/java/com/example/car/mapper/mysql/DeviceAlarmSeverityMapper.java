@@ -6,7 +6,6 @@ import io.lettuce.core.dynamic.annotation.Param;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public interface DeviceAlarmSeverityMapper {
     void insertAlarmSeverity(DeviceAlarmSeverity alarmSeverity);
@@ -18,6 +17,9 @@ public interface DeviceAlarmSeverityMapper {
     List<Map<String, Object>> selectAlarmSeverityAll(@Param("startTime") String startTime,
                                                      @Param("endTime") String endTime, @Param("number") String number
             , @Param("size") Integer size);
+
+    List<Map<String, Object>> selectNewAlarmAll(@Param("time") String time, @Param("list") List<String> list, @Param(
+            "type") Integer type,@Param("number")String number);
 
     Integer selectAlarmSeverityCount(@Param("startTime") String startTime,
                                      @Param("endTime") String endTime, @Param("name") String name);
@@ -38,7 +40,8 @@ public interface DeviceAlarmSeverityMapper {
 
     List<String> selectAlarmName();
 
-    List<DeviceAlarmSeverity> selectNewAlarm(@Param("time") String time, @Param("list") List<String> list,@Param("type")Integer type);
+    List<DeviceAlarmSeverity> selectNewAlarm(@Param("time") String time, @Param("list") List<String> list, @Param(
+            "type") Integer type,@Param("number")String number);
 
     List<String> selectEChat(@Param("deptid") long deptid, @Param("number") String number);
 

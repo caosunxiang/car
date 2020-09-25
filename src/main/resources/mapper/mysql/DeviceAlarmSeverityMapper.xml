@@ -278,6 +278,44 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
             and
             a.handle_type =#{type}
         </if>
+        <if test="number !=null and number !=''">
+            and
+            car_number  LIKE CONCAT('%',#{number},'%')
+        </if>
+    </select>
+
+    <select id="selectNewAlarmAll" resultType="java.util.Map">
+        SELECT
+        alarm_id AS id,
+        alarm_name AS alarmname,
+        car_number AS carnumber,
+        alarm_start_time AS start_time,
+        alarm_start_speed as start_speed,
+        alarm_end_time AS end_time,
+        alarm_end_speed as end_speed,
+        alarm_end_lat AS alarmEndLat,
+        alarm_end_lng as alarmEndLng,
+        alarm_mileage as alarmMileage,
+        alarm_lat AS start_lat,
+        handle_by AS handleBy,
+        handle_type AS handleType,
+        handle_time AS handleTime,
+        alarm_lng AS start_lon
+        FROM device_alarm_severity  WHERE DATE_FORMAT(alarm_start_time,'%Y-%m-%d')=#{time}
+        <if test="list != null and list.size() >0">
+            and alarm_name in
+            <foreach collection="list" item="name" index="index" open="(" close=")" separator=",">
+                #{name}
+            </foreach>
+        </if>
+        <if test="type !=null and type !=''">
+            and
+            handle_type =#{type}
+        </if>
+        <if test="number !=null and number !=''">
+            and
+            car_number  LIKE CONCAT('%',#{number},'%')
+        </if>
     </select>
     <select id="selectEChat" resultType="java.lang.String">
         SELECT

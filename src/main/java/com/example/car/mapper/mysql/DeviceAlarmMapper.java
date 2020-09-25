@@ -28,15 +28,20 @@ public interface DeviceAlarmMapper {
                              @Param("endTime") String endTime, @Param("id") Long id, @Param("type") Integer type);
 
 
-    Integer selectAlarmNowCount( @Param("type") Integer type);
+    Integer selectAlarmNowCount(@Param("type") Integer type);
 
-    Integer selectAlarmEChat(@Param("deptid")Long deptid);
+    Integer selectAlarmEChat(@Param("deptid") Long deptid);
 
-    Set<String> selectAlarmCar(@Param("deptid")Long deptid , @Param("number")String number);
+    Set<String> selectAlarmCar(@Param("deptid") Long deptid, @Param("number") String number);
 
-    List<String >selectEChat(@Param("deptid")long deptid, @Param("number")String number);
+    List<String> selectEChat(@Param("deptid") long deptid, @Param("number") String number);
 
-    List<EChatBean3>selectEChat1(@Param("number") String number,@Param("time")Integer time);
+    List<EChatBean3> selectEChat1(@Param("number") String number, @Param("time") Integer time);
 
-    List<EChatBean3>selectTask(@Param("number") String number);
+    List<EChatBean3> selectTask(@Param("number") String number);
+
+    List<Map<String, Object>> selectAlarmNew(@Param("number") String number, @Param("startTime") String startTime,
+                                             @Param("endTime") String endTime, @Param("id") Long id,
+                                             @Param("time") String time,
+                                           @Param("size") Integer size, @Param("type") Integer type);
 }

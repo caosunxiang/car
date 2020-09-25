@@ -11,5 +11,5 @@ public interface DeviceAlarmSeverityService {
 
     Body selectAlarmMuck(String number,String name);
 
-    Body selectNewAlarm(String name,String time,Integer type);
+    Body selectNewAlarm(String name,String time,Integer type,String number);
 }

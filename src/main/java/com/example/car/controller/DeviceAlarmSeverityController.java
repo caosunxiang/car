@@ -85,15 +85,15 @@ public class DeviceAlarmSeverityController {
         return deviceAlarmSeverityService.selectAlarmMuck(number, name);
     }
 
-    /** 
-    * @Description: 小程序查询严重报警新接口
-    * @Param: [name, time, type]
-    * @return: com.example.car.common.utils.json.Body
-    * @Author: 冷酷的苹果
-    * @Date: 2020/9/22 14:44
-    */
+    /**
+     * @Description: 小程序查询严重报警新接口
+     * @Param: [name, time, type]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/9/22 14:44
+     */
     @RequestMapping("selectNewAlarm")
-    public Body selectNewAlarm(String name, String time, Integer type) {
-        return deviceAlarmSeverityService.selectNewAlarm(name, time, type);
+    public Body selectNewAlarm(String name, String time, Integer type, String number) {
+        return deviceAlarmSeverityService.selectNewAlarm(name, time, type, number);
     }
 }

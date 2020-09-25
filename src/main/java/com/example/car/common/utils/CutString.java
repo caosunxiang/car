@@ -10,6 +10,8 @@
  */
 package com.example.car.common.utils;
 
+import org.springframework.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,9 @@ public class CutString {
     */
     public static List<String> divide(String msg) {
         List<String> list = new ArrayList<String>();
+        if (StringUtils.isEmpty(msg)){
+            return list;
+        }
         msg = msg + ",";
         char a[] = msg.toCharArray();
         Integer c = 0;

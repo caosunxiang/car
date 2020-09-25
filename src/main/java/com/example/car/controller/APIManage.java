@@ -28,8 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -96,23 +94,36 @@ public class APIManage {
     @RequestMapping("carRecord")
     public Body carRecord(String carnumber, String startTime,
                           String endTime) {
-        List<HistoricalRoute> list = historicalRouteMapper.selectHistoricalRoute(startTime, endTime, carnumber);
+        String address = url + "cmsapi/getHistoryTrack";
+        String sign = Md5Util.MD5EncodeUtf8(username + "admin12320180908180001");
+        Map<String, String> map = new HashMap<>();
+        map.put("carnumber", carnumber);
+        map.put("endTime", endTime);
+        map.put("sign", sign);
+        map.put("startTime", startTime);
+        map.put("tradeno", tradeno);
+        map.put("username", username);
+        String json = JSON.toJSONString(map);
+        String result = HttpUtils.httpPostRaw(address, json, null, "UTF-8");
+        JSONObject jsonObject = JSONObject.parseObject(result);
+        List<Map<String, Object>> list = (List<Map<String, Object>>) jsonObject.get("resultData");
         if (list.size() > 0) {
-            String lat = list.get(0).getLat();
-            String lng = list.get(0).getLng();
-            String direction = list.get(0).getDirection();
-            List<HistoricalRoute> list1 = new ArrayList<>();
+            String lat = list.get(0).get("lat").toString();
+            String lng = list.get(0).get("lng").toString();
+            String direction = list.get(0).get("direction").toString();
+            List<Map<String, Object>> list1 = new ArrayList<>();
             list1.add(list.get(0));
             for (int i = 0; i < list.size(); i++) {
                 if (i != list.size() - 1) {
-                    if (!list.get(i + 1).getLat().equals("0.00") && !list.get(i + 1).getLng().equals("0.00")) {
-                        if (!lat.equals(list.get(i + 1).getLat()) || !lng.equals(list.get(i + 1).getLng())) {
+                    if (!list.get(i + 1).get("lat").equals(0) && !list.get(i + 1).get("lng").equals(0)) {
+                        if (!lat.equals(list.get(i + 1).get("lat").toString()) || !lng.equals(list.get(i + 1).get(
+                                "lng").toString())) {
                             if (Direction.directionGap(Double.parseDouble(direction),
-                                    Double.parseDouble(list.get(i + 1).getDirection()))) {
+                                    Double.parseDouble(list.get(i + 1).get("direction").toString()))) {
                                 list1.add(list.get(i + 1));
                             }
-                            lat = list.get(i + 1).getLat();
-                            lng = list.get(i + 1).getLng();
+                            lat = list.get(i + 1).get("lat").toString();
+                            lng = list.get(i + 1).get("lng").toString();
                         }
                     }
                 }
@@ -164,7 +175,7 @@ public class APIManage {
      * @Date: 2020/7/2 15:17
      */
     @RequestMapping("selectAlarmAll")
-    public Body selectAlarmAll(String startTime, String endTime, String number, Integer size, Integer type) {
+    public Body selectAlarmAll(String number, Integer size, Integer type, String time, String name) {
         Long id = new Long("722445496500748288");
         if (StringUtils.isEmpty(size)) {
             size = 250;
@@ -172,12 +183,14 @@ public class APIManage {
         List<Map<String, Object>> list = new ArrayList<>();
         List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(id);
         for (SysAuthDept sysAuthDept : deptList) {
-            list.addAll(this.deviceAlarmMapper.selectAlarm(number, startTime, endTime, sysAuthDept.getDeptid(), size,
+            list.addAll(this.deviceAlarmMapper.selectAlarmNew(number, null, null, sysAuthDept.getDeptid(), time, size,
                     type));
         }
-        List<Map<String, Object>> list1 = deviceAlarmSeverityMapper.selectAlarmSeverityAll(startTime, endTime, number
-                , size);
+        List<String> listStr = CutString.divide(name);
+        List<Map<String, Object>> list1 = deviceAlarmSeverityMapper.selectNewAlarmAll(time, listStr, type, number);
         list.addAll(list1);
+
+        list.sort((o1, o2) -> Integer.compare(o2.get("start_time").toString().compareTo(o1.get("start_time").toString()), 0));
         return Body.newInstance(list);
     }
 

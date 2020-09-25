@@ -67,12 +67,12 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
     @Override
     public Body selectAlarmSeverityCount(String startTime, String endTime) {
         List<EChatBean3> eChatBean3sGps = deviceAlarmSeverityMapper.selectEChat1(null,
-                null, null, null, "A","离线告警");
+                null, null, null, "A", "离线告警");
         List<EChatBean3> eChatBean3sOther = deviceAlarmSeverityMapper.selectEChat1(null,
-                null, null, null, null,"超速告警");
+                null, null, null, null, "超速告警");
         List<EChatBean3> eChatBean3sMuck = deviceAlarmSeverityMapper.selectEChat1(null,
-                null, null, null, null,"无准运证行驶");
-        Integer count =eChatBean3sGps.size()+eChatBean3sOther.size()+eChatBean3sMuck.size();
+                null, null, null, null, "无准运证行驶");
+        Integer count = eChatBean3sGps.size() + eChatBean3sOther.size() + eChatBean3sMuck.size();
         return Body.newInstance(count);
     }
 
@@ -91,9 +91,10 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
     }
 
     @Override
-    public Body selectNewAlarm(String name, String time, Integer type) {
-        List<String> list=CutString.divide(name);
-        List<DeviceAlarmSeverity> deviceAlarmSeverities=deviceAlarmSeverityMapper.selectNewAlarm(time,list,type);
+    public Body selectNewAlarm(String name, String time, Integer type, String number) {
+        List<String> list = CutString.divide(name);
+        List<DeviceAlarmSeverity> deviceAlarmSeverities = deviceAlarmSeverityMapper.selectNewAlarm(time, list, type,
+                number);
         return Body.newInstance(deviceAlarmSeverities);
     }
 
