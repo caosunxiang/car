@@ -199,11 +199,11 @@ public class Task {
     }
 
     /**
-     * @Description: 超速报警
-     * @Param: []
-     * @return: void
-     * @Author: 冷酷的苹果
-     * @Date: 2020/7/24 17:50
+     * @ Description: 超速报警
+     * @ Param: []
+     * @ return: void
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/7/24 17:50
      */
     @Scheduled(cron = " * 0/5 * * * ? ")
     public void overspeed() {
@@ -275,11 +275,11 @@ public class Task {
     }
 
     /**
-     * @Description: 同步历史轨迹
-     * @Param: []
-     * @return: void
-     * @Author: 冷酷的苹果
-     * @Date: 2020/9/21 8:38
+     * @ Description: 同步历史轨迹
+     * @ Param: []
+     * @ return: void
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/9/21 8:38
      */
     @Scheduled(cron = " 0 0 0 * * ? ")
     public void historicalRoute() {
@@ -448,10 +448,10 @@ public class Task {
     /**
      * 判断时间是否在时间段内
      *
-     * @param nowTime
-     * @param beginTime
-     * @param endTime
-     * @return
+     * @ param nowTime
+     * @ param beginTime
+     * @ param endTime
+     * @ return
      */
     public static boolean belongCalendar(Date nowTime, Date beginTime, Date endTime) {
         Calendar date = Calendar.getInstance();
