@@ -84,24 +84,23 @@
         p.EndTime,
         p.LineName,
         p.PermitNo,
-        p.ProjectId,
+        p.CompanyName,
         p.ProjectName ,
-        c.CarType,
-        c.Capacity,
-        c.ExpiryTime,
-        c.CompanyName,
-        c.CarNo,
-        c.DriverName,
-        c.DriverMobile ,
-        i.place,
-        i.mucktype,
-        i.approvetime,
-        i.permittype
+        i.CarType,
+        i.Capacity,
+        i.ExpiryTime,
+        i.CompanyName,
+        i.CarNo,
+        i.DriverName,
+        i.DriverMobile ,
+        p.place,
+        p.mucktype,
+        p.approvetime,
+        p.permittype
         FROM
-        View_ProjectPermit p
+        View_PermitInfo p
         LEFT JOIN View_PermitTruck t ON t.PermitNo= p.PermitNo
-        LEFT JOIN view_TruckInfo c ON c.CarNo= t.CarNo
-        LEFT JOIN View_PermitInfo i ON i.PermitNo = p.PermitNo
+        LEFT JOIN View_TruckInfo i ON i.CarNo= t.CarNo
         WHERE
         1 = 1
         <if test="projectId !=null and projectId !=''">

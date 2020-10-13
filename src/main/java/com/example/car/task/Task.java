@@ -11,9 +11,7 @@
 package com.example.car.task;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.example.car.common.utils.DateUtil;
-import com.example.car.common.utils.Distance;
 import com.example.car.common.utils.HttpUtils;
 import com.example.car.common.utils.ListUtils;
 import com.example.car.common.utils.entity.EChatBean3;
@@ -51,9 +49,6 @@ public class Task {
 
     @Autowired
     private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
-
-    @Autowired
-    private CarMileageMapper carMileageMapper;
 
     @Autowired
     private HistoricalRouteMapper historicalRouteMapper;
@@ -269,8 +264,7 @@ public class Task {
         }
         for (DeviceLasposition deviceLasposition : list) {
             List<Map<String, String>> list1 = muckMapper.selectMuck(deviceLasposition.getCarnumber(), null,
-                    DateUtil.getDateFormat(new Date(),
-                            DateUtil.FULL_TIME_SPLIT_PATTERN));
+                    DateUtil.timeVariousTypes(1));
             if (list1.size() <= 0) {
                 CarTarget carTarget = new CarTarget();
                 carTarget.setCarNumber(deviceLasposition.getCarnumber());
@@ -281,14 +275,14 @@ public class Task {
     }
 
     /**
-    * @Description: 同步历史轨迹
-    * @Param: []
-    * @return: void
-    * @Author: 冷酷的苹果
-    * @Date: 2020/9/21 8:38
-    */
+     * @Description: 同步历史轨迹
+     * @Param: []
+     * @return: void
+     * @Author: 冷酷的苹果
+     * @Date: 2020/9/21 8:38
+     */
     @Scheduled(cron = " 0 0 0 * * ? ")
-    public void historicalRoute () {
+    public void historicalRoute() {
         List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
         List<DeviceLasposition> list = new ArrayList<>();
         for (SysAuthDept sysAuthDept : deptList) {
@@ -307,7 +301,8 @@ public class Task {
             String json = JSON.toJSONString(map);
             String address = "http://101.132.236.6:8088/cmsapi/getHistoryTrack";
             String result = HttpUtils.doJsonPost(address, json);
-            List<HistoricalRoute> resultData =JSON.parseArray(JSON.parseObject(result).getString("resultData"),HistoricalRoute.class);
+            List<HistoricalRoute> resultData = JSON.parseArray(JSON.parseObject(result).getString("resultData"),
+                    HistoricalRoute.class);
             if (resultData.size() > 0) {
                 historicalRouteMapper.insertHistoricalRoute(resultData);
             }

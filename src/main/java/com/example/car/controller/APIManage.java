@@ -315,6 +315,9 @@ public class APIManage {
             deviceLaspositions.addAll(deviceLasposition);
         }
         for (DeviceLasposition resultDatum : deviceLaspositions) {
+            if (!StringUtils.isEmpty(resultDatum.getCarnumber())) {
+                resultDatum.setCarnumber(resultDatum.getCarnumber().replace("新", ""));
+            }
             Double latCar = resultDatum.getLat();
             Double lngCar = resultDatum.getLng();
             boolean isIn = Distance.coordinateToDistance(lat, lng, latCar, lngCar, distance);
@@ -352,6 +355,7 @@ public class APIManage {
             deviceLasposition.setDept(sysAuthDeptMapper.selectSysAuthDeptById(deviceLasposition.getDeptid()).getDeptname());
             List<EChatBean3> EChatBean3 = deviceAlarmSeverityMapper.selectEChat1(number,
                     null, null, deviceLasposition.getDeptid().toString(), "A", null);
+            deviceLasposition.setCarnumber(deviceLasposition.getCarnumber().replace("新", ""));
             deviceLasposition.setAlarm(EChatBean3);
         }
         return Body.newInstance(deviceLasposition);

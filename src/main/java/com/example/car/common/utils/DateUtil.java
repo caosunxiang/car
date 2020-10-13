@@ -190,7 +190,7 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        String var=DateUtil.timeVariousTypes(5);
+        String var=DateUtil.timeVariousTypes(1);
         System.out.println(var);
     }
 }

@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public interface CarInfoMapper {
     List<Map<String, Object>> selectCar(@Param("carnumber") String carnumber, @Param("terminalId") String terminalId,
-                                        @Param("sim") String sim,@Param("deptid")long deptid);
+                                        @Param("sim") String sim, @Param("deptid") long deptid);
 
     List<Map<String, Object>> selectCarByDeptName(@Param("deptname") String deptname);
 
@@ -26,6 +26,8 @@ public interface CarInfoMapper {
     Integer selectStatusCount(@Param("id") String id, @Param("status") String status);
 
     List<Map<String, Object>> selectCarDetailPage(@Param("deptid") String deptid, @Param("carnumber") String carnumber,
-                                              @Param("terminalid") String terminalid, @Param("status") String status,
-                                              @Param("index") Integer index, @Param("size") Integer size);
+                                                  @Param("terminalid") String terminalid,
+                                                  @Param("status") String status,
+                                                  @Param("index") Integer index, @Param("size") Integer size);
 }
+
