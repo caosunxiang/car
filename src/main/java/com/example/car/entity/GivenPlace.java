@@ -29,5 +29,5 @@ public class GivenPlace {
     private String dic;
     private String createtime;
     private String createuser;
-    private String deptid;
+    private Integer type;
 }

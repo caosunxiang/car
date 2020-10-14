@@ -86,6 +86,7 @@
         p.PermitNo,
         p.CompanyName,
         p.ProjectName ,
+        p.Absorption,
         i.CarType,
         i.Capacity,
         i.ExpiryTime,
@@ -96,11 +97,14 @@
         p.place,
         p.mucktype,
         p.approvetime,
-        p.permittype
+        p.permittype,
+        com.Contract,
+        com.Mobile
         FROM
         View_PermitInfo p
         LEFT JOIN View_PermitTruck t ON t.PermitNo= p.PermitNo
         LEFT JOIN View_TruckInfo i ON i.CarNo= t.CarNo
+        LEFT JOIN View_CompanyInfo com ON com.CompanyName= p.CompanyName
         WHERE
         1 = 1
         <if test="projectId !=null and projectId !=''">
