@@ -80,26 +80,25 @@
     </select>
     <select id="selectMuckByProject" resultType="java.util.Map">
         SELECT
-        p.BeginTime,
-        p.EndTime,
-        p.LineName,
-        p.PermitNo,
-        p.CompanyName,
-        p.ProjectName ,
-        p.Absorption,
-        i.CarType,
-        i.Capacity,
-        i.ExpiryTime,
-        i.CompanyName,
-        i.CarNo,
-        i.DriverName,
-        i.DriverMobile ,
-        p.place,
-        p.mucktype,
-        p.approvetime,
-        p.permittype,
-        com.Contract,
-        com.Mobile
+        ISNULL( p.BeginTime, '' ) BeginTime,
+        ISNULL( p.EndTime, '' ) EndTime,
+        ISNULL( p.LineName, '' ) LineName,
+        ISNULL( p.PermitNo, '' ) PermitNo,
+        ISNULL( p.CompanyName, '' ) CompanyName,
+        ISNULL( p.ProjectName , '' ) ProjectName,
+        ISNULL( p.Absorption, '' ) Absorption,
+        ISNULL( i.CarType, '' ) CarType,
+        ISNULL( i.Capacity, '' ) Capacity,
+        ISNULL( i.ExpiryTime, '' ) ExpiryTime,
+        ISNULL( i.CarNo, '' ) CarNo,
+        ISNULL( i.DriverName, '' ) DriverName,
+        ISNULL( i.DriverMobile , '' ) DriverMobile,
+        ISNULL( p.place, '' ) place,
+        ISNULL( p.mucktype, '' ) mucktype,
+        ISNULL( p.approvetime, '' ) approvetime,
+        ISNULL( p.permittype, '' ) permittype,
+        ISNULL( com.Contract, '' ) Contract,
+        ISNULL( com.Mobile , '' ) Mobile
         FROM
         View_PermitInfo p
         LEFT JOIN View_PermitTruck t ON t.PermitNo= p.PermitNo
