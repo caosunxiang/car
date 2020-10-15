@@ -11,6 +11,8 @@
 package com.example.car.controller;
 
 import com.example.car.common.utils.json.Body;
+import com.example.car.entity.M04;
+import com.example.car.entity.M07;
 import com.example.car.service.MuckService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,64 +37,126 @@ import org.springframework.web.bind.annotation.RestController;
 public class MuckController {
 
     private final MuckService muckService;
-/** 
-* @Description: 根据车牌号 准运证号 查询准运证信息
-* @Param: [carNo, permitNo]
-* @return: com.example.car.common.utils.json.Body
-* @Author: 冷酷的苹果
-* @Date: 2020/6/22 10:33
-*/
+
+    /**
+     * @Description: 根据车牌号 准运证号 查询准运证信息
+     * @Param: [carNo, permitNo]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/6/22 10:33
+     */
     @RequestMapping("selectMuck")
-    public Body selectMuck(String carNo, String permitNo,String time) {
-        return this.muckService.selectMuck(carNo, permitNo,time);
-    }
-
-    /** 
-    * @Description: 工程名称模糊查询工程信息
-    * @Param: [name]
-    * @return: com.example.car.common.utils.json.Body
-    * @Author: 冷酷的苹果
-    * @Date: 2020/6/22 10:34
-    */
-    @RequestMapping("selectMuckByName")
-    public Body selectMuckByName(String projectName,String time,String name,String endTime,Integer index,Integer size) {
-        return this.muckService.selectMuckByName(projectName,time,name,endTime,index,size);
-    }
-
-    /** 
-    * @Description: 工程id查询工程下的准运证信息
-    * @Param: [projectId]
-    * @return: com.example.car.common.utils.json.Body
-    * @Author: 冷酷的苹果
-    * @Date: 2020/6/22 10:34
-    */
-    @RequestMapping("selectMuckByProject")
-    public Body selectMuckByProject(String projectId,String time) {
-        return this.muckService.selectMuckByProject(projectId,time);
+    public Body selectMuck(String carNo, String permitNo, String time) {
+        return this.muckService.selectMuck(carNo, permitNo, time);
     }
 
     /**
-    * @Description: 查询准运证数量
-    * @Param: [projectName, time, name, endTime]
-    * @return: com.example.car.common.utils.json.Body
-    * @Author: 冷酷的苹果
-    * @Date: 2020/7/27 9:33
-    */
+     * @Description: 工程名称模糊查询工程信息
+     * @Param: [name]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/6/22 10:34
+     */
+    @RequestMapping("selectMuckByName")
+    public Body selectMuckByName(String projectName, String time, String name, String endTime, Integer index,
+                                 Integer size) {
+        return this.muckService.selectMuckByName(projectName, time, name, endTime, index, size);
+    }
+
+    /**
+     * @Description: 工程id查询工程下的准运证信息
+     * @Param: [projectId]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/6/22 10:34
+     */
+    @RequestMapping("selectMuckByProject")
+    public Body selectMuckByProject(String projectId, String time) {
+        return this.muckService.selectMuckByProject(projectId, time);
+    }
+
+    /**
+     * @Description: 查询准运证数量
+     * @Param: [projectName, time, name, endTime]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/7/27 9:33
+     */
     @RequestMapping("selectMuckCount")
     public Body selectMuckCount(String projectName, String time, String name, String endTime) {
         return this.muckService.selectMuckCount(projectName, time, name, endTime);
     }
 
-    /** 
-    * @Description: 查询车辆详情
-    * @Param: [carNo]
-    * @return: com.example.car.common.utils.json.Body
-    * @Author: 冷酷的苹果
-    * @Date: 2020/9/17 13:48
-    */
+    /**
+     * @Description: 查询车辆详情
+     * @Param: [carNo]
+     * @return: com.example.car.common.utils.json.Body
+     * @Author: 冷酷的苹果
+     * @Date: 2020/9/17 13:48
+     */
     @RequestMapping("selectCarInfo")
-    public Body selectCarInfo(String carNo){
+    public Body selectCarInfo(String carNo) {
         return this.muckService.selectCarInfo(carNo);
+    }
+
+    /**
+     * @ Description: 查询消纳场所
+     * @ Param: []
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/10/15 9:17
+     */
+    @RequestMapping("selectGivenPlace")
+    public Body selectGivenPlace() {
+        return this.muckService.selectGivenPlace();
+    }
+
+    /**
+     * @ Description: 查询工地信息
+     * @ Param: []
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/10/15 9:18
+     */
+    @RequestMapping("selectConstructionSite")
+    public Body selectConstructionSite() {
+        return this.muckService.selectConstructionSite();
+    }
+
+    /**
+     * @ Description: 修改消纳场所
+     * @ Param: [m07]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/10/15 9:52
+     */
+    @RequestMapping("updateGivenPlace")
+    public Body updateGivenPlace(M07 m07) {
+        return this.muckService.updateGivenPlace(m07);
+    }
+
+    /**
+     * @ Description: 修改工地
+     * @ Param: [m04]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/10/15 9:52
+     */
+    @RequestMapping("updateConstructionSite")
+    public Body updateConstructionSite(M04 m04) {
+        return this.muckService.updateConstructionSite(m04);
+    }
+
+    /** 
+    * @ Description: 二维码跳转准允资格接口
+    * @ Param: [companyId]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/10/15 17:32
+    */
+    @RequestMapping("selectCarInfoByCompany")
+    public Body selectCarInfoByCompany(String companyId) {
+        return this.muckService.selectCarInfoByCompany(companyId);
     }
 }
 

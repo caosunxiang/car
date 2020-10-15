@@ -11,9 +11,9 @@
 package com.example.car.service.impl;
 
 import com.example.car.common.utils.json.Body;
-import com.example.car.entity.GivenPlace;
-import com.example.car.mapper.mysql.GivenPlaceMapper;
-import com.example.car.service.GivenPlaceService;
+import com.example.car.entity.Place;
+import com.example.car.mapper.mysql.PlaceMapper;
+import com.example.car.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,36 +31,36 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(transactionManager = "masterTransactionManager", propagation = Propagation.SUPPORTS, readOnly = true)
-public class GivenPlaceServiceImpl implements GivenPlaceService {
+public class PlaceServiceImpl implements PlaceService {
 
     @Autowired
-    private GivenPlaceMapper givenPlaceMapper;
+    private PlaceMapper placeMapper;
 
     @Override
-    public Body insertGivenPlace(GivenPlace givenPlace) {
-        givenPlaceMapper.insertGivenPlace(givenPlace);
+    public Body insertPlace(Place place) {
+        placeMapper.insertPlace(place);
         return Body.BODY_200;
     }
 
     @Override
-    public Body updateGivenPlace(GivenPlace givenPlace) {
-        givenPlaceMapper.updateGivenPlace(givenPlace);
+    public Body updatePlace(Place place) {
+        placeMapper.updatePlace(place);
         return Body.BODY_200;
     }
 
     @Override
-    public Body delGivenPlace(Integer id) {
-        givenPlaceMapper.delGivenPlace(id);
+    public Body delPlace(Integer id) {
+        placeMapper.delPlace(id);
         return Body.BODY_200;
     }
 
     @Override
     public Body selectOne(Integer id) {
-        return Body.newInstance(givenPlaceMapper.selectOne(id));
+        return Body.newInstance(placeMapper.selectOne(id));
     }
 
     @Override
     public Body selectAll() {
-        return Body.newInstance(givenPlaceMapper.selectAll());
+        return Body.newInstance(placeMapper.selectAll());
     }
 }

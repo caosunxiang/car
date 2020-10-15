@@ -1,6 +1,8 @@
 package com.example.car.mapper.sqlserver;
 
 
+import com.example.car.entity.M04;
+import com.example.car.entity.M07;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -18,4 +20,14 @@ public interface MuckMapper {
                             @Param("endTime")String endTime);
 
     List<Map<String, String>> selectCarInfo(@Param("carNo") String carNo);
+
+    List<M07>selectGivenPlace();
+
+    List<M04>selectConstructionSite();
+
+    void updateGivenPlace(M07 m07);
+
+    void updateConstructionSite(M04 m04);
+
+    List<Map<String,Object>> selectCarInfoByCompany(@Param("companyId")String companyId);
 }

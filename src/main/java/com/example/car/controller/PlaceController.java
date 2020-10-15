@@ -1,9 +1,8 @@
 package com.example.car.controller;
 
 import com.example.car.common.utils.json.Body;
-import com.example.car.entity.GivenPlace;
-import com.example.car.service.GivenPlaceService;
-import com.example.car.service.IDeviceAlarmService;
+import com.example.car.entity.Place;
+import com.example.car.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -22,67 +21,67 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 @RequiredArgsConstructor
-public class GivenPlaceController {
+public class PlaceController {
 
-    private final GivenPlaceService givenPlaceService;
+    private final PlaceService PlaceService;
 
     /**
-     * @Description: 新增消纳场所
+     * @Description: 新增停车场
      * @Param: [givenPlace]
      * @return: com.example.car.common.utils.json.Body
      * @Author: 冷酷的苹果
      * @Date: 2020/10/13 10:40
      */
-    @RequestMapping("insertGivenPlace")
-    public Body insertGivenPlace(GivenPlace givenPlace) {
-        return this.givenPlaceService.insertGivenPlace(givenPlace);
+    @RequestMapping("insertPlace")
+    public Body insertPlace(Place place) {
+        return this.PlaceService.insertPlace(place);
     }
 
     /**
-     * @Description: 修改消纳场所
+     * @Description: 修改停车场
      * @Param: [givenPlace]
      * @return: com.example.car.common.utils.json.Body
      * @Author: 冷酷的苹果
      * @Date: 2020/10/13 10:40
      */
-    @RequestMapping("updateGivenPlace")
-    public Body updateGivenPlace(GivenPlace givenPlace) {
-        return givenPlaceService.updateGivenPlace(givenPlace);
+    @RequestMapping("updatePlace")
+    public Body updatePlace(Place place) {
+        return this.PlaceService.updatePlace(place);
     }
 
     /**
-     * @Description: 删除消纳场所
+     * @Description: 删除停车场
      * @Param: [givenPlace]
      * @return: com.example.car.common.utils.json.Body
      * @Author: 冷酷的苹果
      * @Date: 2020/10/13 10:40
      */
-    @RequestMapping("delGivenPlace")
-    public Body delGivenPlace(Integer id) {
-        return givenPlaceService.delGivenPlace(id);
+    @RequestMapping("delPlace")
+    public Body delPlace(Integer id) {
+        return this.PlaceService.delPlace(id);
     }
 
     /**
-     * @Description: 查询指定消纳场所
+     * @Description: 查询指定停车场
      * @Param: [givenPlace]
      * @return: com.example.car.common.utils.json.Body
      * @Author: 冷酷的苹果
      * @Date: 2020/10/13 10:40
      */
-    @RequestMapping("selectGivenPlaceOne")
+    @RequestMapping("selectPlaceOne")
     public Body selectOne(Integer id) {
-        return givenPlaceService.selectOne(id);
+        return this.PlaceService.selectOne(id);
     }
 
     /**
-     * @Description: 查询所有消纳场所
+     * @Description: 查询所有停车场
      * @Param: [givenPlace]
      * @return: com.example.car.common.utils.json.Body
      * @Author: 冷酷的苹果
      * @Date: 2020/10/13 10:40
      */
-    @RequestMapping("selectGivenPlaceAll")
+    @RequestMapping("selectPlaceAll")
     public Body selectAll() {
-        return givenPlaceService.selectAll();
+        return this.PlaceService.selectAll();
     }
 }

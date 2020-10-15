@@ -11,6 +11,8 @@
 package com.example.car.service.impl;
 
 import com.example.car.common.utils.json.Body;
+import com.example.car.entity.M04;
+import com.example.car.entity.M07;
 import com.example.car.mapper.sqlserver.MuckMapper;
 import com.example.car.service.MuckService;
 import lombok.RequiredArgsConstructor;
@@ -76,5 +78,32 @@ public class MuckServiceImpl implements MuckService {
     public Body selectCarInfo(String carNo) {
         List<Map<String,String>>list=this.muckMapper.selectCarInfo(carNo);
         return Body.newInstance(list);
+    }
+
+    @Override
+    public Body selectGivenPlace() {
+        return Body.newInstance(this.muckMapper.selectGivenPlace());
+    }
+
+    @Override
+    public Body selectConstructionSite() {
+        return Body.newInstance(this.muckMapper.selectConstructionSite());
+    }
+
+    @Override
+    public Body updateGivenPlace(M07 m07) {
+        this.muckMapper.updateGivenPlace(m07);
+        return Body.newInstance();
+    }
+
+    @Override
+    public Body updateConstructionSite(M04 m04) {
+        this.muckMapper.updateConstructionSite(m04);
+        return Body.newInstance();
+    }
+
+    @Override
+    public Body selectCarInfoByCompany(String companyId) {
+        return Body.newInstance(this.muckMapper.selectCarInfoByCompany(companyId));
     }
 }
