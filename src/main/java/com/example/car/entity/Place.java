@@ -34,4 +34,6 @@ public class Place {
     private String standbyphone;
     private String remark;
     private String standbyuser;
+    private String starttime;
+    private String endtime;
 }

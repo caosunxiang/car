@@ -1,5 +1,6 @@
 package com.example.car.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.util.Date;
@@ -92,4 +93,10 @@ public class DeviceAlarmSeverity {
      * 处理时间
      */
     private Long handleTime;
+
+    /**
+     * 车队信息
+     */
+    @TableField(exist = false)
+    private String deptname;
 }

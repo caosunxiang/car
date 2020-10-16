@@ -253,21 +253,26 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         a.alarmStartTime DESC
     </select>
     <select id="selectNewAlarm" resultType="com.example.car.entity.DeviceAlarmSeverity">
-        SELECT alarm_id AS alarmId,
-        alarm_name AS alarmName,
-        car_number AS carNumber,
-        alarm_start_time AS alarmStartTime,
-        alarm_start_speed as alarmStartSpeed,
-        alarm_end_time AS alarmEndTime,
-        alarm_end_speed as alarmEndSpeed,
-        alarm_end_lat AS alarmEndLat,
-        alarm_end_lng as alarmEndLng,
-        alarm_mileage as alarmMileage,
-        alarm_lat AS alarmLat,
-        handle_by AS handleBy,
-        handle_type AS handleType,
-        handle_time AS handleTime,
-        alarm_lng AS alarmLng from device_alarm_severity a WHERE DATE_FORMAT(a.alarm_start_time,'%Y-%m-%d')=#{time}
+        SELECT
+        a.alarm_id AS alarmId,
+        a.alarm_name AS alarmName,
+        a.car_number AS carNumber,
+        a.alarm_start_time AS alarmStartTime,
+        a.alarm_start_speed AS alarmStartSpeed,
+        a.alarm_end_time AS alarmEndTime,
+        a.alarm_end_speed AS alarmEndSpeed,
+        a.alarm_end_lat AS alarmEndLat,
+        a.alarm_end_lng AS alarmEndLng,
+        a.alarm_mileage AS alarmMileage,
+        a.alarm_lat AS alarmLat,
+        a.handle_by AS handleBy,
+        a.handle_type AS handleType,
+        a.handle_time AS handleTime,
+        alarm_lng AS alarmLng,
+        d.deptname AS deptname
+        FROM
+        device_alarm_severity a
+        LEFT JOIN sys_auth_dept d ON d.deptid = a.deptid WHERE DATE_FORMAT(a.alarm_start_time,'%Y-%m-%d')=#{time}
         <if test="list != null and list.size() >0">
         and a.alarm_name in
         <foreach collection="list" item="name" index="index" open="(" close=")" separator=",">
