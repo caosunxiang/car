@@ -29,5 +29,9 @@ public class Place {
     private String dic;
     private String createtime;
     private String createuser;
-    private Integer type;
+    private String site;
+    private String phone;
+    private String standbyphone;
+    private String remark;
+    private String standbyuser;
 }
