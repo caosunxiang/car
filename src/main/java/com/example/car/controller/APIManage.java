@@ -65,8 +65,6 @@ public class APIManage {
     private DeviceOnlineRecordMapper deviceOnlineRecordMapper;
     @Autowired
     private CarStatusChangeRecordMapper carStatusChangeRecordMapper;
-    @Autowired
-    private HistoricalRouteMapper historicalRouteMapper;
 
     /**
      * @Description: 接口转发
