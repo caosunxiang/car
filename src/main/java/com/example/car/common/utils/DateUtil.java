@@ -189,8 +189,17 @@ public class DateUtil {
         }
     }
 
+    public static String severalDaysAgo(String type,Integer day) {
+        SimpleDateFormat format = new SimpleDateFormat(type);
+        Date date;
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, -day);
+        date = c.getTime();
+        return format.format(date);
+    }
+
     public static void main(String[] args) {
-        String var=DateUtil.timeVariousTypes(1);
+        String var=DateUtil.severalDaysAgo(DateUtil.FULL_TIME_SPLIT_PATTERN,15);
         System.out.println(var);
     }
 }

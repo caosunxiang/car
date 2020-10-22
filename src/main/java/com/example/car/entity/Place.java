@@ -36,4 +36,6 @@ public class Place {
     private String standbyuser;
     private String starttime;
     private String endtime;
+    private String area;
+    private String video;
 }

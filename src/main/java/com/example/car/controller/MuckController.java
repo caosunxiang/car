@@ -147,16 +147,40 @@ public class MuckController {
         return this.muckService.updateConstructionSite(m04);
     }
 
-    /** 
-    * @ Description: 二维码跳转准允资格接口
-    * @ Param: [companyId]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2020/10/15 17:32
-    */
+    /**
+     * @ Description: 二维码跳转准允资格接口
+     * @ Param: [companyId]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/10/15 17:32
+     */
     @RequestMapping("selectCarInfoByCompany")
     public Body selectCarInfoByCompany(String companyId) {
         return this.muckService.selectCarInfoByCompany(companyId);
+    }
+
+    /**
+     * @ Description: 消纳场所详情
+     * @ Param: [recid]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/10/22 17:37
+     */
+    @RequestMapping("selectGivenPlaceOne")
+    public Body selectGivenPlaceOne(String recid) {
+        return this.muckService.selectGivenPlaceOne(recid);
+    }
+
+    /**
+    * @ Description: 查询工地详情
+    * @ Param: [recid]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/10/22 17:38
+    */
+    @RequestMapping("selectConstructionSiteOne")
+    public Body selectConstructionSiteOne(String recid) {
+        return this.muckService.selectConstructionSiteOne(recid);
     }
 }
 

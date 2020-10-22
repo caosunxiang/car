@@ -10,4 +10,6 @@ public interface HistoricalRouteMapper {
 
     List<HistoricalRoute> selectHistoricalRoute(@Param("startTime") String startTime,
                                                 @Param("endTime") String endTime, @Param("name") String name);
+
+    void delHistoricalRoute(@Param("time") String time);
 }

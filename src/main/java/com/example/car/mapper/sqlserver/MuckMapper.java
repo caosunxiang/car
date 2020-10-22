@@ -25,6 +25,10 @@ public interface MuckMapper {
 
     List<M04>selectConstructionSite();
 
+    M07 selectGivenPlaceOne(@Param("recid") String recid);
+
+    M04 selectConstructionSiteOne(@Param("recid") String recid);
+
     void updateGivenPlace(M07 m07);
 
     void updateConstructionSite(M04 m04);

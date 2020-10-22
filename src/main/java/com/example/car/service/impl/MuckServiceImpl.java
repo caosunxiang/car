@@ -106,4 +106,14 @@ public class MuckServiceImpl implements MuckService {
     public Body selectCarInfoByCompany(String companyId) {
         return Body.newInstance(this.muckMapper.selectCarInfoByCompany(companyId));
     }
+
+    @Override
+    public Body selectGivenPlaceOne(String recid) {
+        return Body.newInstance(this.muckMapper.selectGivenPlaceOne(recid));
+    }
+
+    @Override
+    public Body selectConstructionSiteOne(String recid) {
+        return Body.newInstance(this.muckMapper.selectConstructionSiteOne(recid));
+    }
 }

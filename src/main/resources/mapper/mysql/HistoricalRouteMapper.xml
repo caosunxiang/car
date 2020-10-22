@@ -49,4 +49,8 @@
             and carnumber = #{name}
         </if>
     </select>
+
+    <delete id="delHistoricalRoute">
+        delete  from historical_route where createtime<![CDATA[ < ]]>#{time}
+    </delete>
 </mapper>

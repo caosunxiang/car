@@ -6,17 +6,17 @@ import io.lettuce.core.dynamic.annotation.Param;
 import java.util.List;
 
 /**
-* 设备最后位置表 Mapper
-*
-* @author 冷酷的苹果
-* @date 2020-07-29 10:31:06
-*/
+ * 设备最后位置表 Mapper
+ *
+ * @author 冷酷的苹果
+ * @date 2020-07-29 10:31:06
+ */
 public interface DeviceLaspositionMapper {
-   List<DeviceLasposition> selectLasposition(@Param("pid")String pid);
+    List<DeviceLasposition> selectLasposition(@Param("pid") String pid);
 
-   DeviceLasposition selectLaspositionByCarNo(@Param("number")String number);
+    DeviceLasposition selectLaspositionByCarNo(@Param("number") String number);
 
-    List<DeviceLasposition> selectLaspositionAlarm(@Param("pid")String pid);
+    List<DeviceLasposition> selectLaspositionAlarm(@Param("pid") String pid);
 
-    List<DeviceLasposition> selectposition(@Param("pid")String pid,@Param("number")String number);
+    List<DeviceLasposition> selectposition(@Param("pid") String pid, @Param("number") String number);
 }

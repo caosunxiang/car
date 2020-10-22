@@ -18,6 +18,7 @@ import com.example.car.common.utils.entity.EChatBean3;
 import com.example.car.entity.*;
 import com.example.car.mapper.mysql.*;
 import com.example.car.mapper.sqlserver.MuckMapper;
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -307,6 +309,19 @@ public class Task {
                 historicalRouteMapper.insertHistoricalRoute(resultData);
             }
         }
+    }
+
+
+    /**
+     * @ Description: 同步历史轨迹
+     * @ Param: []
+     * @ return: void
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/9/21 8:38
+     */
+    @Scheduled(cron = " 0 0 3 * * ? ")
+    public void delhistoricalRoute() {
+       this.historicalRouteMapper.delHistoricalRoute(DateUtil.severalDaysAgo(DateUtil.FULL_TIME_SPLIT_PATTERN,15));
     }
 
 //    @Scheduled(cron = " 0 30 7,19 * * ?")
