@@ -46,4 +46,6 @@ public class M07 {
     private String Area;
 
     private String Dot;
+
+    private String VideoUrl;
 }

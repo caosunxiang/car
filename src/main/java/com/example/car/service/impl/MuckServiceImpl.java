@@ -116,4 +116,9 @@ public class MuckServiceImpl implements MuckService {
     public Body selectConstructionSiteOne(String recid) {
         return Body.newInstance(this.muckMapper.selectConstructionSiteOne(recid));
     }
+
+    @Override
+    public Body selectoperprogress(String number) {
+        return Body.newInstance(this.muckMapper.selectoperprogress(number));
+    }
 }

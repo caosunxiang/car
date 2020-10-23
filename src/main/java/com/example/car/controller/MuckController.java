@@ -182,5 +182,17 @@ public class MuckController {
     public Body selectConstructionSiteOne(String recid) {
         return this.muckService.selectConstructionSiteOne(recid);
     }
+
+    /** 
+    * @ Description: 查询准运证的审批流程
+    * @ Param: [number]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/10/23 15:13
+    */
+    @RequestMapping("selectoperprogress")
+    public Body selectoperprogress(String number) {
+        return Body.newInstance(this.muckService.selectoperprogress(number));
+    }
 }
 

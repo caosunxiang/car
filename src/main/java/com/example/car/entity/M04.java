@@ -80,4 +80,6 @@ public class M04 {
     private String Area;
 
     private String Dot;
+
+    private String VideoUrl;
 }
