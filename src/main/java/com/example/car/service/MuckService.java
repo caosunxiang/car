@@ -30,4 +30,8 @@ public interface MuckService {
     Body selectConstructionSiteOne( String recid);
 
     Body selectoperprogress(String number);
+
+    Body selectNotice();
+
+    Body selectM01();
 }

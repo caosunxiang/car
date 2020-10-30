@@ -30,6 +30,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import redis.clients.jedis.JedisPool;
 
 import java.util.Date;
 import java.util.List;
@@ -52,7 +53,6 @@ public class PushController {
     private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
     @Autowired
     private DeviceAlarmMapper deviceAlarmMapper;
-
 
     /*
      * 微信测试账号推送
@@ -98,9 +98,6 @@ public class PushController {
                 System.out.println("推送失败：" + e.getMessage());
                 e.printStackTrace();
             }
-
         }
-
     }
-
 }

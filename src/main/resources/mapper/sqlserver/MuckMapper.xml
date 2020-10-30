@@ -203,9 +203,11 @@ SELECT
 	ISNULL(t.OriginalCarNo,'')OriginalCarNo,
 	ISNULL(t.RegisterTime,'')RegisterTime,
 	ISNULL(t.SXSFQQ,'')SXSFQQ,
-	ISNULL(t.ZYZG,'')ZYZG
+	ISNULL(t.ZYZG,'')ZYZG,
+	ISNULL(m.M0108,'')M0108,
+	ISNULL(m.M0109,'')M0109
 FROM
-	View_TruckInfo t LEFT JOIN View_CompanyInfo c ON c.CompanyName=t.CompanyName
+	View_TruckInfo t LEFT JOIN View_CompanyInfo c ON c.CompanyName=t.CompanyName LEFT JOIN M01 m ON c.CompanyId=m.MustId
 	WHERE
 	c.CompanyId=#{companyId}
 	AND
@@ -230,5 +232,44 @@ FROM
 	view_operprogress o
 WHERE
 	o.serial_number = #{number}
+    </select>
+
+    <select id="selectNotice" resultType="com.example.car.entity.Notice">
+        SELECT
+	n.NoticeId,
+	n.Title,
+	n.Content,
+	n.Publisher,
+	n.PublishTime,
+	n.Owner,
+	n.TitleColor,
+	n.IsTop,
+	n.IsPop,
+	n.Mark,
+	n.Category,
+	n.Published,
+	n.ExpireTime
+FROM
+	Notice n
+    </select>
+
+    <select id="selectM01" resultType="com.example.car.entity.M01">
+        SELECT
+	m.Creator,
+	m.DispOrder,
+	m.M0101,
+	m.M0102,
+	m.M0103,
+	m.M0104,
+	m.M0105,
+	m.M0106,
+	m.M0107,
+	m.M0108,
+	m.M0109,
+	m.MustId,
+	m.ShortSpell,
+	m.Status
+FROM
+	M01 m
     </select>
 </mapper>

@@ -154,6 +154,7 @@ public class MuckController {
      * @ Author: 冷酷的苹果
      * @ Date: 2020/10/15 17:32
      */
+
     @RequestMapping("selectCarInfoByCompany")
     public Body selectCarInfoByCompany(String companyId) {
         return this.muckService.selectCarInfoByCompany(companyId);
@@ -193,6 +194,30 @@ public class MuckController {
     @RequestMapping("selectoperprogress")
     public Body selectoperprogress(String number) {
         return Body.newInstance(this.muckService.selectoperprogress(number));
+    }
+
+    /** 
+    * @ Description: 查询系统公告
+    * @ Param: []
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/10/30 9:50
+    */
+    @RequestMapping("selectNotice")
+    public Body selectNotice() {
+        return Body.newInstance(this.muckService.selectNotice());
+    }
+
+    /** 
+    * @ Description: 查找公司详细信息
+    * @ Param: []
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/10/30 15:46
+    */
+    @RequestMapping("selectM01")
+    public Body selectM01() {
+        return Body.newInstance(this.muckService.selectM01());
     }
 }
 

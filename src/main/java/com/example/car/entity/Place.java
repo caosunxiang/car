@@ -38,4 +38,5 @@ public class Place {
     private String endtime;
     private String area;
     private String video;
+    private String district;
 }

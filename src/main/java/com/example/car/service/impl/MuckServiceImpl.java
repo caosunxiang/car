@@ -121,4 +121,14 @@ public class MuckServiceImpl implements MuckService {
     public Body selectoperprogress(String number) {
         return Body.newInstance(this.muckMapper.selectoperprogress(number));
     }
+
+    @Override
+    public Body selectNotice() {
+        return Body.newInstance(this.muckMapper.selectNotice());
+    }
+
+    @Override
+    public Body selectM01() {
+        return Body.newInstance(this.muckMapper.selectM01());
+    }
 }

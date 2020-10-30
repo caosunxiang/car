@@ -1,9 +1,7 @@
 package com.example.car.mapper.sqlserver;
 
 
-import com.example.car.entity.M04;
-import com.example.car.entity.M07;
-import com.example.car.entity.Operprogress;
+import com.example.car.entity.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -37,4 +35,8 @@ public interface MuckMapper {
     List<Map<String,Object>> selectCarInfoByCompany(@Param("companyId")String companyId);
 
     List<Operprogress> selectoperprogress(@Param("number")String number);
+
+    List<Notice>selectNotice();
+
+    List<M01>selectM01();
 }
