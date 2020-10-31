@@ -795,4 +795,23 @@ public class APIManage {
         }
         return Body.newInstance(eChatBean4s);
     }
+
+    /** 
+    * @ Description: 查询统计指定天数的各项报警数量
+    * @ Param: [time]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/10/31 14:00
+    */
+    @RequestMapping("EChatBean5")
+    public Body EChatBean5(Integer time) {
+        List<EChatBean5> eChatBean5s = new ArrayList<>();
+        for (int i = 0; i < time; i++) {
+            EChatBean5 eChatBean5 = new EChatBean5();
+            eChatBean5.setTime(DateUtil.severalDaysAgo("yyyy-MM-dd", i));
+            eChatBean5.setMessage(this.deviceAlarmSeverityMapper.selectAlarmNameAndCount(eChatBean5.getTime()));
+            eChatBean5s.add(eChatBean5);
+        }
+        return Body.newInstance(eChatBean5s);
+    }
 }

@@ -193,7 +193,7 @@ public class MuckController {
     */
     @RequestMapping("selectoperprogress")
     public Body selectoperprogress(String number) {
-        return Body.newInstance(this.muckService.selectoperprogress(number));
+        return this.muckService.selectoperprogress(number);
     }
 
     /** 
@@ -205,7 +205,7 @@ public class MuckController {
     */
     @RequestMapping("selectNotice")
     public Body selectNotice() {
-        return Body.newInstance(this.muckService.selectNotice());
+        return this.muckService.selectNotice();
     }
 
     /** 
@@ -217,7 +217,7 @@ public class MuckController {
     */
     @RequestMapping("selectM01")
     public Body selectM01() {
-        return Body.newInstance(this.muckService.selectM01());
+        return this.muckService.selectM01();
     }
 }
 

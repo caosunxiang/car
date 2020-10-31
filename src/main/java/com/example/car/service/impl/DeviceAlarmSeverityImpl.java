@@ -98,4 +98,9 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
         return Body.newInstance(deviceAlarmSeverities);
     }
 
+    @Override
+    public Body selectCountEveryCar() {
+        return Body.newInstance(this.deviceAlarmSeverityMapper.selectCountEveryCar());
+    }
+
 }

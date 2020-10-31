@@ -1,6 +1,7 @@
 package com.example.car.mapper.mysql;
 
 import com.example.car.common.utils.entity.EChatBean3;
+import com.example.car.common.utils.entity.EChatBean6;
 import com.example.car.entity.DeviceAlarmSeverity;
 import io.lettuce.core.dynamic.annotation.Param;
 
@@ -50,5 +51,9 @@ public interface DeviceAlarmSeverityMapper {
                                   @Param("day") String day, @Param("name") String name);
 
     List<DeviceAlarmSeverity> selectAlarmGroupCar();
+
+    Integer selectCountEveryCar();
+
+    List<EChatBean6>selectAlarmNameAndCount(@Param("time")String time);
 
 }

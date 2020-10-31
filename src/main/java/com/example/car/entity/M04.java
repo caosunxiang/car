@@ -82,4 +82,6 @@ public class M04 {
     private String Dot;
 
     private String VideoUrl;
+
+    private String M0429;
 }

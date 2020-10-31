@@ -199,7 +199,7 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        String var=DateUtil.severalDaysAgo(DateUtil.FULL_TIME_SPLIT_PATTERN,15);
+        String var=DateUtil.severalDaysAgo("yyyy-MM-dd",15);
         System.out.println(var);
     }
 }

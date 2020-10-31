@@ -412,4 +412,33 @@ FROM
 				GROUP BY
 				carNumber
     </select>
+
+    <select id="selectCountEveryCar" resultType="java.lang.Integer">
+        SELECT
+	COUNT(*)
+FROM
+	(
+	SELECT
+		*
+	FROM
+		device_alarm_severity
+	WHERE
+		1 = 1
+		AND TO_DAYS( alarm_start_time )= TO_DAYS(
+		NOW())
+GROUP BY
+	car_number) a
+    </select>
+
+    <select id="selectAlarmNameAndCount" resultType="com.example.car.common.utils.entity.EChatBean6">
+        SELECT
+	alarm_name as name,
+	COUNT( 1 ) AS count
+FROM
+	device_alarm_severity
+WHERE
+	DATE_FORMAT( alarm_start_time, '%Y-%m-%d' ) = #{time}
+GROUP BY
+	alarm_name
+    </select>
 </mapper>

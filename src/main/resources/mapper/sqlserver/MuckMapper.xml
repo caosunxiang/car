@@ -179,12 +179,12 @@ t.CarNo=#{carNo}
  </select>
 
     <update id="updateGivenPlace">
-        UPDATE M07 SET area=#{Area},dot=#{Dot} WHERE  Recid=#{RecId}
+        UPDATE M07 SET area=#{Area},dot=#{Dot},M0718=#{M0718} WHERE  Recid=#{RecId}
     </update>
 
 
     <update id="updateConstructionSite">
-        UPDATE M04 SET area=#{Area},dot=#{Dot} WHERE  Recid=#{RecId}
+        UPDATE M04 SET area=#{Area},dot=#{Dot},M0429=#{M0429} WHERE  Recid=#{RecId}
     </update>
 
     <select id="selectCarInfoByCompany" resultType="java.util.Map">

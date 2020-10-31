@@ -48,4 +48,6 @@ public class M07 {
     private String Dot;
 
     private String VideoUrl;
+
+    private String M0718;
 }

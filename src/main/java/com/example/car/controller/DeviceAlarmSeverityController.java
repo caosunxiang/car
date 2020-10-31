@@ -96,4 +96,17 @@ public class DeviceAlarmSeverityController {
     public Body selectNewAlarm(String name, String time, Integer type, String number) {
         return deviceAlarmSeverityService.selectNewAlarm(name, time, type, number);
     }
+
+    /**
+    * @ Description: 查询有多少车辆报警
+    * @ Param: []
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/10/31 10:24
+    */
+    @RequestMapping("selectCountEveryCar")
+    public Body selectCountEveryCar() {
+        return this.deviceAlarmSeverityService.selectCountEveryCar();
+    }
+
 }
