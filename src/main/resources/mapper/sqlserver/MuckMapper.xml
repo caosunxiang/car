@@ -162,20 +162,31 @@ WHERE
 t.CarNo=#{carNo}
 </select>
     <select id="selectGivenPlace" resultType="com.example.car.entity.M07">
-        select RecId, M0702, M0703, M0704, M0706, M0707, M0708, M0709, M0710, Area, Dot, VideoUrl from M07
+        select RecId, M0702, M0703, M0704, M0706, M0707, M0708, M0709, M0710, Area, Dot, VideoUrl,M0718 from M07
+        where
+        1=1
+        <if test="name !=null and name !=''">
+            and M0706 LIKE '%'+ #{name}+'%'
+        </if>
     </select>
 
     <select id="selectConstructionSite" resultType="com.example.car.entity.M04">
-      select RecId, M0417, M0418, M0419, M0401, M0402, M0407, M0408, M0403, M0404, M0405, M0406, M0422, M0409, M0410, M0411, M0412, M0413, M0414, M0420, M0425, M0426, Area, Dot, VideoUrl from M04
+      select RecId, M0417, M0418, M0419, M0401, M0402, M0407, M0408, M0403, M0404, M0405, M0406, M0422, M0409, M0410,
+       M0411, M0412, M0413, M0414, M0420, M0425, M0426, Area, Dot, VideoUrl,M0429  from M04
+        where
+        1=1
+        <if test="name !=null and name !=''">
+            and M0401 LIKE '%'+ #{name}+'%'
+        </if>
  </select>
 
     <select id="selectGivenPlaceOne" resultType="com.example.car.entity.M07">
-        select RecId, M0702, M0703, M0704, M0706, M0707, M0708, M0709, M0710, Area, Dot, VideoUrl from M07 where RecId=#{recid}
+        select RecId, M0702, M0703, M0704, M0706, M0707, M0708, M0709, M0710, Area, Dot, VideoUrl,M0718 from M07 where RecId=#{recid}
     </select>
 
     <select id="selectConstructionSiteOne" resultType="com.example.car.entity.M04">
       select RecId, M0417, M0418, M0419, M0401, M0402, M0407, M0408, M0403, M0404, M0405, M0406, M0422,
-       M0409, M0410, M0411, M0412, M0413, M0414, M0420, M0425, M0426, Area, Dot, VideoUrl from M04  where RecId=#{recid}
+       M0409, M0410, M0411, M0412, M0413, M0414, M0420, M0425, M0426, Area, Dot, VideoUrl,M0429 from M04  where RecId=#{recid}
  </select>
 
     <update id="updateGivenPlace">
@@ -271,5 +282,25 @@ FROM
 	m.Status
 FROM
 	M01 m
+    </select>
+
+    <select id="selectCountByMuck" resultType="com.example.car.common.utils.entity.EChatBean7">
+        SELECT
+	b.[time],a.[count]
+FROM
+	 ( SELECT BeginTime AS 'time', COUNT ( 1 ) AS 'count' FROM View_ProjectPermit GROUP BY BeginTime ) a
+	RIGHT JOIN (
+	SELECT CONVERT
+		( CHAR ( 10 ), DATEADD( dd, number, #{time } ), 120 ) AS 'time'
+	FROM
+		master..spt_values
+	WHERE
+		type = 'p'
+		AND DATEDIFF(
+			MI,
+			DATEADD( dd, number, #{time } ),
+			( SELECT CONVERT ( VARCHAR ( 100 ), GETDATE( ), 23 ) )
+		) > 0
+	)  b ON b.time = a.time;
     </select>
 </mapper>

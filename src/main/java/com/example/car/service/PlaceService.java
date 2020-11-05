@@ -12,5 +12,5 @@ public interface PlaceService {
 
     Body selectOne(Integer id);
 
-    Body selectAll();
+    Body selectAll(String name);
 }

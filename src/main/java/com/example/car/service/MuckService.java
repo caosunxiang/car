@@ -15,9 +15,9 @@ public interface MuckService {
 
     Body selectCarInfo(String carNo);
 
-    Body selectGivenPlace();
+    Body selectGivenPlace(String name);
 
-    Body selectConstructionSite();
+    Body selectConstructionSite(String name);
 
     Body updateGivenPlace(M07 m07);
 
@@ -34,4 +34,6 @@ public interface MuckService {
     Body selectNotice();
 
     Body selectM01();
+
+    Body selectCountByMuck(String time);
 }

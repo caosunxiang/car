@@ -60,7 +60,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Body selectAll() {
-        return Body.newInstance(placeMapper.selectAll());
+    public Body selectAll(String name) {
+        return Body.newInstance(placeMapper.selectAll(name));
     }
 }

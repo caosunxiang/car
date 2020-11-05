@@ -5,11 +5,16 @@
 insert into place (`name`,lat,lng,dic,createtime,createuser,`site`,phone,standbyphone,remark,standbyuser,starttime,endtime,area,video,district)
 values (#{name},#{lat},#{lng},#{dic},#{createtime},#{createuser},#{site},#{phone},#{standbyphone},#{remark},#{standbyuser},#{starttime},#{endtime},#{area},#{video},#{district});
 </insert>
+
     <select id="selectOne" resultType="com.example.car.entity.Place">
 select * from place where id=#{id}
     </select>
     <select id="selectAll" resultType="com.example.car.entity.Place">
-select * from place
+select * from place where
+ 1=1
+ <if test="name !=null and name!=''">
+     and  `name` LIKE CONCAT('%',#{name},'%')
+ </if>
     </select>
     <update id="updatePlace">
         update place set
@@ -65,4 +70,5 @@ select * from place
     <delete id="delPlace">
 delete from place where id=#{id}
     </delete>
+
 </mapper>

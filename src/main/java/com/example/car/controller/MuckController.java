@@ -107,8 +107,8 @@ public class MuckController {
      * @ Date: 2020/10/15 9:17
      */
     @RequestMapping("selectGivenPlace")
-    public Body selectGivenPlace() {
-        return this.muckService.selectGivenPlace();
+    public Body selectGivenPlace(String name) {
+        return this.muckService.selectGivenPlace(name);
     }
 
     /**
@@ -119,8 +119,8 @@ public class MuckController {
      * @ Date: 2020/10/15 9:18
      */
     @RequestMapping("selectConstructionSite")
-    public Body selectConstructionSite() {
-        return this.muckService.selectConstructionSite();
+    public Body selectConstructionSite(String name) {
+        return this.muckService.selectConstructionSite(name);
     }
 
     /**
@@ -218,6 +218,18 @@ public class MuckController {
     @RequestMapping("selectM01")
     public Body selectM01() {
         return this.muckService.selectM01();
+    }
+
+    /*** 
+    * @ Description: 每天准运证数量折线图
+    * @ Param: [time]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/11/5 9:35
+    */
+    @RequestMapping("selectCountByMuck")
+    public Body selectCountByMuck(String time) {
+        return this.muckService.selectCountByMuck(time);
     }
 }
 

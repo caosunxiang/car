@@ -81,13 +81,13 @@ public class MuckServiceImpl implements MuckService {
     }
 
     @Override
-    public Body selectGivenPlace() {
-        return Body.newInstance(this.muckMapper.selectGivenPlace());
+    public Body selectGivenPlace(String name) {
+        return Body.newInstance(this.muckMapper.selectGivenPlace(name));
     }
 
     @Override
-    public Body selectConstructionSite() {
-        return Body.newInstance(this.muckMapper.selectConstructionSite());
+    public Body selectConstructionSite(String name) {
+        return Body.newInstance(this.muckMapper.selectConstructionSite(name));
     }
 
     @Override
@@ -130,5 +130,10 @@ public class MuckServiceImpl implements MuckService {
     @Override
     public Body selectM01() {
         return Body.newInstance(this.muckMapper.selectM01());
+    }
+
+    @Override
+    public Body selectCountByMuck(String time) {
+        return Body.newInstance(this.muckMapper.selectCountByMuck(time));
     }
 }

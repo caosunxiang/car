@@ -81,7 +81,7 @@ public class PlaceController {
      * @Date: 2020/10/13 10:40
      */
     @RequestMapping("selectPlaceAll")
-    public Body selectAll() {
-        return this.PlaceService.selectAll();
+    public Body selectAll(String name) {
+        return this.PlaceService.selectAll(name);
     }
 }

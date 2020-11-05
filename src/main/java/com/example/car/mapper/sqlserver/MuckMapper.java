@@ -1,6 +1,7 @@
 package com.example.car.mapper.sqlserver;
 
 
+import com.example.car.common.utils.entity.EChatBean7;
 import com.example.car.entity.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,9 +21,9 @@ public interface MuckMapper {
 
     List<Map<String, String>> selectCarInfo(@Param("carNo") String carNo);
 
-    List<M07>selectGivenPlace();
+    List<M07>selectGivenPlace(@Param("name")String name);
 
-    List<M04>selectConstructionSite();
+    List<M04>selectConstructionSite(@Param("name")String name);
 
     M07 selectGivenPlaceOne(@Param("recid") String recid);
 
@@ -39,4 +40,6 @@ public interface MuckMapper {
     List<Notice>selectNotice();
 
     List<M01>selectM01();
+
+    List<EChatBean7> selectCountByMuck(@Param("time")String time);
 }
