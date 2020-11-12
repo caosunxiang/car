@@ -81,13 +81,13 @@ public class MuckServiceImpl implements MuckService {
     }
 
     @Override
-    public Body selectGivenPlace(String name) {
-        return Body.newInstance(this.muckMapper.selectGivenPlace(name));
+    public Body selectGivenPlace(String name ,Integer size,Integer index) {
+        return Body.newInstance(this.muckMapper.selectGivenPlace(name,size,index*size));
     }
 
     @Override
-    public Body selectConstructionSite(String name) {
-        return Body.newInstance(this.muckMapper.selectConstructionSite(name));
+    public Body selectConstructionSite(String name, Integer size,Integer index) {
+        return Body.newInstance(this.muckMapper.selectConstructionSite(name,size,index*size));
     }
 
     @Override

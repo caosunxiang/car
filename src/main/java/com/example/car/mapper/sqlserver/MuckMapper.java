@@ -21,9 +21,9 @@ public interface MuckMapper {
 
     List<Map<String, String>> selectCarInfo(@Param("carNo") String carNo);
 
-    List<M07>selectGivenPlace(@Param("name")String name);
+    List<M07>selectGivenPlace(@Param("name")String name,@Param("size")Integer size,@Param("total")Integer total);
 
-    List<M04>selectConstructionSite(@Param("name")String name);
+    List<M04>selectConstructionSite(@Param("name")String name,@Param("size")Integer size,@Param("total")Integer total);
 
     M07 selectGivenPlaceOne(@Param("recid") String recid);
 

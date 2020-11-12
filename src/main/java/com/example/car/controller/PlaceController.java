@@ -5,6 +5,7 @@ import com.example.car.entity.Place;
 import com.example.car.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,7 +82,10 @@ public class PlaceController {
      * @Date: 2020/10/13 10:40
      */
     @RequestMapping("selectPlaceAll")
-    public Body selectAll(String name) {
-        return this.PlaceService.selectAll(name);
+    public Body selectAll(String name,Integer index,Integer size) {
+        if (StringUtils.isEmpty(index)||StringUtils.isEmpty(size)){
+            return Body.BODY_451;
+        }
+        return this.PlaceService.selectAll(name,index,size);
     }
 }

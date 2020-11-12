@@ -15,6 +15,7 @@ select * from place where
  <if test="name !=null and name!=''">
      and  `name` LIKE CONCAT('%',#{name},'%')
  </if>
+ limit #{page} ,#{size}
     </select>
     <update id="updatePlace">
         update place set

@@ -14,5 +14,5 @@ public interface PlaceMapper {
 
     Place selectOne(@Param("id") Integer id);
 
-    List<Place> selectAll(@Param("name") String name);
+    List<Place> selectAll(@Param("name") String name,@Param("page")Integer page,@Param("size")Integer size);
 }

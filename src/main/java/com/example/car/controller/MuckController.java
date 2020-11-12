@@ -16,6 +16,7 @@ import com.example.car.entity.M07;
 import com.example.car.service.MuckService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -107,8 +108,11 @@ public class MuckController {
      * @ Date: 2020/10/15 9:17
      */
     @RequestMapping("selectGivenPlace")
-    public Body selectGivenPlace(String name) {
-        return this.muckService.selectGivenPlace(name);
+    public Body selectGivenPlace(String name, Integer size,Integer index) {
+        if (StringUtils.isEmpty(index)||StringUtils.isEmpty(size)){
+            return Body.BODY_451;
+        }
+        return this.muckService.selectGivenPlace(name,size,index);
     }
 
     /**
@@ -119,8 +123,11 @@ public class MuckController {
      * @ Date: 2020/10/15 9:18
      */
     @RequestMapping("selectConstructionSite")
-    public Body selectConstructionSite(String name) {
-        return this.muckService.selectConstructionSite(name);
+    public Body selectConstructionSite(String name, Integer size,Integer index) {
+        if (StringUtils.isEmpty(index)||StringUtils.isEmpty(size)){
+            return Body.BODY_451;
+        }
+        return this.muckService.selectConstructionSite(name,size,index);
     }
 
     /**
