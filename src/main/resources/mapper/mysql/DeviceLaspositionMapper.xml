@@ -31,4 +31,10 @@ WHERE
         </if>
     </select>
 
+    <select id="selectLaspositionInCarNo" resultType="com.example.car.entity.DeviceLasposition">
+        select  * from device_last_position where carnumber in
+        <foreach collection="list" item="name" index="index" open="(" close=")" separator=",">
+            #{name}
+        </foreach>
+    </select>
 </mapper>

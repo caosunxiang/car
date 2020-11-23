@@ -18,6 +18,7 @@ import com.example.car.common.utils.entity.*;
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.*;
 import com.example.car.mapper.mysql.*;
+import com.example.car.mapper.sqlserver.MuckMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +66,11 @@ public class APIManage {
     private DeviceOnlineRecordMapper deviceOnlineRecordMapper;
     @Autowired
     private CarStatusChangeRecordMapper carStatusChangeRecordMapper;
+    @Autowired
+    private PlaceMapper placeMapper;
+    @Autowired
+    private MuckMapper muckMapper;
+
 
     /**
      * @Description: 接口转发
@@ -796,13 +802,13 @@ public class APIManage {
         return Body.newInstance(eChatBean4s);
     }
 
-    /** 
-    * @ Description: 查询统计指定天数的各项报警数量
-    * @ Param: [time]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2020/10/31 14:00
-    */
+    /**
+     * @ Description: 查询统计指定天数的各项报警数量
+     * @ Param: [time]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/10/31 14:00
+     */
     @RequestMapping("EChatBean5")
     public Body EChatBean5(Integer time) {
         List<EChatBean5> eChatBean5s = new ArrayList<>();
@@ -813,5 +819,132 @@ public class APIManage {
             eChatBean5s.add(eChatBean5);
         }
         return Body.newInstance(eChatBean5s);
+    }
+
+    /**
+     * @ Description: 查询车辆，停车场，消纳场，所工地的位置
+     * @ Param: []
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/11/13 16:55
+     */
+    @RequestMapping("LocationBean")
+    public Body LocationBean() {
+        List<LocationBean> locationBeans = new ArrayList<>();
+        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
+        for (SysAuthDept sysAuthDept : deptList) {
+            List<DeviceLasposition> deviceLasposition =
+                    deviceLaspositionMapper.selectLasposition(sysAuthDept.getDeptid().toString());
+            for (DeviceLasposition lasposition : deviceLasposition) {
+                if (sysAuthDept.getDeptid().equals(lasposition.getDeptid())) {
+                    LocationBean locationBean = new LocationBean();
+                    Map<String, String> map = new HashMap<>();
+                    map.put("lat", lasposition.getLat().toString());
+                    map.put("lng", lasposition.getLng().toString());
+                    map.put("deptid", lasposition.getDeptid().toString());
+                    map.put("direction", lasposition.getDirection());
+                    map.put("time", lasposition.getGpstime());
+                    map.put("speed", lasposition.getSpeed());
+                    map.put("status", lasposition.getCarstatus().toString());
+                    locationBean.setName(lasposition.getCarnumber());
+                    locationBean.setType(1);
+                    locationBean.setArea(map);
+                    locationBeans.add(locationBean);
+                }
+            }
+        }
+        List<Place> places = placeMapper.selectAll(null, 1, 1000);
+        for (Place place : places) {
+            LocationBean locationBean = new LocationBean();
+            Map<String, String> map = new HashMap<>();
+            map.put("lat", place.getLat());
+            map.put("lng", place.getLng());
+            map.put("area", place.getArea());
+            locationBean.setName(place.getName());
+            locationBean.setType(2);
+            locationBean.setArea(map);
+            locationBeans.add(locationBean);
+        }
+        List<M04> m04s = muckMapper.selectConstructionSite(null, 1000, 1000,null,null,
+                null,null,null,null,null,null);
+        for (M04 m04 : m04s) {
+            if (!StringUtils.isEmpty(m04.getDot()) && !m04.getDot().equals("1")) {
+                LocationBean locationBean = new LocationBean();
+                Map<String, String> map = new HashMap<>();
+                map.put("Area", m04.getArea());
+                map.put("Dot", m04.getDot());
+                map.put("id", m04.getRecId());
+                locationBean.setName(m04.getM0401());
+                locationBean.setType(3);
+                locationBean.setArea(map);
+                locationBeans.add(locationBean);
+            }
+        }
+        List<M07> m07s = muckMapper.selectGivenPlace(null, 1000, 1000, null, null,
+                null, null, null, null, null);
+        for (M07 m07 : m07s) {
+            if (!StringUtils.isEmpty(m07.getDot()) && !m07.getDot().equals("1")) {
+                LocationBean locationBean = new LocationBean();
+                Map<String, String> map = new HashMap<>();
+                map.put("Area", m07.getArea());
+                map.put("Dot", m07.getDot());
+                map.put("id", m07.getRecId());
+                locationBean.setName(m07.getM0706());
+                locationBean.setType(4);
+                locationBean.setArea(map);
+                locationBeans.add(locationBean);
+            }
+        }
+        return Body.newInstance(locationBeans);
+    }
+
+    /**
+     * @ Description: 树状图详情
+     * @ Param: [deptid]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/11/17 17:52
+     */
+    @RequestMapping("SysAuthDeptDetail")
+    public Body SysAuthDeptDetail(Long deptid) {
+        List<DeptDetail> deptDetails = new ArrayList<>();
+        List<SysAuthDept> sysAuthDept = sysAuthDeptMapper.selectSysAuthDeptByParent(deptid);
+        for (SysAuthDept authDept : sysAuthDept) {
+            List<DeptDetailChild> deptDetailChildren = new ArrayList<>();
+            DeptDetail deptDetail = new DeptDetail();
+            deptDetail.setId(authDept.getDeptid().toString());
+            deptDetail.setName(authDept.getDeptname());
+            deptDetail.setPid(authDept.getParentid().toString());
+            List<DeviceLasposition> deviceLaspositions = deviceLaspositionMapper.
+                    selectLasposition(deptDetail.getId());
+            for (DeviceLasposition deviceLasposition : deviceLaspositions) {
+                DeptDetailChild deptDetailChild = new DeptDetailChild();
+                deptDetailChild.setId(deviceLasposition.getId().toString());
+                deptDetailChild.setName(deviceLasposition.getCarnumber());
+                deptDetailChild.setPid(deviceLasposition.getDeptid().toString());
+                deptDetailChild.setStatus(deviceLasposition.getCarstatus().toString());
+                deptDetailChildren.add(deptDetailChild);
+                deptDetail.setSysAuthDepts(deptDetailChildren);
+            }
+            deptDetails.add(deptDetail);
+        }
+        return Body.newInstance(deptDetails);
+    }
+
+    /**
+     * @ Description: 车牌号批量查找车辆
+     * @ Param: [name]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/11/18 16:20
+     */
+    @RequestMapping("selectLaspositionInCarNo")
+    public Body selectLaspositionInCarNo(String name) {
+        List<String> list = CutString.divide(name);
+        List<DeviceLasposition> laspositions = deviceLaspositionMapper.selectLaspositionInCarNo(list);
+        for (DeviceLasposition lasposition : laspositions) {
+            lasposition.setBk1(lasposition.getDeptid().toString());
+        }
+        return Body.newInstance(laspositions);
     }
 }

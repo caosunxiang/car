@@ -140,27 +140,49 @@
         ) AS c
     </select>
     <select id="selectCarInfo" resultType="java.util.Map">
-SELECT
-	ISNULL(t.Capacity,'') Capacity,
-	ISNULL(t.CarNo,'')CarNo,
-	ISNULL(t.CarType,'')CarType,
-	ISNULL(t.CarframeNo,'')CarframeNo,
-	ISNULL(t.CompanyName,'')CompanyName,
-	ISNULL(t.DriverCardNo,'')DriverCardNo,
-	ISNULL(t.DriverMobile,'')DriverMobile,
-	ISNULL(t.DriverName,'')DriverName,
-	ISNULL(t.EngineNo,'')EngineNo,
-	ISNULL(t.ExpiryTime,'')ExpiryTime,
-	ISNULL(t.GPSSFYC,'')GPSSFYC,
-	ISNULL(t.OriginalCarNo,'')OriginalCarNo,
-	ISNULL(t.RegisterTime,'')RegisterTime,
-	ISNULL(t.SXSFQQ,'')SXSFQQ,
-	ISNULL(t.ZYZG,'')ZYZG
-FROM
-	View_TruckInfo t
-WHERE
-t.CarNo=#{carNo}
-</select>
+        SELECT TOP ${size} * FROM (
+        SELECT
+        TOP ${total}
+        ISNULL(t.Capacity,'') Capacity,
+        ISNULL(t.CarNo,'')CarNo,
+        ISNULL(t.CarType,'')CarType,
+        ISNULL(t.CarframeNo,'')CarframeNo,
+        ISNULL(t.CompanyName,'')CompanyName,
+        ISNULL(t.DriverCardNo,'')DriverCardNo,
+        ISNULL(t.DriverMobile,'')DriverMobile,
+        ISNULL(t.DriverName,'')DriverName,
+        ISNULL(t.EngineNo,'')EngineNo,
+        ISNULL(t.ExpiryTime,'')ExpiryTime,
+        ISNULL(t.GPSSFYC,'')GPSSFYC,
+        ISNULL(t.OriginalCarNo,'')OriginalCarNo,
+        ISNULL(t.RegisterTime,'')RegisterTime,
+        ISNULL(t.SXSFQQ,'')SXSFQQ,
+        ISNULL(t.ZYZG,'')ZYZG
+        FROM
+        View_TruckInfo t
+        WHERE
+        1=1
+        <if test="carNo !=null and carNo!=''">
+            and t.CarNo LIKE '%'+ #{carNo} +'%'
+        </if>
+        <if test="CompanyName !=null and CompanyName!=''">
+            and t.CompanyName LIKE '%'+ #{CompanyName} +'%'
+        </if>
+        <if test="DriverName !=null and DriverName!=''">
+            and t.DriverName = #{DriverName}
+        </if>
+        <if test="EngineNo !=null and EngineNo!=''">
+            and t.EngineNo = #{EngineNo}
+        </if>
+        <if test="CarframeNo !=null and CarframeNo!=''">
+            and t.CarframeNo = #{CarframeNo}
+        </if>
+        <if test="CarType !=null and CarType!=''">
+            and t.CarType = CarType
+        </if>
+        ORDER BY RegisterTime desc
+        ) a ORDER BY RegisterTime ASC
+    </select>
     <select id="selectGivenPlace" resultType="com.example.car.entity.M07">
         SELECT TOP
         ${size} a.*
@@ -186,6 +208,27 @@ t.CarNo=#{carNo}
         1 = 1
         <if test="name !=null and name !=''">
             and M0706 LIKE '%'+ #{name}+'%'
+        </if>
+        <if test="M0702 !=null and M0702 !=''">
+            and M0702 LIKE '%'+ #{M0702}+'%'
+        </if>
+        <if test="M0707 !=null and M0707 !=''">
+            and M0707 LIKE '%'+ #{M0707}+'%'
+        </if>
+        <if test="M0708	!=null and M0708 !=''">
+            and M0708 LIKE '%'+ #{M0708}+'%'
+        </if>
+        <if test="M0703	!=null and M0703 !=''">
+            and M0703 = #{M0703}
+        </if>
+        <if test="M0704	!=null and M0704 !=''">
+            and M0704 = #{M0704}
+        </if>
+        <if test="M0709	!=null and M0709 !=''">
+            and M0709    <![CDATA[ > ]]> #{M0709}
+        </if>
+        <if test="M0710	!=null and M0710 !=''">
+            and M0710 <![CDATA[ < ]]> #{M0710}
         </if>
         AND datediff( yy, M0709, GETDATE( ) ) = 0
         ORDER BY
@@ -231,16 +274,138 @@ t.CarNo=#{carNo}
         M04
         WHERE
         1 = 1
-        <if test = "name !=null and name !=''" >
-        AND M0401 LIKE '%' + #{ name }+ '%' </if>
+        <if test="name !=null and name !=''">
+            AND M0401 LIKE '%' + #{ name }+ '%'
+        </if>
+        <if test="M0417 !=null and M0417 !=''">
+            AND M0417 LIKE '%' + #{ M0417 }+ '%'
+        </if>
+        <if test="M0419 !=null and M0419 !=''">
+            AND M0419 = #{ M0419 }
+        </if>
+        <if test="M0402 !=null and M0402 !=''">
+            AND M0402 LIKE '%' + #{ M0402 }+ '%'
+        </if>
+        <if test="M0403 !=null and M0403 !=''">
+            AND M0403 LIKE '%' + #{ M0403 }+ '%'
+        </if>
+        <if test="M0414 !=null and M0414 !=''">
+            AND M0414 = #{ M0414 }
+        </if>
+        <if test="M0420 !=null and M0420 !=''">
+            AND M0420 = #{ M0420 }
+        </if>
+        <if test="M0425 !=null and M0425 !=''">
+            AND M0425 <![CDATA[ > ]]> #{ M0425 }
+        </if>
+        <if test="M0426 !=null and M0426 !=''">
+            AND M0426 <![CDATA[ < ]]> #{ M0426 }
+        </if>
         AND datediff( yy, M0418, GETDATE( ) ) = 0
         ORDER BY
         recid DESC
         ) AS a
         ORDER BY
         a.recid ASC;
-
     </select>
+    <select id="selectCarInfoCount" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        View_TruckInfo t
+        WHERE
+        1=1
+        <if test="carNo !=null and carNo!=''">
+            and t.CarNo LIKE '%'+ #{carNo} +'%'
+        </if>
+        <if test="CompanyName !=null and CompanyName!=''">
+            and t.CompanyName LIKE '%'+ #{CompanyName} +'%'
+        </if>
+        <if test="DriverName !=null and DriverName!=''">
+            and t.DriverName = #{DriverName}
+        </if>
+        <if test="EngineNo !=null and EngineNo!=''">
+            and t.EngineNo = #{EngineNo}
+        </if>
+        <if test="CarframeNo !=null and CarframeNo!=''">
+            and t.CarframeNo = #{CarframeNo}
+        </if>
+        <if test="CarType !=null and CarType!=''">
+            and t.CarType = CarType
+        </if>
+    </select>
+
+    <select id="selectGivenPlaceCount" resultType="java.lang.Integer">
+        SELECT
+        count (1)
+        FROM
+        M07
+        WHERE
+        1 = 1
+        <if test="name !=null and name !=''">
+            and M0706 LIKE '%'+ #{name}+'%'
+        </if>
+        <if test="M0702 !=null and M0702 !=''">
+            and M0702 LIKE '%'+ #{M0702}+'%'
+        </if>
+        <if test="M0707 !=null and M0707 !=''">
+            and M0707 LIKE '%'+ #{M0707}+'%'
+        </if>
+        <if test="M0708	!=null and M0708 !=''">
+            and M0708 LIKE '%'+ #{M0708}+'%'
+        </if>
+        <if test="M0703	!=null and M0703 !=''">
+            and M0703 = #{M0703}
+        </if>
+        <if test="M0704	!=null and M0704 !=''">
+            and M0704 = #{M0704}
+        </if>
+        <if test="M0709	!=null and M0709 !=''">
+            and M0709    <![CDATA[ > ]]> #{M0709}
+        </if>
+        <if test="M0710	!=null and M0710 !=''">
+            and M0710 <![CDATA[ < ]]> #{M0710}
+        </if>
+        AND datediff( yy, M0709, GETDATE( ) ) = 0
+    </select>
+
+    <select id="selectConstructionSiteCount" resultType="java.lang.Integer">
+        SELECT
+        count(1)
+        FROM
+        M04
+        WHERE
+        1 = 1
+        <if test="name !=null and name !=''">
+            AND M0401 LIKE '%' + #{ name }+ '%'
+        </if>
+        <if test="M0417 !=null and M0417 !=''">
+            AND M0417 LIKE '%' + #{ M0417 }+ '%'
+        </if>
+        <if test="M0419 !=null and M0419 !=''">
+            AND M0419 = #{ M0419 }
+        </if>
+        <if test="M0402 !=null and M0402 !=''">
+            AND M0402 LIKE '%' + #{ M0402 }+ '%'
+        </if>
+        <if test="M0403 !=null and M0403 !=''">
+            AND M0403 LIKE '%' + #{ M0403 }+ '%'
+        </if>
+        <if test="M0414 !=null and M0414 !=''">
+            AND M0414 = #{ M0414 }
+        </if>
+        <if test="M0420 !=null and M0420 !=''">
+            AND M0420 = #{ M0420 }
+        </if>
+        <if test="M0425 !=null and M0425 !=''">
+            AND M0425 <![CDATA[ > ]]> #{ M0425 }
+        </if>
+        <if test="M0426 !=null and M0426 !=''">
+            AND M0426 <![CDATA[ < ]]> #{ M0426 }
+        </if>
+        AND datediff( yy, M0418, GETDATE( ) ) = 0
+    </select>
+
 
     <select id="selectGivenPlaceOne" resultType="com.example.car.entity.M07">
         select RecId, M0702, M0703, M0704, M0706, M0707, M0708, M0709, M0710, Area, Dot, VideoUrl,M0718 from M07 where RecId=#{recid}
@@ -366,5 +531,69 @@ FROM
 			( SELECT CONVERT ( VARCHAR ( 100 ), GETDATE( ), 23 ) )
 		) > 0
 	)  b ON b.time = a.time;
+    </select>
+    <select id="selectMuckadvanced" resultType="java.util.Map">
+        SELECT TOP
+        ${size} a.*
+        FROM
+        (
+        SELECT TOP
+        ${total} ISNULL( p.BeginTime, '' ) BeginTime,
+        ISNULL( p.EndTime, '' ) EndTime,
+        ISNULL( p.LineName, '' ) LineName,
+        ISNULL( p.PermitNo, '' ) PermitNo,
+        ISNULL( p.CompanyName, '' ) CompanyName,
+        ISNULL( p.ProjectName , '' ) ProjectName,
+        ISNULL( p.Absorption, '' ) Absorption,
+        ISNULL( p.place, '' ) place,
+        ISNULL( p.mucktype, '' ) mucktype,
+        ISNULL( p.approvetime, '' ) approvetime,
+        ISNULL( p.permittype, '' ) permittype
+        FROM
+        View_PermitInfo p
+        WHERE
+        1 = 1
+        <if test="name !=null and name !=''">
+            AND p.CompanyName LIKE '%' + #{ name }+ '%'
+        </if>
+        <if test="BeginTime !=null and BeginTime !=''">
+            AND
+            CONVERT(nvarchar(10), p.EndTime,112 ) = #{BeginTime}
+        </if>
+        <if test="type !=null and type !='' and type == 'A'.toString()">
+            AND
+            CONVERT(nvarchar(10), p.EndTime,102 ) <![CDATA[ < ]]> CONVERT(nvarchar(10),GETDATE(),121)
+        </if>
+        ORDER BY
+        p.EndTime DESC
+        ) a
+        ORDER BY
+        a.EndTime ASC
+    </select>
+    <select id="selectMuckadvancedCount" resultType="java.lang.Integer">
+        SELECT count (1)
+        FROM
+        View_PermitInfo p
+        WHERE
+        1 = 1
+        <if test="name !=null and name !=''">
+            AND p.CompanyName LIKE '%' + #{ name }+ '%'
+        </if>
+        <if test="BeginTime !=null and BeginTime !=''">
+            AND
+            CONVERT(nvarchar(10), p.EndTime,112 ) = #{BeginTime}
+        </if>
+        <if test="type !=null and type !='' and type == 'A'.toString()">
+            AND
+            CONVERT(nvarchar(10), p.EndTime,102 ) <![CDATA[ < ]]> CONVERT(nvarchar(10),GETDATE(),121)
+        </if>
+    </select>
+    <select id="selectCarByPermitNo" resultType="java.lang.String">
+        SELECT pt.carNO from  View_ProjectPermit p
+        LEFT JOIN View_PermitTruck pt ON p.PermitNo = pt.PermitNo
+        WHERE
+        1 = 1
+				AND
+				p.PermitNo=#{PermitNo}
     </select>
 </mapper>

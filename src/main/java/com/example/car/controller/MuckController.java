@@ -96,8 +96,15 @@ public class MuckController {
      * @Date: 2020/9/17 13:48
      */
     @RequestMapping("selectCarInfo")
-    public Body selectCarInfo(String carNo) {
-        return this.muckService.selectCarInfo(carNo);
+    public Body selectCarInfo(String carNo, Integer size, Integer index, String CompanyName,
+                              String DriverName, String EngineNo,
+                              String CarframeNo, String CarType) {
+        if (StringUtils.isEmpty(index) || StringUtils.isEmpty(size)) {
+            size = 10;
+            index = 1;
+        }
+        return this.muckService.selectCarInfo(carNo, size, index, CompanyName, DriverName, EngineNo, CarframeNo,
+                CarType);
     }
 
     /**
@@ -108,11 +115,13 @@ public class MuckController {
      * @ Date: 2020/10/15 9:17
      */
     @RequestMapping("selectGivenPlace")
-    public Body selectGivenPlace(String name, Integer size,Integer index) {
-        if (StringUtils.isEmpty(index)||StringUtils.isEmpty(size)){
+    public Body selectGivenPlace(String name, Integer size, Integer index, String M0702, String M0707, String M0708,
+                                 String M0703, String M0704, String M0709,
+                                 String M0710) {
+        if (StringUtils.isEmpty(index) || StringUtils.isEmpty(size)) {
             return Body.BODY_451;
         }
-        return this.muckService.selectGivenPlace(name,size,index);
+        return this.muckService.selectGivenPlace(name, size, index, M0702, M0707, M0708, M0703, M0704, M0709, M0710);
     }
 
     /**
@@ -123,11 +132,16 @@ public class MuckController {
      * @ Date: 2020/10/15 9:18
      */
     @RequestMapping("selectConstructionSite")
-    public Body selectConstructionSite(String name, Integer size,Integer index) {
-        if (StringUtils.isEmpty(index)||StringUtils.isEmpty(size)){
+    public Body selectConstructionSite(String name, Integer size, Integer index, String M0417,
+                                       String M0419, String M0402,
+                                       String M0403, String M0414,
+                                       String M0420, String M0425,
+                                       String M0426) {
+        if (StringUtils.isEmpty(index) || StringUtils.isEmpty(size)) {
             return Body.BODY_451;
         }
-        return this.muckService.selectConstructionSite(name,size,index);
+        return this.muckService.selectConstructionSite(name, size, index, M0417, M0419, M0402, M0403, M0414, M0420,
+                M0425, M0426);
     }
 
     /**
@@ -180,63 +194,79 @@ public class MuckController {
     }
 
     /**
-    * @ Description: 查询工地详情
-    * @ Param: [recid]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2020/10/22 17:38
-    */
+     * @ Description: 查询工地详情
+     * @ Param: [recid]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/10/22 17:38
+     */
     @RequestMapping("selectConstructionSiteOne")
     public Body selectConstructionSiteOne(String recid) {
         return this.muckService.selectConstructionSiteOne(recid);
     }
 
-    /** 
-    * @ Description: 查询准运证的审批流程
-    * @ Param: [number]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2020/10/23 15:13
-    */
+    /**
+     * @ Description: 查询准运证的审批流程
+     * @ Param: [number]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/10/23 15:13
+     */
     @RequestMapping("selectoperprogress")
     public Body selectoperprogress(String number) {
         return this.muckService.selectoperprogress(number);
     }
 
-    /** 
-    * @ Description: 查询系统公告
-    * @ Param: []
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2020/10/30 9:50
-    */
+    /**
+     * @ Description: 查询系统公告
+     * @ Param: []
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/10/30 9:50
+     */
     @RequestMapping("selectNotice")
     public Body selectNotice() {
         return this.muckService.selectNotice();
     }
 
-    /** 
-    * @ Description: 查找公司详细信息
-    * @ Param: []
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2020/10/30 15:46
-    */
+    /**
+     * @ Description: 查找公司详细信息
+     * @ Param: []
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/10/30 15:46
+     */
     @RequestMapping("selectM01")
     public Body selectM01() {
         return this.muckService.selectM01();
     }
 
     /*** 
-    * @ Description: 每天准运证数量折线图
-    * @ Param: [time]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2020/11/5 14:45
-    */
+     * @ Description: 每天准运证数量折线图
+     * @ Param: [time]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/11/5 14:45
+     */
     @RequestMapping("selectCountByMuck")
     public Body selectCountByMuck(String time) {
         return this.muckService.selectCountByMuck(time);
+    }
+
+    /** 
+    * @ Description: 分页高级查询准运证
+    * @ Param: [name, size, index, CarNo, BeginTime, type]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/11/20 14:16
+    */
+    @RequestMapping("selectMuckAdvanced")
+    public Body selectMuckAdvanced(String name, Integer size, Integer index,  String BeginTime,
+                                   String type) {
+        if (StringUtils.isEmpty(index) || StringUtils.isEmpty(size)) {
+            return Body.BODY_451;
+        }
+        return this.muckService.selectMuckAdvanced(name, size, index,  BeginTime, type);
     }
 }
 
