@@ -157,6 +157,8 @@
         ISNULL(t.OriginalCarNo,'')OriginalCarNo,
         ISNULL(t.RegisterTime,'')RegisterTime,
         ISNULL(t.SXSFQQ,'')SXSFQQ,
+        ISNULL( t.JQXYXQ, '' ) JQXYXQ,
+        ISNULL( t.SHYXYXQ, '' ) SHYXYXQ,
         ISNULL(t.ZYZG,'')ZYZG
         FROM
         View_TruckInfo t
@@ -178,7 +180,7 @@
             and t.CarframeNo = #{CarframeNo}
         </if>
         <if test="CarType !=null and CarType!=''">
-            and t.CarType = CarType
+            and t.CarType = #{CarType}
         </if>
         ORDER BY RegisterTime desc
         ) a ORDER BY RegisterTime ASC
@@ -331,7 +333,7 @@
             and t.CarframeNo = #{CarframeNo}
         </if>
         <if test="CarType !=null and CarType!=''">
-            and t.CarType = CarType
+            and t.CarType = #{CarType}
         </if>
     </select>
 
@@ -574,6 +576,7 @@ FROM
         SELECT count (1)
         FROM
         View_PermitInfo p
+        LEFT JOIN View_PermitTruck t ON t.PermitNo= p.PermitNo
         WHERE
         1 = 1
         <if test="name !=null and name !=''">
@@ -585,11 +588,11 @@ FROM
         </if>
         <if test="type !=null and type !='' and type == 'A'.toString()">
             AND
-            CONVERT(nvarchar(10), p.EndTime,102 ) <![CDATA[ < ]]> CONVERT(nvarchar(10),GETDATE(),121)
+            CONVERT(nvarchar(10), p.EndTime,102 ) <![CDATA[ < ]]> CONVERT(nvarchar(10),GETDATE(),102)
         </if>
     </select>
     <select id="selectCarByPermitNo" resultType="java.lang.String">
-        SELECT pt.carNO from  View_ProjectPermit p
+     SELECT pt.carNO from  View_ProjectPermit p
         LEFT JOIN View_PermitTruck pt ON p.PermitNo = pt.PermitNo
         WHERE
         1 = 1

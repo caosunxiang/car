@@ -124,7 +124,6 @@
             <artifactId>mssql-jdbc</artifactId>
             <version>6.2.2.jre8</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-websocket</artifactId>
@@ -154,6 +153,11 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-core</artifactId>
             <version>3.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
         <!--  log4j12日志适配器 -->
         <dependency>

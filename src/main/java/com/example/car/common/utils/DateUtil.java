@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * 时间工具类
@@ -201,5 +202,6 @@ public class DateUtil {
     public static void main(String[] args) {
         String var=DateUtil.severalDaysAgo("yyyy-MM-dd",15);
         System.out.println(var);
+        System.out.println( UUID.randomUUID().toString());
     }
 }

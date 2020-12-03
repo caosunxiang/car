@@ -181,7 +181,6 @@
 //                        deviceAlarmSeverity1.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
 //                                DateUtil.FULL_TIME_SPLIT_PATTERN));
 //                        deviceAlarmSeverity1.setDeptid(resultDatum.getDeptid());
-//                        deviceAlarmSeverity1.setDeptid(resultDatum.getDeptid());
 //                        deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
 //                        System.out.println("不好啦！报警了，离线告警");
 //                    }

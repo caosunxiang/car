@@ -82,5 +82,5 @@ public interface MuckMapper {
     Integer selectMuckadvancedCount(@Param("name") String name,
                                     @Param("BeginTime") String BeginTime, @Param("type") String type);
 
-    List<String> selectCarByPermitNo(@Param("PermitNo")String permitNo);
+    List<String> selectCarByPermitNo(@Param("PermitNo")String PermitNo);
 }

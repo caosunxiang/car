@@ -27,6 +27,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -119,7 +120,8 @@ public class APIManage {
             list1.add(list.get(0));
             for (int i = 0; i < list.size(); i++) {
                 if (i != list.size() - 1) {
-                    if (!list.get(i + 1).get("lat").equals(0) && !list.get(i + 1).get("lng").equals(0)) {
+                    if (!(Double.parseDouble(list.get(i + 1).get("lat").toString()) == 0.0) &&
+                            !(Double.parseDouble(list.get(i + 1).get("lng").toString()) == 0.0)) {
                         if (!lat.equals(list.get(i + 1).get("lat").toString()) || !lng.equals(list.get(i + 1).get(
                                 "lng").toString())) {
                             if (Direction.directionGap(Double.parseDouble(direction),
@@ -134,7 +136,6 @@ public class APIManage {
             }
             // list.sort((o1, o2) -> Integer.compare(o1.get("createtime").toString().compareTo(o2.get("createtime")
             // .toString()), 0));
-            System.out.println(list1.toString());
             return Body.newInstance(list1);
         }
         return Body.newInstance(list);
@@ -865,8 +866,8 @@ public class APIManage {
             locationBean.setArea(map);
             locationBeans.add(locationBean);
         }
-        List<M04> m04s = muckMapper.selectConstructionSite(null, 1000, 1000,null,null,
-                null,null,null,null,null,null);
+        List<M04> m04s = muckMapper.selectConstructionSite(null, 1000, 1000, null, null,
+                null, null, null, null, null, null);
         for (M04 m04 : m04s) {
             if (!StringUtils.isEmpty(m04.getDot()) && !m04.getDot().equals("1")) {
                 LocationBean locationBean = new LocationBean();
@@ -947,4 +948,19 @@ public class APIManage {
         }
         return Body.newInstance(laspositions);
     }
+
+    /*** 
+    * @ Description: 上传图片
+    * @ Param: [files]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/12/2 17:20
+    */
+    @RequestMapping("uploadImg")
+    public Body uploadImg(MultipartFile files){
+        String url=FileUploadUtils.fileUpload(files,"img");
+        return Body.newInstance(url);
+    }
+
+
 }
