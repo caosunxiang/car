@@ -42,6 +42,9 @@ public interface DeviceAlarmSeverityMapper {
     List<String> selectAlarmName();
 
     List<DeviceAlarmSeverity> selectNewAlarm(@Param("time") String time, @Param("list") List<String> list, @Param(
+            "type") Integer type,@Param("number")String number,@Param("index")Integer index,@Param("size")Integer size);
+
+    Integer selectNewAlarmCount(@Param("time") String time, @Param("list") List<String> list, @Param(
             "type") Integer type,@Param("number")String number);
 
     List<String> selectEChat(@Param("deptid") long deptid, @Param("number") String number);

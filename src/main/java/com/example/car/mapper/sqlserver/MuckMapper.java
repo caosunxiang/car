@@ -83,4 +83,6 @@ public interface MuckMapper {
                                     @Param("BeginTime") String BeginTime, @Param("type") String type);
 
     List<String> selectCarByPermitNo(@Param("PermitNo")String PermitNo);
+
+    Integer uploadImg(@Param("img")String img ,@Param("carNo")String carNo);
 }

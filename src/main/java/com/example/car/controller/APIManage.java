@@ -957,8 +957,9 @@ public class APIManage {
     * @ Date: 2020/12/2 17:20
     */
     @RequestMapping("uploadImg")
-    public Body uploadImg(MultipartFile files){
+    public Body uploadImg(MultipartFile files,String carNo){
         String url=FileUploadUtils.fileUpload(files,"img");
+        muckMapper.uploadImg(url,carNo);
         return Body.newInstance(url);
     }
 

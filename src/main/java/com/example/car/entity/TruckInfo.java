@@ -59,4 +59,7 @@ public class TruckInfo {
 
     private String driverMobile;
 
+
+    private String DLicenseImage;
+
 }

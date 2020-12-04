@@ -14,6 +14,7 @@ import com.example.car.common.utils.json.Body;
 import com.example.car.service.DeviceAlarmSeverityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,6 +96,22 @@ public class DeviceAlarmSeverityController {
     @RequestMapping("selectNewAlarm")
     public Body selectNewAlarm(String name, String time, Integer type, String number) {
         return deviceAlarmSeverityService.selectNewAlarm(name, time, type, number);
+    }
+
+    /** 
+    * @ Description: PC查询严重报警
+    * @ Param: [name, time, type, number, index, size]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/12/3 16:22
+    */
+    @RequestMapping("selectNewAlarmPage")
+    public Body selectNewAlarmPage(String name, String time, Integer type, String number, Integer index, Integer size) {
+        if (StringUtils.isEmpty(index)||StringUtils.isEmpty(size)){
+            index=0;
+            size=10;
+        }
+        return deviceAlarmSeverityService.selectNewAlarmPage(name,time,type,number,index,size);
     }
 
     /**

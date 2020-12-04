@@ -13,5 +13,7 @@ public interface DeviceAlarmSeverityService {
 
     Body selectNewAlarm(String name,String time,Integer type,String number);
 
+    Body selectNewAlarmPage(String name,String time,Integer type,String number,Integer index,Integer size);
+
     Body selectCountEveryCar();
 }

@@ -13,6 +13,7 @@ package com.example.car.service.impl;
 import com.example.car.common.utils.CutString;
 import com.example.car.common.utils.entity.EChatBean3;
 import com.example.car.common.utils.json.Body;
+import com.example.car.common.utils.page.PageUtils;
 import com.example.car.entity.DeviceAlarmSeverity;
 import com.example.car.entity.DeviceLasposition;
 import com.example.car.entity.SysAuthDept;
@@ -21,6 +22,7 @@ import com.example.car.mapper.mysql.DeviceAlarmSeverityMapper;
 import com.example.car.mapper.mysql.DeviceLaspositionMapper;
 import com.example.car.mapper.mysql.SysAuthDeptMapper;
 import com.example.car.service.DeviceAlarmSeverityService;
+import com.github.pagehelper.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -94,8 +96,21 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
     public Body selectNewAlarm(String name, String time, Integer type, String number) {
         List<String> list = CutString.divide(name);
         List<DeviceAlarmSeverity> deviceAlarmSeverities = deviceAlarmSeverityMapper.selectNewAlarm(time, list, type,
-                number);
+                number, null, null);
         return Body.newInstance(deviceAlarmSeverities);
+    }
+
+    @Override
+    public Body selectNewAlarmPage(String name, String time, Integer type, String number, Integer index, Integer size) {
+        PageUtils pageUtils = new PageUtils();
+        List<String> list = CutString.divide(name);
+        List<DeviceAlarmSeverity> deviceAlarmSeverities = deviceAlarmSeverityMapper.selectNewAlarm(time, list, type,
+                number, index * size, size);
+        pageUtils.setTotal(deviceAlarmSeverityMapper.selectNewAlarmCount(time, list, type, number));
+        pageUtils.setSize(size);
+        pageUtils.setIndex(index);
+        pageUtils.setList(deviceAlarmSeverities);
+        return Body.newInstance(pageUtils);
     }
 
     @Override

@@ -272,7 +272,10 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         d.deptname AS deptname
         FROM
         device_alarm_severity a
-        LEFT JOIN sys_auth_dept d ON d.deptid = a.deptid WHERE DATE_FORMAT(a.alarm_start_time,'%Y-%m-%d')=#{time}
+        LEFT JOIN sys_auth_dept d ON d.deptid = a.deptid WHERE 1=1
+        <if test="time !=null and time !=''">
+            and DATE_FORMAT(a.alarm_start_time,'%Y-%m-%d')=#{time}
+        </if>
         <if test="list != null and list.size() >0">
         and a.alarm_name in
         <foreach collection="list" item="name" index="index" open="(" close=")" separator=",">
@@ -287,8 +290,34 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
             and
             car_number  LIKE CONCAT('%',#{number},'%')
         </if>
+        <if test="index !=null and index!='' and size!=null and size!=''">
+            limit #{index},#{size}
+        </if>
     </select>
-
+    <select id="selectNewAlarmCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        device_alarm_severity a
+        LEFT JOIN sys_auth_dept d ON d.deptid = a.deptid WHERE 1=1
+        <if test="time !=null and time !=''">
+            and DATE_FORMAT(a.alarm_start_time,'%Y-%m-%d')=#{time}
+        </if>
+        <if test="list != null and list.size() >0">
+            and a.alarm_name in
+            <foreach collection="list" item="name" index="index" open="(" close=")" separator=",">
+                #{name}
+            </foreach>
+        </if>
+        <if test="type !=null and type !=''">
+            and
+            a.handle_type =#{type}
+        </if>
+        <if test="number !=null and number !=''">
+            and
+            car_number  LIKE CONCAT('%',#{number},'%')
+        </if>
+    </select>
     <select id="selectNewAlarmAll" resultType="java.util.Map">
         SELECT
         alarm_id AS id,

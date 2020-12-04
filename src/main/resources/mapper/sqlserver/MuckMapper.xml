@@ -13,7 +13,8 @@
         t.ExpiryTime,
         t.CompanyName,
         t.DriverName,
-        t.DriverMobile
+        t.DriverMobile,
+        t.DLicenseImage
         FROM
         View_PermitTruck p
         LEFT JOIN View_TruckInfo t ON p.carno = t.carno
@@ -93,6 +94,7 @@
         ISNULL( i.CarNo, '' ) CarNo,
         ISNULL( i.DriverName, '' ) DriverName,
         ISNULL( i.DriverMobile , '' ) DriverMobile,
+        ISNULL( i.DLicenseImage , '' ) DLicenseImage,
         ISNULL( p.place, '' ) place,
         ISNULL( p.mucktype, '' ) mucktype,
         ISNULL( p.approvetime, '' ) approvetime,
@@ -159,7 +161,8 @@
         ISNULL(t.SXSFQQ,'')SXSFQQ,
         ISNULL( t.JQXYXQ, '' ) JQXYXQ,
         ISNULL( t.SHYXYXQ, '' ) SHYXYXQ,
-        ISNULL(t.ZYZG,'')ZYZG
+        ISNULL(t.ZYZG,'')ZYZG,
+        ISNULL(t.DLicenseImage,'')DLicenseImage
         FROM
         View_TruckInfo t
         WHERE
@@ -445,7 +448,8 @@ SELECT
 	ISNULL(t.SXSFQQ,'')SXSFQQ,
 	ISNULL(t.ZYZG,'')ZYZG,
 	ISNULL(m.M0108,'')M0108,
-	ISNULL(m.M0109,'')M0109
+	ISNULL(m.M0109,'')M0109,
+	ISNULL(t.DLicenseImage,'')DLicenseImage
 FROM
 	View_TruckInfo t LEFT JOIN View_CompanyInfo c ON c.CompanyName=t.CompanyName LEFT JOIN M01 m ON c.CompanyId=m.MustId
 	WHERE
@@ -599,4 +603,7 @@ FROM
 				AND
 				p.PermitNo=#{PermitNo}
     </select>
+    <update id="uploadImg">
+        update M03 set DLicenseImage=#{img} where M0331=#{carNo}
+    </update>
 </mapper>
