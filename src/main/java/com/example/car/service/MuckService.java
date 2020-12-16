@@ -47,4 +47,6 @@ public interface MuckService {
 
     Body selectMuckAdvanced(String name, Integer size,Integer index, String BeginTime, String type);
 
+    Body selectMuckPage(String name, Integer size,Integer index, String BeginTime, String type);
+
 }

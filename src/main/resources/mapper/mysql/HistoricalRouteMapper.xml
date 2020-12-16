@@ -48,6 +48,7 @@
         <if test="name !=null and name !=''">
             and carnumber = #{name}
         </if>
+        limit 0,100000
     </select>
 
     <delete id="delHistoricalRoute">

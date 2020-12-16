@@ -147,6 +147,7 @@
         TOP ${total}
         ISNULL(t.Capacity,'') Capacity,
         ISNULL(t.CarNo,'')CarNo,
+        ISNULL(t.RecId,'')RecId,
         ISNULL(t.CarType,'')CarType,
         ISNULL(t.CarframeNo,'')CarframeNo,
         ISNULL(t.CompanyName,'')CompanyName,
@@ -606,4 +607,62 @@ FROM
     <update id="uploadImg">
         update M03 set DLicenseImage=#{img} where M0331=#{carNo}
     </update>
+
+    <select id="selectMuckPage" resultType="java.util.Map">
+        SELECT TOP
+        ${size} a.*
+        FROM
+        (
+        SELECT TOP
+        ${total} ISNULL( p.BeginTime, '' ) BeginTime,
+        ISNULL( p.EndTime, '' ) EndTime,
+        ISNULL( p.LineName, '' ) LineName,
+        ISNULL( p.PermitNo, '' ) PermitNo,
+        ISNULL( p.CompanyName, '' ) CompanyName,
+        ISNULL( p.ProjectName , '' ) ProjectName,
+        ISNULL( p.Absorption, '' ) Absorption,
+        ISNULL( p.place, '' ) place,
+        ISNULL( p.mucktype, '' ) mucktype,
+        ISNULL( p.approvetime, '' ) approvetime,
+        ISNULL( m03.m0331, '' ) carnumber,
+        ISNULL( p.permittype, '' ) permittype
+        FROM
+        View_PermitInfo p LEFT JOIN M03 m03 ON m03.M0302=p.CompanyName
+        WHERE
+        1 = 1
+        <if test="name !=null and name !=''">
+            AND m03.m0331 LIKE '%' + #{ name }+ '%'
+        </if>
+        <if test="BeginTime !=null and BeginTime !=''">
+            AND
+            CONVERT(nvarchar(10), p.EndTime,112 ) = #{BeginTime}
+        </if>
+        <if test="type !=null and type !='' and type == 'A'.toString()">
+            AND
+            CONVERT(nvarchar(10), p.EndTime,102 ) <![CDATA[ < ]]> CONVERT(nvarchar(10),GETDATE(),121)
+        </if>
+        ORDER BY
+        p.EndTime DESC
+        ) a
+        ORDER BY
+        a.EndTime ASC
+    </select>
+    <select id="selectMuckPageCount" resultType="java.lang.Integer">
+        SELECT count (1)
+        FROM
+        View_PermitInfo p LEFT JOIN M03 m03 ON m03.M0302=p.CompanyName
+        WHERE
+        1 = 1
+        <if test="name !=null and name !=''">
+            AND m03.m0331 LIKE '%' + #{ name }+ '%'
+        </if>
+        <if test="BeginTime !=null and BeginTime !=''">
+            AND
+            CONVERT(nvarchar(10), p.EndTime,112 ) = #{BeginTime}
+        </if>
+        <if test="type !=null and type !='' and type == 'A'.toString()">
+            AND
+            CONVERT(nvarchar(10), p.EndTime,102 ) <![CDATA[ < ]]> CONVERT(nvarchar(10),GETDATE(),102)
+        </if>
+    </select>
 </mapper>

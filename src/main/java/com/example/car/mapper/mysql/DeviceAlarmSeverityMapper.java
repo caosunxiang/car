@@ -20,7 +20,7 @@ public interface DeviceAlarmSeverityMapper {
             , @Param("size") Integer size);
 
     List<Map<String, Object>> selectNewAlarmAll(@Param("time") String time, @Param("list") List<String> list, @Param(
-            "type") Integer type,@Param("number")String number);
+            "type") Integer type, @Param("number") String number);
 
     Integer selectAlarmSeverityCount(@Param("startTime") String startTime,
                                      @Param("endTime") String endTime, @Param("name") String name);
@@ -42,10 +42,11 @@ public interface DeviceAlarmSeverityMapper {
     List<String> selectAlarmName();
 
     List<DeviceAlarmSeverity> selectNewAlarm(@Param("time") String time, @Param("list") List<String> list, @Param(
-            "type") Integer type,@Param("number")String number,@Param("index")Integer index,@Param("size")Integer size);
+            "type") Integer type, @Param("number") String number, @Param("index") Integer index,
+                                             @Param("size") Integer size);
 
     Integer selectNewAlarmCount(@Param("time") String time, @Param("list") List<String> list, @Param(
-            "type") Integer type,@Param("number")String number);
+            "type") Integer type, @Param("number") String number);
 
     List<String> selectEChat(@Param("deptid") long deptid, @Param("number") String number);
 
@@ -57,6 +58,9 @@ public interface DeviceAlarmSeverityMapper {
 
     Integer selectCountEveryCar();
 
-    List<EChatBean6>selectAlarmNameAndCount(@Param("time")String time);
+    List<EChatBean6> selectAlarmNameAndCount(@Param("time") String time);
+
+    List<DeviceAlarmSeverity> selectAlarmExcel(@Param("startTime") String startTime, @Param("endTime") String endTime
+            , @Param("deptid") String deptid);
 
 }

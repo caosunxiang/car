@@ -12,10 +12,9 @@ package com.example.car.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Decoder;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -28,7 +27,7 @@ import java.util.*;
  * @since 1.0.0
  */
 @Slf4j
-public class FileUploadUtils {
+public class FileUploadUtils implements MultipartFile{
     /**
      * nginx 图片服务器的存储路径
      */
@@ -44,6 +43,9 @@ public class FileUploadUtils {
      */
     private static final int RANDOM_NUMBER = 6;
 
+
+    private final byte[] imgContent;
+    private final String header;
 
     /**
      * LayUI 的图片上传的返回值
@@ -212,6 +214,78 @@ public class FileUploadUtils {
         return true;
     }
 
+
+    public FileUploadUtils(byte[] imgContent, String header) {
+        this.imgContent = imgContent;
+        this.header = header.split(";")[0];
+    }
+
+    @Override
+    public String getName() {
+        return System.currentTimeMillis() + Math.random() + "." + header.split("/")[1];
+    }
+
+    @Override
+    public String getOriginalFilename() {
+        return System.currentTimeMillis() + (int) Math.random() * 10000 + "." + header.split("/")[1];
+    }
+
+    @Override
+    public String getContentType() {
+        return header.split(":")[1];
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return imgContent == null || imgContent.length == 0;
+    }
+
+    @Override
+    public long getSize() {
+        return imgContent.length;
+    }
+
+    @Override
+    public byte[] getBytes() throws IOException {
+        return imgContent;
+    }
+
+    @Override
+    public InputStream getInputStream() throws IOException {
+        return new ByteArrayInputStream(imgContent);
+    }
+
+    @Override
+    public void transferTo(File dest) throws IOException, IllegalStateException {
+        new FileOutputStream(dest).write(imgContent);
+    }
+
+
+
+    /**
+     * base64转multipartFile
+     *
+     * @param base64
+     * @return
+     */
+    public static MultipartFile base64Convert(String base64) {
+
+        String[] baseStrs = base64.split(",");
+
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] b = new byte[0];
+        try {
+            b = decoder.decodeBuffer(baseStrs[1]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < b.length; ++i) {
+            if (b[i] < 0) {
+                b[i] += 256;
+            }
+        }
+        return new FileUploadUtils(b, baseStrs[0]);
+    }
 
 }
 

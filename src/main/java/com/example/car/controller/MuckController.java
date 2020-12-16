@@ -268,5 +268,20 @@ public class MuckController {
         }
         return this.muckService.selectMuckAdvanced(name, size, index,  BeginTime, type);
     }
+
+    /** 
+    * @ Description: 准运证查询
+    * @ Param: [name, size, index, BeginTime, type]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/12/15 14:26
+    */
+    @RequestMapping("selectMuckPage")
+    public Body selectMuckPage(String name, Integer size, Integer index, String BeginTime, String type) {
+        if (StringUtils.isEmpty(index) || StringUtils.isEmpty(size)) {
+            return Body.BODY_451;
+        }
+        return this.muckService.selectMuckPage(name, size, index,  BeginTime, type);
+    }
 }
 

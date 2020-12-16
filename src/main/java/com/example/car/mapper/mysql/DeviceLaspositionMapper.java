@@ -21,4 +21,6 @@ public interface DeviceLaspositionMapper {
     List<DeviceLasposition> selectposition(@Param("pid") String pid, @Param("number") String number);
 
     List<DeviceLasposition>selectLaspositionInCarNo( @Param("list") List<String> list);
+
+    List<DeviceLasposition> selectLaspositionForTree(@Param("number") String number);
 }

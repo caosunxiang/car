@@ -135,4 +135,33 @@ FROM
         </if>
         limit #{index},#{size};
     </select>
+    <select id="selectCarExcel" resultType="com.example.car.common.utils.excel.entity.Online">
+        SELECT
+        c.carnumber ,
+        a.deptname,
+        c.terminal_id AS terminalId,
+        c.car_service_status,
+        l.carstatus
+        FROM
+        car_info c
+        LEFT JOIN sys_auth_dept a ON a.deptid = c.deptid
+        LEFT JOIN device_info d ON d.carid = c.id
+        LEFT JOIN device_last_position l ON l.carid = c.id
+        WHERE
+        1 = 1
+        <if test="deptid !=null and deptid !=''">
+            AND a.deptid = #{deptid}
+        </if>
+        <if test="status !=null and status == 'X'.toString()">
+            AND l.carstatus IN (1,2)
+            and c.car_service_status = 0
+        </if>
+        <if test="status !=null and status == 'A'.toString()">
+            AND l.carstatus IN (3,4,5,6,7,8)
+            and c.car_service_status = 0
+        </if>
+        <if test="status !=null and status == 'C'.toString()">
+            and c.car_service_status != 0
+        </if>
+    </select>
 </mapper>

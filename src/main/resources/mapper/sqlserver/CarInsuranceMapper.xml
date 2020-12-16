@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.car.mapper.sqlserver.CarInsuranceMapper">
+    <insert id="insertInsurance">
+   insert into
+   (jqxId,insuranceUrl,jqxTime,jqxCompany,carId,jqxMoney,syxTime,syxCompany,annualVerification,verification,examinant,verificationTime)
+    values
+    (#{jqxId},#{insuranceUrl},#{jqxTime},#{jqxCompany},#{carId},#{jqxMoney},#{syxTime},#{syxCompany},#{annualVerification},#{verification},#{examinant},#{verificationTime})
+</insert>
+    <select id="selectInsuranceByCarId" resultType="com.example.car.entity.CarInsurance">
+select * FROM car_insurance where 1=1
+   <if test="carid !=null and carid !=''">
+      and carId =#{carid}
+   </if>
+    </select>
+    <update id="updateInsuranceUrl">
+        update car_insurance set  insuranceUrl=#{insuranceUrl} where #{insuranceId}
+    </update>
+</mapper>

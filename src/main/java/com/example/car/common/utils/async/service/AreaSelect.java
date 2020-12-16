@@ -51,18 +51,32 @@ public class AreaSelect {
         return isArea;
     }
 
-    public List<String> areaSelect(Double lat1, Double lng1, String startTime,
+    public List<HistoricalRoute> areaSelect(Double lat1, Double lng1, String startTime,
                               String endTime, Double distance) {
-        List<String> numbers=new ArrayList<>();
+        List<HistoricalRoute> numbers=new ArrayList<>();
         List<HistoricalRoute> list = historicalRouteMapper.selectHistoricalRoute(startTime, endTime,null);
         for (HistoricalRoute historicalRoute : list) {
             System.out.println(historicalRoute.toString());
-            if (!numbers.contains(historicalRoute.getCarnumber())){
-                if ( !Distance.coordinateToDistance(lat1, lng1, Double.parseDouble(historicalRoute.getLat()),
-                        Double.parseDouble(historicalRoute.getLng()), distance)){
-                    numbers.add(historicalRoute.getCarnumber());
-                }
-            }
+            boolean flag=true;
+               if (numbers.size()>0){
+                   for (HistoricalRoute number : numbers) {
+                       if (number.getCarid().equals(historicalRoute.getCarid())) {
+                           flag = false;
+                           break;
+                       }
+                   }
+                   if (flag){
+                       if ( !Distance.coordinateToDistance(lat1, lng1, Double.parseDouble(historicalRoute.getLat()),
+                               Double.parseDouble(historicalRoute.getLng()), distance)){
+                           numbers.add(historicalRoute);
+                       }
+                   }
+               }else {
+                   if ( !Distance.coordinateToDistance(lat1, lng1, Double.parseDouble(historicalRoute.getLat()),
+                           Double.parseDouble(historicalRoute.getLng()), distance)){
+                       numbers.add(historicalRoute);
+                   }
+               }
         }
         return numbers;
     }

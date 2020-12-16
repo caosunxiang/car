@@ -1,5 +1,6 @@
 package com.example.car.mapper.mysql;
 
+import com.example.car.common.utils.excel.entity.Online;
 import com.example.car.entity.CarInfo;
 import io.lettuce.core.dynamic.annotation.Param;
 
@@ -29,5 +30,7 @@ public interface CarInfoMapper {
                                                   @Param("terminalid") String terminalid,
                                                   @Param("status") String status,
                                                   @Param("index") Integer index, @Param("size") Integer size);
+
+    List<Online>selectCarExcel(@Param("deptid") String deptid, @Param("status") String status);
 }
 

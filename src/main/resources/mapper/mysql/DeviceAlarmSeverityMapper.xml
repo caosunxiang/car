@@ -277,10 +277,10 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
             and DATE_FORMAT(a.alarm_start_time,'%Y-%m-%d')=#{time}
         </if>
         <if test="list != null and list.size() >0">
-        and a.alarm_name in
-        <foreach collection="list" item="name" index="index" open="(" close=")" separator=",">
-            #{name}
-        </foreach>
+            and a.alarm_name in
+            <foreach collection="list" item="name" index="index" open="(" close=")" separator=",">
+                #{name}
+            </foreach>
         </if>
         <if test="type !=null and type !=''">
             and
@@ -288,7 +288,7 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         </if>
         <if test="number !=null and number !=''">
             and
-            car_number  LIKE CONCAT('%',#{number},'%')
+            car_number LIKE CONCAT('%',#{number},'%')
         </if>
         <if test="index !=null and index!='' and size!=null and size!=''">
             limit #{index},#{size}
@@ -315,7 +315,7 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         </if>
         <if test="number !=null and number !=''">
             and
-            car_number  LIKE CONCAT('%',#{number},'%')
+            car_number LIKE CONCAT('%',#{number},'%')
         </if>
     </select>
     <select id="selectNewAlarmAll" resultType="java.util.Map">
@@ -335,7 +335,7 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         handle_type AS handleType,
         handle_time AS handleTime,
         alarm_lng AS start_lon
-        FROM device_alarm_severity  WHERE DATE_FORMAT(alarm_start_time,'%Y-%m-%d')=#{time}
+        FROM device_alarm_severity WHERE DATE_FORMAT(alarm_start_time,'%Y-%m-%d')=#{time}
         <if test="list != null and list.size() >0">
             and alarm_name in
             <foreach collection="list" item="name" index="index" open="(" close=")" separator=",">
@@ -348,7 +348,7 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
         </if>
         <if test="number !=null and number !=''">
             and
-            car_number  LIKE CONCAT('%',#{number},'%')
+            car_number LIKE CONCAT('%',#{number},'%')
         </if>
     </select>
     <select id="selectEChat" resultType="java.lang.String">
@@ -474,5 +474,34 @@ FROM
 	device_alarm_severity
 GROUP BY
 	alarm_name) b ON a.`name`=b.`name`
+    </select>
+
+    <select id="selectAlarmExcel" resultType="com.example.car.entity.DeviceAlarmSeverity">
+        select
+        alarm.alarm_id AS alarmId,
+        alarm.alarm_name AS alarmName,
+        alarm.car_number AS carNumber,
+        alarm.alarm_start_time AS alarmStartTime,
+        alarm.alarm_start_speed as alarmStartSpeed,
+        alarm.alarm_end_time AS alarmEndTime,
+        alarm.alarm_end_speed as alarmEndSpeed,
+        alarm.alarm_end_lat AS alarmEndLat,
+        alarm.alarm_end_lng as alarmEndLng,
+        alarm.alarm_mileage as alarmMileage,
+        alarm.alarm_lat AS alarmLat,
+        alarm.handle_by AS handleBy,
+        alarm.handle_type AS handleType,
+        alarm.handle_time AS handleTime,
+        alarm.deptid AS deptid,
+        dept.deptname AS deptname,
+        alarm.alarm_lng AS alarmLng
+         from device_alarm_severity alarm LEFT JOIN sys_auth_dept dept ON dept.deptid=alarm.deptid  where 1=1
+        <if test="startTime !=null and endTime!=null and startTime!='' and endTime!=''">
+            AND alarm.alarm_start_time BETWEEN #{startTime}
+            AND #{endTime}
+        </if>
+        <if test="deptid !=null and deptid !=''">
+            and alarm.deptid=#{deptid}
+        </if>
     </select>
 </mapper>

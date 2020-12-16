@@ -60,8 +60,9 @@ public class MuckServiceImpl implements MuckService {
         if (index > muckMapper.selectMuckCount(projectName, time, name, endTime) / size) {
             size = muckMapper.selectMuckCount(projectName, time, name, endTime) % size;
         }
-        List<Map<String, String>> list = this.muckMapper.selectMuckByName(projectName, time, name, endTime,
-                (index * size), size);
+        List<Map<String, String>> list = this.muckMapper.
+                selectMuckByName(projectName, time, name, endTime,
+                        (index * size), size);
         return Body.newInstance(list);
     }
 
@@ -99,13 +100,14 @@ public class MuckServiceImpl implements MuckService {
         PageUtils pageUtils = new PageUtils();
         pageUtils.setIndex(index);
         pageUtils.setSize(size);
-        pageUtils.setTotal(muckMapper.selectGivenPlaceCount(name,M0702,M0707,M0708,M0703,M0704,M0709,M0710));
-        pageUtils.setList(this.muckMapper.selectGivenPlace(name, size, index * size,M0702,M0707,M0708,M0703,M0704,M0709,M0710));
+        pageUtils.setTotal(muckMapper.selectGivenPlaceCount(name, M0702, M0707, M0708, M0703, M0704, M0709, M0710));
+        pageUtils.setList(this.muckMapper.selectGivenPlace(name, size, index * size, M0702, M0707, M0708, M0703,
+                M0704, M0709, M0710));
         return Body.newInstance(pageUtils);
     }
 
     @Override
-    public Body selectConstructionSite(String name, Integer size, Integer index ,String M0417,
+    public Body selectConstructionSite(String name, Integer size, Integer index, String M0417,
                                        String M0419, String M0402,
                                        String M0403, String M0414,
                                        String M0420, String M0425,
@@ -113,8 +115,10 @@ public class MuckServiceImpl implements MuckService {
         PageUtils pageUtils = new PageUtils();
         pageUtils.setIndex(index);
         pageUtils.setSize(size);
-        pageUtils.setTotal(muckMapper.selectConstructionSiteCount(name,M0417,M0419,M0402,M0403,M0414,M0420,M0425, M0426));
-        pageUtils.setList(this.muckMapper.selectConstructionSite(name, size, index * size,M0417,M0419,M0402,M0403,M0414,M0420,M0425, M0426));
+        pageUtils.setTotal(muckMapper.selectConstructionSiteCount(name, M0417, M0419, M0402, M0403, M0414, M0420,
+                M0425, M0426));
+        pageUtils.setList(this.muckMapper.selectConstructionSite(name, size, index * size, M0417, M0419, M0402, M0403
+                , M0414, M0420, M0425, M0426));
         return Body.newInstance(pageUtils);
     }
 
@@ -166,18 +170,28 @@ public class MuckServiceImpl implements MuckService {
     }
 
     @Override
-    public Body selectMuckAdvanced(String name, Integer size, Integer index,  String BeginTime,
+    public Body selectMuckAdvanced(String name, Integer size, Integer index, String BeginTime,
                                    String type) {
         PageUtils pageUtils = new PageUtils();
         pageUtils.setIndex(index);
         pageUtils.setSize(size);
-        pageUtils.setTotal(muckMapper.selectMuckadvancedCount(name,BeginTime,type));
-        List<Map<String,Object>> list=this.muckMapper.selectMuckadvanced(name, size, index * size,BeginTime,type);
+        pageUtils.setTotal(muckMapper.selectMuckadvancedCount(name, BeginTime, type));
+        List<Map<String, Object>> list = this.muckMapper.selectMuckadvanced(name, size, index * size, BeginTime, type);
         for (Map<String, Object> objectMap : list) {
-            List<String> strings=muckMapper.selectCarByPermitNo(objectMap.get("PermitNo").toString());
-            objectMap.put("car",strings);
+            List<String> strings = muckMapper.selectCarByPermitNo(objectMap.get("PermitNo").toString());
+            objectMap.put("car", strings);
         }
         pageUtils.setList(list);
+        return Body.newInstance(pageUtils);
+    }
+
+    @Override
+    public Body selectMuckPage(String name, Integer size, Integer index, String BeginTime, String type) {
+        PageUtils pageUtils = new PageUtils();
+        pageUtils.setIndex(index);
+        pageUtils.setSize(size);
+        pageUtils.setTotal(muckMapper.selectMuckPageCount(name, BeginTime, type));
+        pageUtils.setList(this.muckMapper.selectMuckPage(name, size, index * size, BeginTime, type));
         return Body.newInstance(pageUtils);
     }
 }

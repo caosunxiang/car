@@ -377,7 +377,7 @@ public class APIManage {
     public Body areaSelect(Double lat1, Double lng1, String startTime, String endTime,
                            String numbers, Double dic) {
         if (StringUtils.isEmpty(numbers)) {
-            List<String> list = areaSelect.areaSelect(lat1, lng1, startTime, endTime, dic);
+            List<HistoricalRoute> list = areaSelect.areaSelect(lat1, lng1, startTime, endTime, dic);
             return Body.newInstance(list);
         } else {
             List<String> str = CutString.divide(numbers);
@@ -907,29 +907,34 @@ public class APIManage {
      * @ Date: 2020/11/17 17:52
      */
     @RequestMapping("SysAuthDeptDetail")
-    public Body SysAuthDeptDetail(Long deptid) {
-        List<DeptDetail> deptDetails = new ArrayList<>();
-        List<SysAuthDept> sysAuthDept = sysAuthDeptMapper.selectSysAuthDeptByParent(deptid);
-        for (SysAuthDept authDept : sysAuthDept) {
-            List<DeptDetailChild> deptDetailChildren = new ArrayList<>();
-            DeptDetail deptDetail = new DeptDetail();
-            deptDetail.setId(authDept.getDeptid().toString());
-            deptDetail.setName(authDept.getDeptname());
-            deptDetail.setPid(authDept.getParentid().toString());
-            List<DeviceLasposition> deviceLaspositions = deviceLaspositionMapper.
-                    selectLasposition(deptDetail.getId());
-            for (DeviceLasposition deviceLasposition : deviceLaspositions) {
-                DeptDetailChild deptDetailChild = new DeptDetailChild();
-                deptDetailChild.setId(deviceLasposition.getId().toString());
-                deptDetailChild.setName(deviceLasposition.getCarnumber());
-                deptDetailChild.setPid(deviceLasposition.getDeptid().toString());
-                deptDetailChild.setStatus(deviceLasposition.getCarstatus().toString());
-                deptDetailChildren.add(deptDetailChild);
-                deptDetail.setSysAuthDepts(deptDetailChildren);
+    public Body SysAuthDeptDetail(Long deptid, String name) {
+        if (StringUtils.isEmpty(name)) {
+            List<DeptDetail> deptDetails = new ArrayList<>();
+            List<SysAuthDept> sysAuthDept = sysAuthDeptMapper.selectSysAuthDeptByParent(deptid);
+            for (SysAuthDept authDept : sysAuthDept) {
+                List<DeptDetailChild> deptDetailChildren = new ArrayList<>();
+                DeptDetail deptDetail = new DeptDetail();
+                deptDetail.setId(authDept.getDeptid().toString());
+                deptDetail.setName(authDept.getDeptname());
+                deptDetail.setPid(authDept.getParentid().toString());
+                List<DeviceLasposition> deviceLaspositions = deviceLaspositionMapper.
+                        selectLasposition(deptDetail.getId());
+                for (DeviceLasposition deviceLasposition : deviceLaspositions) {
+                    DeptDetailChild deptDetailChild = new DeptDetailChild();
+                    deptDetailChild.setId(deviceLasposition.getId().toString());
+                    deptDetailChild.setName(deviceLasposition.getCarnumber());
+                    deptDetailChild.setPid(deviceLasposition.getDeptid().toString());
+                    deptDetailChild.setStatus(deviceLasposition.getCarstatus().toString());
+                    deptDetailChildren.add(deptDetailChild);
+                    deptDetail.setSysAuthDepts(deptDetailChildren);
+                }
+                deptDetails.add(deptDetail);
             }
-            deptDetails.add(deptDetail);
+            return Body.newInstance(deptDetails);
+        } else {
+            List<DeviceLasposition> deviceLasposition = deviceLaspositionMapper.selectLaspositionForTree(name);
+            return Body.newInstance(deviceLasposition);
         }
-        return Body.newInstance(deptDetails);
     }
 
     /**
@@ -950,18 +955,17 @@ public class APIManage {
     }
 
     /*** 
-    * @ Description: 上传图片
-    * @ Param: [files]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2020/12/2 17:20
-    */
+     * @ Description: 上传图片
+     * @ Param: [files]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/12/2 17:20
+     */
     @RequestMapping("uploadImg")
-    public Body uploadImg(MultipartFile files,String carNo){
-        String url=FileUploadUtils.fileUpload(files,"img");
-        muckMapper.uploadImg(url,carNo);
+    public Body uploadImg(String files, String carNo) {
+        MultipartFile file = FileUploadUtils.base64Convert(files);
+        String url = FileUploadUtils.fileUpload(file, "img");
+        muckMapper.uploadImg(url, carNo);
         return Body.newInstance(url);
     }
-
-
 }

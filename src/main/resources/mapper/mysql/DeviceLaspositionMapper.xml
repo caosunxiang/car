@@ -37,4 +37,11 @@ WHERE
             #{name}
         </foreach>
     </select>
+
+    <select id="selectLaspositionForTree" resultType="com.example.car.entity.DeviceLasposition">
+        select  * from device_last_position where 1=1
+        <if test="number !=null and number !=''">
+          and  carnumber LIKE CONCAT('%',#{number},'%')
+        </if>
+    </select>
 </mapper>

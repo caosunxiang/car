@@ -85,4 +85,13 @@ public interface MuckMapper {
     List<String> selectCarByPermitNo(@Param("PermitNo")String PermitNo);
 
     Integer uploadImg(@Param("img")String img ,@Param("carNo")String carNo);
+
+    List<Map<String, Object>> selectMuckPage(@Param("name") String name, @Param("size") Integer size,
+                                                 @Param("total") Integer total,
+                                                 @Param("BeginTime") String BeginTime, @Param("type") String type);
+
+
+    Integer selectMuckPageCount(@Param("name") String name,
+                                    @Param("BeginTime") String BeginTime, @Param("type") String type);
+
 }
