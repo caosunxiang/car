@@ -49,4 +49,5 @@ public interface MuckService {
 
     Body selectMuckPage(String name, Integer size,Integer index, String BeginTime, String type);
 
+    Body PowerControl(String userid);
 }

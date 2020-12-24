@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.car.mapper.sqlserver.OperationLogMapper">
+<select id="selectLog" resultType="com.example.car.entity.OperationLog">
+    SELECT
+	log.*,
+	u.username AS userName,
+	m03.M0331 AS carNumber
+FROM
+	operation_log log
+	LEFT JOIN Users u ON log.userid= u.userid
+	LEFT JOIN M03 m03 ON m03.RecId= log.carId
+	where
+	1=1
+	<if test="carid !=null and carid!=''">
+      and log.carId=#{carid}
+    </if>
+    <if test="userid !=null and userid!=''">
+        and log.userid=#{userid}
+    </if>
+    <if test="id !=null and id!=''">
+        and log.id=#{id}
+    </if>
+    order by log.time desc
+</select>
+    <insert id="insertLog">
+        insert into operation_log (carId,title,content,[time],userId)
+         values
+          (#{carId},#{title},#{content},#{time},#{userId})
+    </insert>
+</mapper>

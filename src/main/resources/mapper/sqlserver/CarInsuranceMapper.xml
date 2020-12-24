@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.car.mapper.sqlserver.CarInsuranceMapper">
     <insert id="insertInsurance">
-   insert into
+   insert into car_insurance
    (jqxId,insuranceUrl,jqxTime,jqxCompany,carId,jqxMoney,syxTime,syxCompany,annualVerification,verification,examinant,verificationTime)
     values
     (#{jqxId},#{insuranceUrl},#{jqxTime},#{jqxCompany},#{carId},#{jqxMoney},#{syxTime},#{syxCompany},#{annualVerification},#{verification},#{examinant},#{verificationTime})
@@ -14,6 +14,6 @@ select * FROM car_insurance where 1=1
    </if>
     </select>
     <update id="updateInsuranceUrl">
-        update car_insurance set  insuranceUrl=#{insuranceUrl} where #{insuranceId}
+        update car_insurance set  insuranceUrl = #{insuranceUrl} where insuranceId=#{insuranceId}
     </update>
 </mapper>

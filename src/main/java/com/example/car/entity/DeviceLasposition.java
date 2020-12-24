@@ -30,7 +30,7 @@ public class DeviceLasposition {
      * 机构id
      */
     @TableField("deptid")
-    private Long deptid;
+    private String deptid;
 
     /**
      * 车辆id

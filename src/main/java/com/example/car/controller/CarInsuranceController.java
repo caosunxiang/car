@@ -15,6 +15,7 @@ import com.example.car.service.CarInsuranceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,9 +50,12 @@ public class CarInsuranceController {
     public Body insertInsurance(String files, String carid, String jqxId, String jqxTime, String jqxCompany,
                                 String jqxMoney, String syxId, String syxTime, String syxCompany,
                                 String annualVerification, String verification, String examinant,
-                                String verificationTime) {
+                                String verificationTime,String userid) {
+        if (StringUtils.isEmpty(files)){
+            return  Body.newInstance(201,"请上传base64格式的图片");
+        }
         return carInsuranceService.insertInsurance(files, carid, jqxId, jqxTime, jqxCompany, jqxMoney, syxId, syxTime
-                , syxCompany, annualVerification, verification, examinant, verificationTime);
+                , syxCompany, annualVerification, verification, examinant, verificationTime,userid);
     }
 
     /**
@@ -74,7 +78,7 @@ public class CarInsuranceController {
      * @ Date: 2020/12/16 11:15
      */
     @RequestMapping("updateInsuranceUrl")
-    public Body updateInsuranceUrl(String files, Integer insuranceId) {
-        return carInsuranceService.updateInsuranceUrl(files, insuranceId);
+    public Body updateInsuranceUrl(String files, Integer insuranceId,String carid,String userid) {
+        return carInsuranceService.updateInsuranceUrl(files, insuranceId,carid,userid);
     }
 }

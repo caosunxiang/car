@@ -1,3 +1,0 @@
-2020-12-03 09:01:58 ERROR http-nio-8081-exec-2 com.example.car.common.utils.FileUploadUtils http://127.0.0.1:8081/upload/1606957318660692707.jpg
-2020-12-03 14:59:08 ERROR http-nio-8081-exec-2 com.example.car.common.utils.FileUploadUtils http://47.99.155.20:8081/upload/1606978748904480616.jpg
-2020-12-03 15:00:26 ERROR http-nio-8081-exec-2 com.example.car.common.utils.FileUploadUtils http://127.0.0.1:8081/upload/1606978826945274824.jpg

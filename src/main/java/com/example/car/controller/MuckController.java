@@ -283,5 +283,20 @@ public class MuckController {
         }
         return this.muckService.selectMuckPage(name, size, index,  BeginTime, type);
     }
+
+    /** 
+    * @ Description: 验证用户是不是管理员
+    * @ Param: [userid]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/12/21 15:20
+    */
+    @RequestMapping("/PowerControl")
+    public Body PowerControl(String userid) {
+        if (StringUtils.isEmpty(userid)) {
+            return Body.BODY_451;
+        }
+        return this.muckService.PowerControl(userid);
+    }
 }
 

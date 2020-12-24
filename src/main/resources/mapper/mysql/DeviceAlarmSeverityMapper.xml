@@ -290,7 +290,7 @@ values (#{alarmName},#{carNumber},#{alarmStartTime},#{alarmStartSpeed},#{alarmLa
             and
             car_number LIKE CONCAT('%',#{number},'%')
         </if>
-        <if test="index !=null and index!='' and size!=null and size!=''">
+        <if test="index !=null and index!='' or index==0 and size!=null and size!='' ">
             limit #{index},#{size}
         </if>
     </select>

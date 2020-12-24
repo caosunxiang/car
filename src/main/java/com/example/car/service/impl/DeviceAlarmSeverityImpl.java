@@ -105,7 +105,7 @@ public class DeviceAlarmSeverityImpl implements DeviceAlarmSeverityService {
         PageUtils pageUtils = new PageUtils();
         List<String> list = CutString.divide(name);
         List<DeviceAlarmSeverity> deviceAlarmSeverities = deviceAlarmSeverityMapper.selectNewAlarm(time, list, type,
-                number, index * size, size);
+                number, (index-1)  * size, size);
         pageUtils.setTotal(deviceAlarmSeverityMapper.selectNewAlarmCount(time, list, type, number));
         pageUtils.setSize(size);
         pageUtils.setIndex(index);

@@ -94,4 +94,5 @@ public interface MuckMapper {
     Integer selectMuckPageCount(@Param("name") String name,
                                     @Param("BeginTime") String BeginTime, @Param("type") String type);
 
+    List<Map<String, Object>> PowerControl(@Param("userid")String userid);
 }

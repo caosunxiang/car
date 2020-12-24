@@ -108,7 +108,7 @@ public class DeviceAlarmSeverityController {
     @RequestMapping("selectNewAlarmPage")
     public Body selectNewAlarmPage(String name, String time, Integer type, String number, Integer index, Integer size) {
         if (StringUtils.isEmpty(index)||StringUtils.isEmpty(size)){
-            index=0;
+            index=1;
             size=10;
         }
         return deviceAlarmSeverityService.selectNewAlarmPage(name,time,type,number,index,size);

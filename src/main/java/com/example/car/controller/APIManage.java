@@ -19,6 +19,7 @@ import com.example.car.common.utils.json.Body;
 import com.example.car.entity.*;
 import com.example.car.mapper.mysql.*;
 import com.example.car.mapper.sqlserver.MuckMapper;
+import com.example.car.mapper.sqlserver.OperationLogMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,8 @@ public class APIManage {
     private PlaceMapper placeMapper;
     @Autowired
     private MuckMapper muckMapper;
+    @Autowired
+    private OperationLogMapper operationLogMapper;
 
 
     /**
@@ -357,9 +360,9 @@ public class APIManage {
         if (StringUtils.isEmpty(deviceLasposition)) {
             return Body.newInstance("车辆未定位");
         } else {
-            deviceLasposition.setDept(sysAuthDeptMapper.selectSysAuthDeptById(deviceLasposition.getDeptid()).getDeptname());
+            deviceLasposition.setDept(sysAuthDeptMapper.selectSysAuthDeptById(Long.valueOf(deviceLasposition.getDeptid())).getDeptname());
             List<EChatBean3> EChatBean3 = deviceAlarmSeverityMapper.selectEChat1(number,
-                    null, null, deviceLasposition.getDeptid().toString(), "A", null);
+                    null, null, deviceLasposition.getDeptid(), "A", null);
             deviceLasposition.setCarnumber(deviceLasposition.getCarnumber().replace("新", ""));
             deviceLasposition.setAlarm(EChatBean3);
         }
@@ -949,7 +952,7 @@ public class APIManage {
         List<String> list = CutString.divide(name);
         List<DeviceLasposition> laspositions = deviceLaspositionMapper.selectLaspositionInCarNo(list);
         for (DeviceLasposition lasposition : laspositions) {
-            lasposition.setBk1(lasposition.getDeptid().toString());
+            lasposition.setBk1(lasposition.getDeptid());
         }
         return Body.newInstance(laspositions);
     }
@@ -962,10 +965,13 @@ public class APIManage {
      * @ Date: 2020/12/2 17:20
      */
     @RequestMapping("uploadImg")
-    public Body uploadImg(String files, String carNo) {
+    public Body uploadImg(String files, String carNo,String carid,String userid) {
         MultipartFile file = FileUploadUtils.base64Convert(files);
         String url = FileUploadUtils.fileUpload(file, "img");
         muckMapper.uploadImg(url, carNo);
+        OperationLog operationLog = new OperationLog(null, carid, "修改", "上传驾驶照片", DateUtil.getDateFormat(new Date(),
+                DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
+        operationLogMapper.insertLog(operationLog);
         return Body.newInstance(url);
     }
 }

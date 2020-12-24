@@ -163,6 +163,16 @@
         ISNULL( t.JQXYXQ, '' ) JQXYXQ,
         ISNULL( t.SHYXYXQ, '' ) SHYXYXQ,
         ISNULL(t.ZYZG,'')ZYZG,
+        ISNULL(t.person,'')person,
+        ISNULL(t.quality,'')quality,
+        ISNULL(t.dimensions,'')dimensions,
+        ISNULL(t.scrapTime,'')scrapTime,
+        ISNULL(t.IssuanceDate,'')IssuanceDate,
+        ISNULL( t.totalQuality, '' ) totalQuality,
+        ISNULL( t.checkQuality, '' ) checkQuality,
+        ISNULL(t.tractionQuality,'')tractionQuality,
+        ISNULL( t.stopTransport, '' ) stopTransport,
+        ISNULL(t.stopEndTime,'')stopEndTime,
         ISNULL(t.DLicenseImage,'')DLicenseImage
         FROM
         View_TruckInfo t
@@ -632,6 +642,7 @@ FROM
         1 = 1
         <if test="name !=null and name !=''">
             AND m03.m0331 LIKE '%' + #{ name }+ '%'
+
         </if>
         <if test="BeginTime !=null and BeginTime !=''">
             AND
@@ -640,6 +651,10 @@ FROM
         <if test="type !=null and type !='' and type == 'A'.toString()">
             AND
             CONVERT(nvarchar(10), p.EndTime,102 ) <![CDATA[ < ]]> CONVERT(nvarchar(10),GETDATE(),121)
+        </if>
+        <if test="type !=null and type !='' and type == 'B'.toString()">
+            AND
+            CONVERT(nvarchar(10), p.EndTime,102 ) <![CDATA[ >= ]]> CONVERT(nvarchar(10),GETDATE(),102)
         </if>
         ORDER BY
         p.EndTime DESC
@@ -664,5 +679,13 @@ FROM
             AND
             CONVERT(nvarchar(10), p.EndTime,102 ) <![CDATA[ < ]]> CONVERT(nvarchar(10),GETDATE(),102)
         </if>
+        <if test="type !=null and type !='' and type == 'B'.toString()">
+            AND
+            CONVERT(nvarchar(10), p.EndTime,102 ) <![CDATA[ >= ]]> CONVERT(nvarchar(10),GETDATE(),102)
+        </if>
+    </select>
+
+    <select id="PowerControl" resultType="java.util.Map">
+select * from UserRole where UserId = #{userid} and RoleId = 1;
     </select>
 </mapper>

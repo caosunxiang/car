@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.car.mapper.sqlserver.M03Mapper">
+    <update id="updateM03">
+   update M03 set person=#{person},quality=#{quality},dimensions=#{dimensions},scrapTime=#{scrapTime},
+   IssuanceDate=#{IssuanceDate},totalQuality=#{totalQuality},checkQuality=#{checkQuality},tractionQuality=#{tractionQuality},
+   stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndTime=#{stopEndTime}
+   where
+   RecId=#{RecId}
+</update>
+    <select id="selectM03" resultType="com.example.car.entity.M03">
+select * from M03 where
+1=1
+<if test="carNumber != null and carNumber!=''">
+    M0331 LIKE '%'+ #{carNumber}+'%'
+</if>
+<if test="recId !=null and recId !=''">
+    RecId=#{recId}
+</if>
+<if test="phone !=null and phone!=''">
+    M0310 = #{phone}
+</if>
+    </select>
+</mapper>
