@@ -3,9 +3,9 @@
 <mapper namespace="com.example.car.mapper.sqlserver.CarInsuranceMapper">
     <insert id="insertInsurance">
    insert into car_insurance
-   (jqxId,insuranceUrl,jqxTime,jqxCompany,carId,jqxMoney,syxTime,syxCompany,annualVerification,verification,examinant,verificationTime)
+   (jqxId,insuranceUrl,jqxTime,jqxCompany,carId,syxId,jqxMoney,syxTime,syxCompany,annualVerification,verification,examinant,verificationTime)
     values
-    (#{jqxId},#{insuranceUrl},#{jqxTime},#{jqxCompany},#{carId},#{jqxMoney},#{syxTime},#{syxCompany},#{annualVerification},#{verification},#{examinant},#{verificationTime})
+    (#{jqxId},#{insuranceUrl},#{jqxTime},#{jqxCompany},#{carId},#{syxId},#{jqxMoney},#{syxTime},#{syxCompany},#{annualVerification},#{verification},#{examinant},#{verificationTime})
 </insert>
     <select id="selectInsuranceByCarId" resultType="com.example.car.entity.CarInsurance">
 select * FROM car_insurance where 1=1

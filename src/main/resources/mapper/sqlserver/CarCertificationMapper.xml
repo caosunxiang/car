@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.car.mapper.sqlserver.CarCertificationMapper">
+<select id="selectCarCertification" resultType="com.example.car.entity.CarCertification">
+select  * from car_certification where 1=1
+<if test="carid !=null and carid!=''">
+    and carid=#{carid}
+</if>
+order by createTime
+</select>
+    <insert id="insertCarCertification">
+        insert into car_certification (certificationStatus,certificationTime,createTime,createUser,carId)
+        values
+         (#{certificationStatus},#{certificationTime},#{createTime},#{createUser},#{carId})
+    </insert>
+    <update id="updateCarCertification">
+        update car_certification set certificationStatus=#{certificationStatus},certificationTime=#{certificationTime},
+        updateUser=#{updateUser} where id=#{id}
+    </update>
+</mapper>

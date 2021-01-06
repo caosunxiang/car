@@ -39,4 +39,6 @@ public class Place {
     private String area;
     private String video;
     private String district;
+    private String videoName;
+    private String videoPassword;
 }

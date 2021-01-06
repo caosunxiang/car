@@ -12,13 +12,20 @@
 select * from M03 where
 1=1
 <if test="carNumber != null and carNumber!=''">
-    M0331 LIKE '%'+ #{carNumber}+'%'
+  and  M0331 LIKE '%'+ #{carNumber}+'%'
 </if>
 <if test="recId !=null and recId !=''">
-    RecId=#{recId}
+    and RecId=#{recId}
 </if>
 <if test="phone !=null and phone!=''">
-    M0310 = #{phone}
+    and  M0310 = #{phone}
+</if>
+<if test="MustId !=null and MustId!=''">
+   and MustId =#{MustId}
+
 </if>
     </select>
+    <update id="updateStopTransport">
+        update M03 set stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndTime=#{stopEndTime}     where  RecId=#{recId}
+    </update>
 </mapper>

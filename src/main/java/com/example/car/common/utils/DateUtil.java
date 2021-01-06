@@ -200,7 +200,7 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-        String var=DateUtil.severalDaysAgo("yyyy-MM-dd",15);
+        String var=DateUtil.severalDaysAgo("yyyy-MM-dd",-3);
         System.out.println(var);
         System.out.println( UUID.randomUUID().toString());
     }

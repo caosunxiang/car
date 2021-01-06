@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.car.mapper.mysql.PlaceMapper">
     <insert id="insertPlace">
-insert into place (`name`,lat,lng,dic,createtime,createuser,`site`,phone,standbyphone,remark,standbyuser,starttime,endtime,area,video,district)
-values (#{name},#{lat},#{lng},#{dic},#{createtime},#{createuser},#{site},#{phone},#{standbyphone},#{remark},#{standbyuser},#{starttime},#{endtime},#{area},#{video},#{district});
+insert into place (`name`,lat,lng,dic,createtime,createuser,`site`,phone,standbyphone,remark,standbyuser,starttime,endtime,area,video,district,videoPassword,videoName)
+values (#{name},#{lat},#{lng},#{dic},#{createtime},#{createuser},#{site},#{phone},#{standbyphone},#{remark},#{standbyuser},#{starttime},#{endtime},#{area},#{video},#{district},#{videoPassword},#{videoName});
 </insert>
 
     <select id="selectOne" resultType="com.example.car.entity.Place">
@@ -64,6 +64,12 @@ select * from place where
         </if>
         <if test="district !=null and district !=''">
             ,district=#{district}
+        </if>
+        <if test="videoName !=null and videoName !=''">
+            ,videoName=#{videoName}
+        </if>
+        <if test="videoPassword !=null and videoPassword !=''">
+            ,videoPassword=#{videoPassword}
         </if>
         where
         id=#{id}

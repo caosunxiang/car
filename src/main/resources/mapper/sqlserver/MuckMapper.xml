@@ -162,6 +162,8 @@
         ISNULL(t.SXSFQQ,'')SXSFQQ,
         ISNULL( t.JQXYXQ, '' ) JQXYXQ,
         ISNULL( t.SHYXYXQ, '' ) SHYXYXQ,
+        ISNULL( t.SHCHSHJ, '' ) SHCHSHJ,
+        ISNULL( t.ShortSpell, '' ) ShortSpell,
         ISNULL(t.ZYZG,'')ZYZG,
         ISNULL(t.person,'')person,
         ISNULL(t.quality,'')quality,
@@ -246,7 +248,7 @@
         <if test="M0710	!=null and M0710 !=''">
             and M0710 <![CDATA[ < ]]> #{M0710}
         </if>
-        AND datediff( yy, M0709, GETDATE( ) ) = 0
+        AND datediff( MM, M0709, GETDATE( ) ) <![CDATA[ < ]]> 12
         ORDER BY
         recid DESC
         ) AS a
@@ -285,6 +287,8 @@
         Area,
         Dot,
         VideoUrl,
+        videoName,
+        videoPassword,
         M0429
         FROM
         M04
@@ -317,7 +321,7 @@
         <if test="M0426 !=null and M0426 !=''">
             AND M0426 <![CDATA[ < ]]> #{ M0426 }
         </if>
-        AND datediff( yy, M0418, GETDATE( ) ) = 0
+        AND datediff( MM, M0418, GETDATE( ) ) <![CDATA[ < ]]> 12
         ORDER BY
         recid DESC
         ) AS a
@@ -382,7 +386,7 @@
         <if test="M0710	!=null and M0710 !=''">
             and M0710 <![CDATA[ < ]]> #{M0710}
         </if>
-        AND datediff( yy, M0709, GETDATE( ) ) = 0
+        AND datediff( MM, M0709, GETDATE( ) ) <![CDATA[ < ]]> 12
     </select>
 
     <select id="selectConstructionSiteCount" resultType="java.lang.Integer">
@@ -419,7 +423,7 @@
         <if test="M0426 !=null and M0426 !=''">
             AND M0426 <![CDATA[ < ]]> #{ M0426 }
         </if>
-        AND datediff( yy, M0418, GETDATE( ) ) = 0
+        AND datediff( MM, M0418, GETDATE( ) ) <![CDATA[ < ]]> 12
     </select>
 
 
@@ -429,7 +433,8 @@
 
     <select id="selectConstructionSiteOne" resultType="com.example.car.entity.M04">
       select RecId, M0417, M0418, M0419, M0401, M0402, M0407, M0408, M0403, M0404, M0405, M0406, M0422,
-       M0409, M0410, M0411, M0412, M0413, M0414, M0420, M0425, M0426, Area, Dot, VideoUrl,M0429 from M04  where RecId=#{recid}
+       M0409, M0410, M0411, M0412, M0413, M0414, M0420, M0425, M0426, Area, Dot, VideoUrl,videoName,
+        videoPassword,M0429 from M04  where RecId=#{recid}
  </select>
 
     <update id="updateGivenPlace">
@@ -524,7 +529,12 @@ FROM
 	m.M0108,
 	m.M0109,
 	m.MustId,
+	m.QRCode,
 	m.ShortSpell,
+	m.representative,
+	m.registeredCapital,
+	m.dateEstablishment,
+	m.address,
 	m.Status
 FROM
 	M01 m
@@ -688,4 +698,8 @@ FROM
     <select id="PowerControl" resultType="java.util.Map">
 select * from UserRole where UserId = #{userid} and RoleId = 1;
     </select>
+
+<update id="updateM04VideoUrl">
+    update M04  set  VideoUrl=#{VideoUrl},videoName=#{videoName},videoPassword=#{videoPassword} where RecId=#{RecId}
+</update>
 </mapper>

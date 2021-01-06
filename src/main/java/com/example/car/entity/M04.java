@@ -84,4 +84,8 @@ public class M04 {
     private String VideoUrl;
 
     private String M0429;
+
+    private String videoName;
+
+    private String videoPassword;
 }

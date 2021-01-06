@@ -71,7 +71,7 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
         OperationLog operationLog = new OperationLog(null, carid, "上传保险合同", "用户上传保险合同",
                 DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
         operationLogMapper.insertLog(operationLog);
-        return Body.BODY_200;
+        return Body.newInstance(carInsurance);
     }
 
     @Override
@@ -91,6 +91,6 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
         OperationLog operationLog = new OperationLog(null, carid, "修改", "修改合同信息", DateUtil.getDateFormat(new Date(),
                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
         operationLogMapper.insertLog(operationLog);
-        return Body.BODY_200;
+        return Body.newInstance(carInsurance);
     }
 }

@@ -50,4 +50,6 @@ public interface MuckService {
     Body selectMuckPage(String name, Integer size,Integer index, String BeginTime, String type);
 
     Body PowerControl(String userid);
+
+    Body updateM04VideoUrl(String videoUrl,String videoName,String videoPassword,String recId);
 }

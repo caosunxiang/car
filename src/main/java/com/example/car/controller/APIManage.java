@@ -315,9 +315,9 @@ public class APIManage {
             List<DeviceLasposition> deviceLasposition =
                     deviceLaspositionMapper.selectLasposition(sysAuthDept.getDeptid().toString());
             for (DeviceLasposition lasposition : deviceLasposition) {
-                if (sysAuthDept.getDeptid().equals(lasposition.getDeptid())) {
+                if (sysAuthDept.getDeptid().toString().equals(lasposition.getDeptid())) {
                     lasposition.setDept(sysAuthDept.getDeptname());
-                    lasposition.setBk1(lasposition.getDeptid().toString());
+                    lasposition.setBk1(lasposition.getDeptid());
                 }
             }
             deviceLaspositions.addAll(deviceLasposition);
@@ -840,12 +840,12 @@ public class APIManage {
             List<DeviceLasposition> deviceLasposition =
                     deviceLaspositionMapper.selectLasposition(sysAuthDept.getDeptid().toString());
             for (DeviceLasposition lasposition : deviceLasposition) {
-                if (sysAuthDept.getDeptid().equals(lasposition.getDeptid())) {
+                if (sysAuthDept.getDeptid().toString().equals(lasposition.getDeptid())) {
                     LocationBean locationBean = new LocationBean();
                     Map<String, String> map = new HashMap<>();
                     map.put("lat", lasposition.getLat().toString());
                     map.put("lng", lasposition.getLng().toString());
-                    map.put("deptid", lasposition.getDeptid().toString());
+                    map.put("deptid", lasposition.getDeptid());
                     map.put("direction", lasposition.getDirection());
                     map.put("time", lasposition.getGpstime());
                     map.put("speed", lasposition.getSpeed());
@@ -972,6 +972,20 @@ public class APIManage {
         OperationLog operationLog = new OperationLog(null, carid, "修改", "上传驾驶照片", DateUtil.getDateFormat(new Date(),
                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
         operationLogMapper.insertLog(operationLog);
+        return Body.newInstance(url);
+    }
+
+    /***
+     * @ Description: 上传图片
+     * @ Param: [files]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/12/2 17:20
+     */
+    @RequestMapping("uploadAllImg")
+    public Body uploadAllImg(String files) {
+        MultipartFile file = FileUploadUtils.base64Convert(files);
+        String url = FileUploadUtils.fileUpload(file, "img");
         return Body.newInstance(url);
     }
 }

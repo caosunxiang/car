@@ -75,6 +75,7 @@ public class PushController {
         } catch (WxErrorException e) {
             e.printStackTrace();
         }
+        assert wxMpUserList != null;
         List<String>list=wxMpUserList.getOpenids();
         List<String> list1=deviceAlarmSeverityMapper.selectAlarmName();
         String carName=ListUtils.listToString5(list1, ',');
@@ -100,4 +101,5 @@ public class PushController {
             }
         }
     }
+
 }

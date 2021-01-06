@@ -291,12 +291,28 @@ public class MuckController {
     * @ Author: 冷酷的苹果
     * @ Date: 2020/12/21 15:20
     */
-    @RequestMapping("/PowerControl")
+    @RequestMapping("PowerControl")
     public Body PowerControl(String userid) {
         if (StringUtils.isEmpty(userid)) {
             return Body.BODY_451;
         }
         return this.muckService.PowerControl(userid);
+    }
+
+
+    /** 
+    * @ Description: 修改工地视频地址
+    * @ Param: [VideoUrl, videoName, videoPassword, recId]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2021/1/6 14:05
+    */
+    @RequestMapping("updateM04VideoUrl")
+    public Body updateM04VideoUrl(String VideoUrl, String videoName, String videoPassword,String recId) {
+        if (StringUtils.isEmpty(recId)) {
+            return Body.BODY_451;
+        }
+        return this.muckService.updateM04VideoUrl(VideoUrl, videoName, videoPassword, recId);
     }
 }
 

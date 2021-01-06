@@ -47,8 +47,8 @@ public class M03ServiceImpl implements M03Service {
 
 
     @Override
-    public Body selectM03(String carNumber, String recId, String phone) {
-        List<M03> m03s = m03Mapper.selectM03(carNumber, recId, phone);
+    public Body selectM03(String carNumber, String recId, String phone,String MustId) {
+        List<M03> m03s = m03Mapper.selectM03(carNumber, recId, phone,MustId);
         return Body.newInstance(m03s);
     }
 
@@ -73,6 +73,12 @@ public class M03ServiceImpl implements M03Service {
         OperationLog operationLog = new OperationLog(null, RecId, "修改", "修改车辆信息", DateUtil.getDateFormat(new Date(),
                 DateUtil.FULL_TIME_SPLIT_PATTERN),userid,null,null );
         operationLogMapper.insertLog(operationLog);
+        return Body.BODY_200;
+    }
+
+    @Override
+    public Body updateStopTransport(String stopTransport, Integer stopNumber, String recId) {
+        m03Mapper.updateStopTransport(stopTransport,stopNumber,DateUtil.severalDaysAgo(DateUtil.FULL_TIME_SPLIT_PATTERN, -stopNumber),recId);
         return Body.BODY_200;
     }
 }

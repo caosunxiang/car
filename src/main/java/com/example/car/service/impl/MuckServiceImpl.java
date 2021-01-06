@@ -200,4 +200,15 @@ public class MuckServiceImpl implements MuckService {
         return Body.newInstance(lists);
     }
 
+    @Override
+    public Body updateM04VideoUrl(String VideoUrl, String videoName, String videoPassword,String recId) {
+        M04 m04=new M04();
+        m04.setVideoUrl(VideoUrl);
+        m04.setVideoName(videoName);
+        m04.setVideoPassword(videoPassword);
+        m04.setRecId(recId);
+        muckMapper.updateM04VideoUrl(m04);
+        return Body.BODY_200;
+    }
+
 }

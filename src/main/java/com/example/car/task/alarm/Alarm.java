@@ -1,71 +1,76 @@
-/**
- * Copyright (C), 2020-2020, 众马科技有限公司
- * FileName: Task
- * Author:   冷酷的苹果
- * Date:     2020/7/3 13:59
- * Description: 定时任务
- * History:
- * <author>          <time>          <version>          <desc>
- * 作者姓名           修改时间           版本号              描述
- */
-package com.example.car.task.alarm;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.example.car.common.utils.*;
-import com.example.car.common.utils.entity.EChatBean3;
-import com.example.car.entity.*;
-import com.example.car.mapper.mysql.*;
-import com.example.car.mapper.sqlserver.MuckMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-/**
- * 〈一句话功能简述〉<br>
- * 〈定时任务〉
- *
- * @author 冷酷的苹果
- * @create 2020/7/3
- * @since 1.0.0
- */
-@Component                //实例化
-@Configurable             //注入bean
-@EnableScheduling         //开启计划任务
-public class Alarm {
-
-    @Autowired
-    private SysAuthDeptMapper sysAuthDeptMapper;
-
-    @Autowired
-    private MuckMapper muckMapper;
-
-    @Autowired
-    private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
-
-    @Autowired
-    private HistoricalRouteMapper historicalRouteMapper;
-
-    @Autowired
-    private DeviceLaspositionMapper deviceLaspositionMapper;
-
-    @Autowired
-    private CarTargetMapper carTargetMapper;
-
-    @Autowired
-    private DeviceAlarmMapper deviceAlarmMapper;
-
-    @Autowired
-    private DeviceOnlineRecordMapper deviceOnlineRecordMapper;
-
-
+///**
+// * Copyright (C), 2020-2020, 众马科技有限公司
+// * FileName: Task
+// * Author:   冷酷的苹果
+// * Date:     2020/7/3 13:59
+// * Description: 定时任务
+// * History:
+// * <author>          <time>          <version>          <desc>
+// * 作者姓名           修改时间           版本号              描述
+// */
+//package com.example.car.task.alarm;
+//
+//import com.alibaba.fastjson.JSON;
+//import com.alibaba.fastjson.JSONObject;
+//import com.example.car.common.utils.*;
+//import com.example.car.common.utils.entity.EChatBean3;
+//import com.example.car.entity.*;
+//import com.example.car.mapper.mysql.*;
+//import com.example.car.mapper.sqlserver.M03Mapper;
+//import com.example.car.mapper.sqlserver.MuckMapper;
+//import com.example.car.mapper.sqlserver.OperationLogMapper;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.beans.factory.annotation.Configurable;
+//import org.springframework.scheduling.annotation.EnableScheduling;
+//import org.springframework.scheduling.annotation.Scheduled;
+//import org.springframework.stereotype.Component;
+//import org.springframework.util.StringUtils;
+//
+//import java.io.IOException;
+//import java.text.SimpleDateFormat;
+//import java.util.*;
+//
+///**
+// * 〈一句话功能简述〉<br>
+// * 〈定时任务〉
+// *
+// * @author 冷酷的苹果
+// * @create 2020/7/3
+// * @since 1.0.0
+// */
+//@Component                //实例化
+//@Configurable             //注入bean
+//@EnableScheduling         //开启计划任务
+//public class Alarm {
+//
+//    @Autowired
+//    private SysAuthDeptMapper sysAuthDeptMapper;
+//
+//    @Autowired
+//    private MuckMapper muckMapper;
+//
+//    @Autowired
+//    private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
+//
+//    @Autowired
+//    private M03Mapper m03Mapper;
+//
+//    @Autowired
+//    private OperationLogMapper operationLogMapper;
+//
+//    @Autowired
+//    private DeviceLaspositionMapper deviceLaspositionMapper;
+//
+//    @Autowired
+//    private CarTargetMapper carTargetMapper;
+//
+//    @Autowired
+//    private DeviceAlarmMapper deviceAlarmMapper;
+//
+//    @Autowired
+//    private DeviceOnlineRecordMapper deviceOnlineRecordMapper;
+//
+//
 //    @Scheduled(cron = " * 0/5 * * * ? ")//无证运输存数据库
 //    public void noMuckIn() throws IOException {
 //        System.out.println("开始查询无证运输");
@@ -86,8 +91,15 @@ public class Alarm {
 //                    deviceAlarmSeverity1.setAlarmMileage(deviceLasposition.getMileage());
 //                    deviceAlarmSeverity1.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
 //                            DateUtil.FULL_TIME_SPLIT_PATTERN));
-//                    deviceAlarmSeverity1.setDeptid(deviceLasposition.getDeptid());
+//                    deviceAlarmSeverity1.setDeptid(Long.valueOf(deviceLasposition.getDeptid()));
 //                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
+//                    List<M03> m03 = m03Mapper.selectM03(deviceLasposition.getCarnumber(), null, null);
+//                    if (m03.size()>0){
+//                        OperationLog operationLog = new OperationLog(null, m03.get(0).getRecId(), "报警", "无准运证行驶",
+//                                DateUtil.getDateFormat(new Date(),
+//                                        DateUtil.FULL_TIME_SPLIT_PATTERN),"系统",null,null);
+//                        operationLogMapper.insertLog(operationLog);
+//                    }
 //                    System.out.println("不好啦！报警了，这个人没有准运证");
 //                } else {//无准运证情况但有无证运输的当天记录
 //                    deviceAlarmSeverity.setAlarmEndSpeed(deviceLasposition.getSpeed());
@@ -96,14 +108,13 @@ public class Alarm {
 //                            DateUtil.FULL_TIME_SPLIT_PATTERN));
 //                    deviceAlarmSeverity.setAlarmEndLat(deviceLasposition.getLat().toString());
 //                    deviceAlarmSeverity.setAlarmEndLng(deviceLasposition.getLng().toString());
-//                    deviceAlarmSeverity.setDeptid(deviceLasposition.getDeptid());
+//                    deviceAlarmSeverity.setDeptid(Long.valueOf(deviceLasposition.getDeptid()));
 //                    deviceAlarmSeverityMapper.updateAlarmSeverity(deviceAlarmSeverity);
 //                }
 //                // }
 //            }
 //        }
 //    }
-//
 //
 //
 //    @Scheduled(cron = " * 0/5 * * * ? ")
@@ -142,9 +153,17 @@ public class Alarm {
 //                        deviceAlarmSeverity1.setCarNumber(resultDatum.getCarnumber());
 //                        deviceAlarmSeverity1.setAlarmStartTime(DateUtil.getDateFormat(new Date(),
 //                                DateUtil.FULL_TIME_SPLIT_PATTERN));
-//                        deviceAlarmSeverity1.setDeptid(resultDatum.getDeptid());
+//                        deviceAlarmSeverity1.setDeptid(Long.valueOf(resultDatum.getDeptid()));
 //                        deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
 //                        System.out.println("不好啦！报警了，离线告警");
+//                        deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
+//                        List<M03> m03 = m03Mapper.selectM03(resultDatum.getCarnumber(), null, null);
+//                        if (m03.size()>0) {1
+//                            OperationLog operationLog = new OperationLog(null, m03.get(0).getRecId(), "报警", "离线告警",
+//                                    DateUtil.getDateFormat(new Date(),
+//                                            DateUtil.FULL_TIME_SPLIT_PATTERN),"系统",null,null);
+//                            operationLogMapper.insertLog(operationLog);
+//                        }
 //                    }
 //                } else {
 //                    deviceAlarmSeverity.setAlarmEndSpeed(resultDatum.getSpeed());
@@ -152,7 +171,7 @@ public class Alarm {
 //                            DateUtil.FULL_TIME_SPLIT_PATTERN));
 //                    deviceAlarmSeverity.setAlarmEndLat(resultDatum.getLat().toString());
 //                    deviceAlarmSeverity.setAlarmEndLng(resultDatum.getLng().toString());
-//                    deviceAlarmSeverity.setDeptid(resultDatum.getDeptid());
+//                    deviceAlarmSeverity.setDeptid(Long.valueOf(resultDatum.getDeptid()));
 //                    deviceAlarmSeverityMapper.updateAlarmSeverity(deviceAlarmSeverity);
 //                }
 //            }
@@ -197,15 +216,23 @@ public class Alarm {
 //                    deviceAlarmSeverity1.setAlarmStartTime(ListUtils.getLastElement(deviceAlarms).getStart_time());
 //                    deviceAlarmSeverity1.setAlarmEndTime(deviceAlarms.get(0).getEnd_time());
 //                    deviceAlarmSeverity1.setAlarmEndSpeed(deviceAlarms.get(0).getEnd_speed());
-//                    deviceAlarmSeverity1.setDeptid(deviceLasposition.getDeptid());
+//                    deviceAlarmSeverity1.setDeptid(Long.valueOf(deviceLasposition.getDeptid()));
 //                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
 //                    System.out.println("不好啦！报警了，超速告警");
+//                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
+//                    List<M03> m03 = m03Mapper.selectM03(deviceLasposition.getCarnumber(), null, null);
+//                    if (m03.size()>0) {
+//                        OperationLog operationLog = new OperationLog(null, m03.get(0).getRecId(), "报警", "超速告警",
+//                                DateUtil.getDateFormat(new Date(),
+//                                        DateUtil.FULL_TIME_SPLIT_PATTERN),"系统",null,null);
+//                        operationLogMapper.insertLog(operationLog);
+//                    }
 //                } else if (!StringUtils.isEmpty(deviceAlarmSeverity) && deviceAlarms.size() > 0) {
 //                    deviceAlarmSeverity.setAlarmEndSpeed(deviceAlarms.get(0).getEnd_speed());
 //                    deviceAlarmSeverity.setAlarmEndTime(deviceAlarms.get(0).getEnd_time());
 //                    deviceAlarmSeverity.setAlarmEndLat(deviceLasposition.getLat().toString());
 //                    deviceAlarmSeverity.setAlarmEndLng(deviceLasposition.getLng().toString());
-//                    deviceAlarmSeverity.setDeptid(deviceLasposition.getDeptid());
+//                    deviceAlarmSeverity.setDeptid(Long.valueOf(deviceLasposition.getDeptid()));
 //                    deviceAlarmSeverityMapper.updateAlarmSeverity(deviceAlarmSeverity);
 //                }
 //            }
@@ -344,4 +371,4 @@ public class Alarm {
 //    public static void main(String[] args) {
 //        System.out.println("成功");
 //    }
-}
+//}

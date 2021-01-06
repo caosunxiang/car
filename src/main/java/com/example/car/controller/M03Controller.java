@@ -46,8 +46,8 @@ public class M03Controller {
     * @ Date: 2020/12/23 14:13
     */
     @RequestMapping("selectM03")
-    public Body selectM03(String carNumber, String recId, String phone) {
-        return m03Service.selectM03(carNumber, recId, phone);
+    public Body selectM03(String carNumber, String recId, String phone,String MustId) {
+        return m03Service.selectM03(carNumber, recId, phone,MustId);
     }
 
     /** 
@@ -63,5 +63,17 @@ public class M03Controller {
                           String stopNumber, String stopEndTime, String RecId, String userid) {
         return m03Service.updateM03(person, quality, dimensions, scrapTime, IssuanceDate, totalQuality, checkQuality,
                 tractionQuality, stopTransport, stopNumber, stopEndTime, RecId,userid);
+    }
+
+    /** 
+    * @ Description:停运
+    * @ Param: [stopTransport, stopNumber, stopEndTime, recId]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2020/12/28 10:42
+    */
+    @RequestMapping("updateStopTransport")
+    public Body updateStopTransport(String stopTransport, Integer stopNumber, String recId) {
+        return m03Service.updateStopTransport(stopTransport, stopNumber, recId);
     }
 }

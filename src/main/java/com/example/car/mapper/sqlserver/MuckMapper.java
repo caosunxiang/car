@@ -95,4 +95,6 @@ public interface MuckMapper {
                                     @Param("BeginTime") String BeginTime, @Param("type") String type);
 
     List<Map<String, Object>> PowerControl(@Param("userid")String userid);
+
+    void updateM04VideoUrl(M04 m04);
 }

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.car.mapper.sqlserver.M01Mapper">
+
+    <select id="selectM01Details" resultType="com.example.car.entity.M01">
+        select * from M01 where 1=1
+        <if test="MustId !=null and MustId!=''">
+            and MustId =#{MustId}
+        </if>
+        <if test="name !=null and name !=''">
+            and m0101 like '%'+#{name}+'%'
+        </if>
+        <if test="phone !=null and phone !=''">
+            and m0107 =#{phone}
+        </if>
+    </select>
+
+
+    <update id="updateM01">
+        update M01 set  Status=#{Status}
+        <if test="ShortSpell !=null and ShortSpell!=''">
+            ,ShortSpell=#{ShortSpell}
+        </if>
+        <if test="M0109 !=null and M0109!=''">
+            ,M0109=#{M0109}
+        </if>
+        <if test="M0104 !=null and M0104!=''">
+            ,M0104=#{M0104}
+        </if>
+        <if test="M0108 !=null and M0108!=''">
+            ,M0108=#{M0108}
+        </if>
+        <if test="M0105 !=null and M0105!=''">
+            ,M0105=#{M0105}
+        </if>
+        <if test="M0107 !=null and M0107!=''">
+            ,M0107=#{M0107}
+        </if>
+        <if test="M0106 !=null and M0106!=''">
+            ,M0106=#{M0106}
+        </if>
+        <if test="M0102 !=null and M0102!=''">
+            ,M0102=#{M0102}
+        </if>
+        <if test="M0103 !=null and M0103!=''">
+            ,M0103=#{M0103}
+        </if>
+        <if test="M0101 !=null and M0101!=''">
+            ,M0101=#{M0101}
+        </if>
+        <if test="representative !=null and representative!=''">
+            ,representative=#{representative}
+        </if>
+        <if test="registeredCapital !=null and registeredCapital!=''">
+            ,registeredCapital=#{registeredCapital}
+        </if>
+        <if test="dateEstablishment !=null and dateEstablishment!=''">
+            ,dateEstablishment=#{dateEstablishment}
+        </if>
+        <if test="address !=null and address!=''">
+            ,address=#{address}
+        </if>
+        <if test="QRCode!=null and QRCode!=''">
+            QRCode=#{QRCode}
+        </if>
+        where MustId=#{MustId}
+    </update>
+
+    <insert id="insertM01">
+    insert into M01 (Creator,M0101,M0102,M0103,M0104,M0105,M0106,M0107,M0108,M0109,ShortSpell)
+     values
+      (#{Creator},#{M0101},#{M0102},#{M0103},#{M0104},#{M0105},#{M0106},#{M0107},#{M0108},#{M0109},#{ShortSpell})
+</insert>
+
+</mapper>
+

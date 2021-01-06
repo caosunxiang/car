@@ -10,7 +10,9 @@
  */
 package com.example.car.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 〈一句话功能简述〉<br> 
@@ -21,6 +23,8 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class M01 {
     private String Creator;
     private String DispOrder;
@@ -35,5 +39,10 @@ public class M01 {
     private String M0109;
     private String MustId;
     private String ShortSpell;
+    private String QRCode;
     private String Status;
+    private String representative;
+    private String registeredCapital;
+    private String dateEstablishment;
+    private String address;
 }
