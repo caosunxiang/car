@@ -41,4 +41,5 @@ public class Place {
     private String district;
     private String videoName;
     private String videoPassword;
+    private Integer valid;
 }

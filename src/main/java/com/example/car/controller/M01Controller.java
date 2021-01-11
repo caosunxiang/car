@@ -61,12 +61,12 @@ public class M01Controller {
     public Body updateM01(String Status, String ShortSpell, String M0109, String M0104, String M0108, String M0105,
                           String M0107, String M0106, String M0102, String M0103, String M0101, String representative,
                           String registeredCapital, String dateEstablishment, String address, String MustId,
-                          String QRCode) {
+                          String QRCode,String represenPhone) {
         if (StringUtils.isEmpty(Status)) {
             return Body.newInstance(201, "Status字段不能为空");
         }
         return m01Service.updateM01(Status, ShortSpell, M0109, M0104, M0108, M0105, M0107, M0106, M0102, M0103, M0101
-                , representative, registeredCapital, dateEstablishment, address, MustId, QRCode);
+                , representative, registeredCapital, dateEstablishment, address, MustId, QRCode,represenPhone);
     }
 
     

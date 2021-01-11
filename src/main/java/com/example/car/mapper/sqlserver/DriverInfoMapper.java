@@ -11,7 +11,7 @@ public interface DriverInfoMapper {
 
     void updateDriver(DriverInfo driverInfo);
 
-    List<DriverInfo> selectDriverInfo(@Param("driverId")String driverId);
+    List<DriverInfo> selectDriverInfo(@Param("driverId")String driverId,@Param("MustId")String MustId);
 
     void insertDriverHistorical(DriverHistorical driverHistorical);
 

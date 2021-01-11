@@ -50,4 +50,6 @@ public class M07 {
     private String VideoUrl;
 
     private String M0718;
+
+    private Integer valid;
 }

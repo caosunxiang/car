@@ -12,14 +12,14 @@ package com.example.car.wechat;
 
 import com.example.car.common.utils.DateUtil;
 import com.example.car.common.utils.ListUtils;
+import com.example.car.common.utils.redis.RedisCacheConfiguration;
+import com.example.car.common.utils.redis.RedisConfigure;
 import com.example.car.mapper.mysql.DeviceAlarmMapper;
 import com.example.car.mapper.mysql.DeviceAlarmSeverityMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
-import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
-import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.api.WxMpUserService;
+import me.chanjar.weixin.mp.api.*;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.api.impl.WxMpUserServiceImpl;
 import me.chanjar.weixin.mp.bean.result.WxMpUserList;
@@ -53,6 +53,8 @@ public class PushController {
     private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
     @Autowired
     private DeviceAlarmMapper deviceAlarmMapper;
+    @Autowired
+    private RedisCacheConfiguration redisConfigure;
 
     /*
      * 微信测试账号推送
@@ -60,11 +62,12 @@ public class PushController {
     @GetMapping("/push")
     public void push() {
         //1，配置
-        WxMpInMemoryConfigStorage wxStorage = new WxMpInMemoryConfigStorage();
-        wxStorage.setAppId("wx7513f9ef191ec705");
-        wxStorage.setSecret("d33477fd7f24a92a7d7f56288c42048b");
+
         WxMpService wxMpService = new WxMpServiceImpl();
-        wxMpService.setWxMpConfigStorage(wxStorage);
+        WxMpInRedisConfigStorage redisConfigStorage=new WxMpInRedisConfigStorage(redisConfigure.redisPoolFactory());
+        redisConfigStorage.setAppId("wx7513f9ef191ec705");
+        redisConfigStorage.setSecret("d33477fd7f24a92a7d7f56288c42048b");
+        wxMpService.setWxMpConfigStorage(redisConfigStorage);
         Integer count = deviceAlarmSeverityMapper.selectAlarmNowCount();
         count+=deviceAlarmMapper.selectAlarmNowCount(2);
         //2.获取关注着列表

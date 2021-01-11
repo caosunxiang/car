@@ -66,8 +66,8 @@ public class CarInsuranceController {
      * @ Date: 2020/12/16 10:10
      */
     @RequestMapping("selectInsuranceByCarId")
-    public Body selectInsuranceByCarId(String carid) {
-        return carInsuranceService.selectInsuranceByCarId(carid);
+    public Body selectInsuranceByCarId(String carid,String MustId) {
+        return carInsuranceService.selectInsuranceByCarId(carid,MustId);
     }
 
     /**

@@ -12,4 +12,6 @@ public interface TerminalInfoService {
 
     Body updateTerminal(String modifyUser, String isDelete, String terminal, String terminalType, String carNumber,
                         Integer terminalId);
+
+    Body deleteTerminal(Integer terminalId);
 }

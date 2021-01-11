@@ -8,9 +8,19 @@
     (#{jqxId},#{insuranceUrl},#{jqxTime},#{jqxCompany},#{carId},#{syxId},#{jqxMoney},#{syxTime},#{syxCompany},#{annualVerification},#{verification},#{examinant},#{verificationTime})
 </insert>
     <select id="selectInsuranceByCarId" resultType="com.example.car.entity.CarInsurance">
-select * FROM car_insurance where 1=1
+        SELECT
+        i.*,
+        m03.M0331 AS carNumber
+        FROM
+        car_insurance i
+        RIGHT JOIN M03 m03 ON i.carId= m03.RecId
+        WHERE
+        1 =1
+        <if test="MustId!=null and MustId!=''">
+            AND m03.MustId=#{MustId}
+        </if>
    <if test="carid !=null and carid !=''">
-      and carId =#{carid}
+      and i.carId =#{carid}
    </if>
     </select>
     <update id="updateInsuranceUrl">

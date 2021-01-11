@@ -9,9 +9,12 @@
        #{driverAddress},#{licenseUrl})
    </insert>
     <select id="selectDriverInfo" resultType="com.example.car.entity.DriverInfo">
-        select *  FROM  driver_info where 1=1
+        select m03.m0331 as carNumber,d.*  FROM  driver_info d RIGHT JOIN M03 m03 ON m03.RecId=d.carId where 1=1
         <if test="driverId !=null and driverId !=''">
-            and driverId=#{driverId}
+            and d.driverId=#{driverId}
+        </if>
+        <if test="MustId!= null and MustId!=''">
+           and  m03.MustId=#{MustId}
         </if>
     </select>
     <update id="updateDriver">

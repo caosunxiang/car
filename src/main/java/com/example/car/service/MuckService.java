@@ -52,4 +52,12 @@ public interface MuckService {
     Body PowerControl(String userid);
 
     Body updateM04VideoUrl(String videoUrl,String videoName,String videoPassword,String recId);
+
+    Body validM04(Integer valid,String RecId);
+
+    Body validM07(Integer valid,String RecId);
+
+    Body selectUserRole(String UserId,String RoleId);
+
+    Body selectApply(String userid);
 }

@@ -17,7 +17,7 @@
 
 
     <update id="updateM01">
-        update M01 set  Status=#{Status}
+        update M01 set Status=#{Status}
         <if test="ShortSpell !=null and ShortSpell!=''">
             ,ShortSpell=#{ShortSpell}
         </if>
@@ -61,7 +61,10 @@
             ,address=#{address}
         </if>
         <if test="QRCode!=null and QRCode!=''">
-            QRCode=#{QRCode}
+            ,QRCode=#{QRCode}
+        </if>
+        <if test="represenPhone!=null and represenPhone!=''">
+            ,represenPhone=#{represenPhone}
         </if>
         where MustId=#{MustId}
     </update>

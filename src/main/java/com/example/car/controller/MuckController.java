@@ -314,5 +314,63 @@ public class MuckController {
         }
         return this.muckService.updateM04VideoUrl(VideoUrl, videoName, videoPassword, recId);
     }
+
+    /** 
+    * @ Description: 停用工地
+    * @ Param: [valid, RecId]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2021/1/7 16:42
+    */
+    @RequestMapping("validM04")
+    public Body validM04(Integer valid, String RecId) {
+        if (StringUtils.isEmpty(RecId)||StringUtils.isEmpty(valid)) {
+            return Body.BODY_451;
+        }
+        return this.muckService.validM04(valid, RecId);
+    }
+
+    /** 
+    * @ Description: 停用消纳场所
+    * @ Param: [valid, RecId]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2021/1/7 17:29
+    */
+    @RequestMapping("validM07")
+    public Body validM07(Integer valid, String RecId) {
+        if (StringUtils.isEmpty(RecId)||StringUtils.isEmpty(valid)) {
+            return Body.BODY_451;
+        }
+        return this.muckService.validM07(valid, RecId);
+    }
+
+    
+    /** 
+    * @ Description: 判断用户身份
+    * @ Param: [UserId]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2021/1/11 8:54
+    */
+    @RequestMapping("selectUserRole")
+    public Body selectUserRole(String UserId,String RoleId) {
+        return this.muckService.selectUserRole(UserId,RoleId);
+    }
+
+    /** 
+    * @ Description: 工单数量
+    * @ Param: [userid]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2021/1/11 9:24
+    */
+    @RequestMapping("selectApply")
+    public Body selectApply(String userid) {
+        if (StringUtils.isEmpty(userid)) {
+            return Body.BODY_451;
+        }
+        return this.muckService.selectApply(userid);
+    }
 }
 

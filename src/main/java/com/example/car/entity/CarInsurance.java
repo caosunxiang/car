@@ -10,6 +10,7 @@
  */
 package com.example.car.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 /**
@@ -37,4 +38,6 @@ public class CarInsurance {
     private String verificationTime;
     private String examinant;
     private String carId;
+    @TableField(exist = false)
+    private String carNumber;
 }

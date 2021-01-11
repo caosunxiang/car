@@ -39,4 +39,8 @@
         </if>
         where terminalId=#{terminalId}
     </update>
+    <delete id="deleteTerminal">
+        delete  from terminal_info where
+        terminalId=#{terminalId}
+    </delete>
 </mapper>

@@ -75,8 +75,8 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
     }
 
     @Override
-    public Body selectInsuranceByCarId(String carid) {
-        List<CarInsurance> carInsurances = carInsuranceMapper.selectInsuranceByCarId(carid);
+    public Body selectInsuranceByCarId(String carid,String MustId) {
+        List<CarInsurance> carInsurances = carInsuranceMapper.selectInsuranceByCarId(carid,MustId);
         return Body.newInstance(carInsurances);
     }
 
@@ -93,4 +93,5 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
         operationLogMapper.insertLog(operationLog);
         return Body.newInstance(carInsurance);
     }
+
 }

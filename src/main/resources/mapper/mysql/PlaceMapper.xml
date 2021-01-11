@@ -71,6 +71,9 @@ select * from place where
         <if test="videoPassword !=null and videoPassword !=''">
             ,videoPassword=#{videoPassword}
         </if>
+        <if test="valid !=null and valid !=''">
+            ,valid=#{valid}
+        </if>
         where
         id=#{id}
     </update>

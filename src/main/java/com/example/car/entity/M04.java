@@ -88,4 +88,6 @@ public class M04 {
     private String videoName;
 
     private String videoPassword;
+
+    private Integer valid;
 }

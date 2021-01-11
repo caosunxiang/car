@@ -10,6 +10,7 @@
  */
 package com.example.car.service.impl;
 
+import com.example.car.common.utils.entity.Apply;
 import com.example.car.common.utils.json.Body;
 import com.example.car.common.utils.page.PageUtils;
 import com.example.car.entity.M04;
@@ -209,6 +210,34 @@ public class MuckServiceImpl implements MuckService {
         m04.setRecId(recId);
         muckMapper.updateM04VideoUrl(m04);
         return Body.BODY_200;
+    }
+
+    @Override
+    public Body validM04(Integer valid, String RecId) {
+        muckMapper.validM04(valid,RecId);
+        return Body.BODY_200;
+    }
+
+    @Override
+    public Body validM07(Integer valid, String RecId) {
+        muckMapper.validM07(valid, RecId);
+        return Body.BODY_200;
+    }
+
+    @Override
+    public Body selectUserRole(String UserId,String RoleId) {
+        List<Map<String,Object>> strings=muckMapper.selectUserRole(UserId,RoleId);
+        return Body.newInstance(strings);
+    }
+
+    @Override
+    public Body selectApply(String userid) {
+        Integer newApply=muckMapper.selectNewApply(userid);
+        Integer pendingApply=muckMapper.selectPendingApply(userid);
+        Integer ingApply=muckMapper.selectIngApply(userid);
+        Integer overApply=muckMapper.selectOverApply(userid);
+        Apply apply=new Apply(newApply,pendingApply, ingApply, overApply);
+        return Body.newInstance(apply);
     }
 
 }

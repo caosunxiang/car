@@ -8,7 +8,8 @@ public interface CarInsuranceService {
                          String annualVerification, String verification, String examinant, String verificationTime,
                          String userid);
 
-    Body selectInsuranceByCarId(String carid);
+    Body selectInsuranceByCarId(String carid,String MustId);
 
     Body updateInsuranceUrl(String files, Integer insuranceId,String carid,String userid);
+
 }

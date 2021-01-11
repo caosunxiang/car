@@ -97,4 +97,24 @@ public interface MuckMapper {
     List<Map<String, Object>> PowerControl(@Param("userid")String userid);
 
     void updateM04VideoUrl(M04 m04);
+
+    void validM04(@Param("valid")Integer valid,@Param("RecId")String RecId);
+
+    void validM07(@Param("valid")Integer valid,@Param("RecId")String RecId);
+
+    List<Map<String, Object>> selectUserRole(@Param("UserId")String UserId,@Param("RoleId")String RoleId);
+
+    Integer selectNewApply(@Param("userid")String userid);
+
+    Integer selectPendingApply(@Param("userid")String userid);
+
+    Integer selectIngApply(@Param("userid")String userid);
+
+    Integer selectOverApply(@Param("userid")String userid);
+
+    Integer insertUser(@Param("UserId") Integer UserId,@Param("UserName")String UserName,@Param("UserPwd")String UserPwd);
+
+    Integer selectUserId();
+
+    void insertUserRole(@Param("userid") Integer UserId);
 }

@@ -49,8 +49,8 @@ public class DriverInfoServiceImpl implements DriverInfoService {
 
 
     @Override
-    public Body selectDriverInfo(String driverId) {
-        List<DriverInfo> driverInfos = driverInfoMapper.selectDriverInfo(driverId);
+    public Body selectDriverInfo(String driverId,String MustId) {
+        List<DriverInfo> driverInfos = driverInfoMapper.selectDriverInfo(driverId,MustId);
         return Body.newInstance(driverInfos);
     }
 
@@ -63,7 +63,7 @@ public class DriverInfoServiceImpl implements DriverInfoService {
         MultipartFile file1 = FileUploadUtils.base64Convert(driverFile);
         String url1 = FileUploadUtils.fileUpload(file1, "img");
         DriverInfo driverInfo = new DriverInfo(null, driverName, driverMobile, driverCardNo, driverReviewTime,
-                driverStatus,url1, driverSex, driverAddress, url,null,null);
+                driverStatus,url1, driverSex, driverAddress, url,null,null,null);
         driverInfoMapper.insertDriver(driverInfo);
         DriverHistorical driverHistorical = new DriverHistorical(null, carId, driverInfo.getDriverId().toString(),
                 DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN), null);
@@ -83,7 +83,7 @@ public class DriverInfoServiceImpl implements DriverInfoService {
         MultipartFile file1 = FileUploadUtils.base64Convert(driverFile);
         String url1 = FileUploadUtils.fileUpload(file1, "img");
         DriverInfo driverInfo = new DriverInfo(driverId, driverName, driverMobile, driverCardNo, driverReviewTime,
-                driverStatus,url1, driverSex, driverAddress, url,null,null);
+                driverStatus,url1, driverSex, driverAddress, url,null,null,null);
         driverInfoMapper.updateDriver(driverInfo);
         OperationLog operationLog = new OperationLog(null, carId, "修改", "修改驾驶员信息", DateUtil.getDateFormat(new Date(),
                 DateUtil.FULL_TIME_SPLIT_PATTERN),userid, null, null);

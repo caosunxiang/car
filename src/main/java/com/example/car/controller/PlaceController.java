@@ -47,6 +47,9 @@ public class PlaceController {
      */
     @RequestMapping("updatePlace")
     public Body updatePlace(Place place) {
+        if (StringUtils.isEmpty(place.getName()) || StringUtils.isEmpty(place.getId())) {
+            return Body.BODY_451;
+        }
         return this.PlaceService.updatePlace(place);
     }
 
@@ -82,10 +85,10 @@ public class PlaceController {
      * @Date: 2020/10/13 10:40
      */
     @RequestMapping("selectPlaceAll")
-    public Body selectAll(String name,Integer index,Integer size) {
-        if (StringUtils.isEmpty(index)||StringUtils.isEmpty(size)){
+    public Body selectAll(String name, Integer index, Integer size) {
+        if (StringUtils.isEmpty(index) || StringUtils.isEmpty(size)) {
             return Body.BODY_451;
         }
-        return this.PlaceService.selectAll(name,index,size);
+        return this.PlaceService.selectAll(name, index, size);
     }
 }

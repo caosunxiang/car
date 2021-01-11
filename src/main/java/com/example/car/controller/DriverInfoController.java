@@ -47,8 +47,8 @@ public class DriverInfoController {
      * @ Date: 2020/12/24 16:01
      */
     @RequestMapping("selectDriverInfo")
-    public Body selectDriverInfo(String driverId) {
-        return driverInfoService.selectDriverInfo(driverId);
+    public Body selectDriverInfo(String driverId,String MustId) {
+        return driverInfoService.selectDriverInfo(driverId,MustId);
     }
 
     /**

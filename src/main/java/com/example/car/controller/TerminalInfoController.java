@@ -96,4 +96,19 @@ public class TerminalInfoController {
         }
         return terminalInfoService.updateTerminal(modifyUser,isDelete,terminal,terminalType,carNumber,terminalId);
     }
+
+    /**
+    * @ Description: 删除设备
+    * @ Param: [terminalId]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2021/1/11 10:08
+    */
+    @RequestMapping("deleteTerminal")
+    public Body deleteTerminal(Integer terminalId) {
+        if (StringUtils.isEmpty(terminalId) ) {
+            return Body.BODY_451;
+        }
+        return terminalInfoService.deleteTerminal(terminalId);
+    }
 }

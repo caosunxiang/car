@@ -45,4 +45,5 @@ public class M01 {
     private String registeredCapital;
     private String dateEstablishment;
     private String address;
+    private String represenPhone;
 }

@@ -8,7 +8,8 @@ import java.util.List;
 public interface CarInsuranceMapper {
     Integer insertInsurance(CarInsurance carInsurance);
 
-    List<CarInsurance> selectInsuranceByCarId(@Param("carid")String carid);
+    List<CarInsurance> selectInsuranceByCarId(@Param("carid")String carid,@Param("MustId")String MustId);
 
     Integer updateInsuranceUrl(CarInsurance carInsurance);
+
 }

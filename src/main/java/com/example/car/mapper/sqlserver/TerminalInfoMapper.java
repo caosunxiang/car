@@ -13,4 +13,6 @@ public interface TerminalInfoMapper {
             "deptid") String deptid);
 
     void updateTerminal(TerminalInfo terminalInfo);
+
+    void deleteTerminal(@Param("terminalId")Integer terminalId);
 }

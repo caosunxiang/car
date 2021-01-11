@@ -217,6 +217,7 @@
         M0709,
         M0710,
         Area,
+        valid,
         Dot,
         VideoUrl,
         M0718
@@ -289,6 +290,7 @@
         VideoUrl,
         videoName,
         videoPassword,
+        valid,
         M0429
         FROM
         M04
@@ -428,12 +430,12 @@
 
 
     <select id="selectGivenPlaceOne" resultType="com.example.car.entity.M07">
-        select RecId, M0702, M0703, M0704, M0706, M0707, M0708, M0709, M0710, Area, Dot, VideoUrl,M0718 from M07 where RecId=#{recid}
+        select RecId, M0702, M0703, M0704, M0706, M0707, M0708, M0709, M0710, Area, Dot,valid, VideoUrl,M0718 from M07 where RecId=#{recid}
     </select>
 
     <select id="selectConstructionSiteOne" resultType="com.example.car.entity.M04">
       select RecId, M0417, M0418, M0419, M0401, M0402, M0407, M0408, M0403, M0404, M0405, M0406, M0422,
-       M0409, M0410, M0411, M0412, M0413, M0414, M0420, M0425, M0426, Area, Dot, VideoUrl,videoName,
+       M0409, M0410, M0411, M0412, M0413, M0414, M0420, M0425, M0426, Area, Dot, VideoUrl,videoName,valid,
         videoPassword,M0429 from M04  where RecId=#{recid}
  </select>
 
@@ -699,7 +701,65 @@ FROM
 select * from UserRole where UserId = #{userid} and RoleId = 1;
     </select>
 
-<update id="updateM04VideoUrl">
+    <update id="updateM04VideoUrl">
     update M04  set  VideoUrl=#{VideoUrl},videoName=#{videoName},videoPassword=#{videoPassword} where RecId=#{RecId}
 </update>
+    <update id="validM04">
+        update M04  set valid=#{valid}  where   RecId=#{RecId}
+    </update>
+    <update id="validM07">
+        update M07  set valid=#{valid}  where   RecId=#{RecId}
+    </update>
+    <select id="selectUserRole" resultType="java.util.Map">
+        select * from UserRole where
+        1=1
+        <if test="UserId !=null and UserId!=''">
+            and UserId = #{UserId}
+        </if>
+        <if test="RoleId!=null and RoleId!=''">
+            and RoleId = #{RoleId}
+        </if>
+
+    </select>
+
+
+    <select id="selectNewApply" resultType="java.lang.Integer">
+select count(OPERID)
+from Oper
+where Owner = #{userid} or OperId in (
+  select ObjId from UserAcl where UserId = #{userid} and ObjType = 'oper' and CanExec = 1
+)
+    </select>
+    <select id="selectPendingApply" resultType="java.lang.Integer">
+select count(ID)
+from OS_CURRENTSTEP
+where Owner LIKE '%'+#{userid}+'%'
+
+    </select>
+    <select id="selectIngApply" resultType="java.lang.Integer">
+select count(ENTRY_ID)
+from OS_WFENTRY
+where creator = #{userid} AND STATE = 1
+
+
+    </select>
+    <select id="selectOverApply" resultType="java.lang.Integer">
+select count(ENTRY_ID)
+from OS_WFENTRY
+where creator = #{userid} AND STATE = 4
+    </select>
+
+    <insert id="insertUser">
+        insert into users (UserId,UserName,UserPwd)
+         values
+          (#{UserId},#{UserName},#{UserPwd})
+    </insert>
+
+    <select id="selectUserId" resultType="java.lang.Integer">
+select MAX(userid) from users
+    </select>
+
+    <insert id="insertUserRole">
+        insert into UserRole values (#{userid},4)
+    </insert>
 </mapper>

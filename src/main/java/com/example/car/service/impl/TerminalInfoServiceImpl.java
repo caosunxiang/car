@@ -81,7 +81,7 @@ public class TerminalInfoServiceImpl implements TerminalInfoService {
         if (terminalInfos.size()>0){
             for (TerminalInfo terminalInfo : terminalInfos) {
                 DeviceLasposition deviceLasposition=deviceLaspositionMapper.selectLaspositionByCarNo(terminalInfo.getCarNumber());
-                terminalInfo.setStatus(deviceLasposition.getCarstatus().toString());
+                terminalInfo.setStatus(deviceLasposition==null?"":deviceLasposition.getCarstatus().toString());
             }
         }
         return Body.newInstance(terminalInfos);
@@ -99,6 +99,8 @@ public class TerminalInfoServiceImpl implements TerminalInfoService {
         terminalInfo.setIsDelete("0");
         terminalInfo.setModifyDate(DateUtil.getDateFormat(new Date(),DateUtil.FULL_TIME_SPLIT_PATTERN));
         terminalInfo.setModifyUser(createUser);
+        terminalInfo.setCarId(carId);
+        terminalInfo.setDeptid(deptid);
         terminalInfo.setTerminal(terminal);
         terminalInfo.setTerminalType(terminalType);
         terminalInfoMapper.insertTerminal(terminalInfo);
@@ -117,6 +119,12 @@ public class TerminalInfoServiceImpl implements TerminalInfoService {
         terminalInfo.setModifyDate(DateUtil.getDateFormat(new Date(),DateUtil.FULL_TIME_SPLIT_PATTERN));
         terminalInfo.setTerminalId(terminalId);
         terminalInfoMapper.updateTerminal(terminalInfo);
+        return Body.BODY_200;
+    }
+
+    @Override
+    public Body deleteTerminal(Integer terminalId) {
+        this.terminalInfoMapper.deleteTerminal(terminalId);
         return Body.BODY_200;
     }
 }

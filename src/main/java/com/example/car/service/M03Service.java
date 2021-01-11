@@ -1,6 +1,8 @@
 package com.example.car.service;
 
 import com.example.car.common.utils.json.Body;
+import com.example.car.entity.M03;
+import com.example.car.entity.TerminalInfo;
 
 public interface M03Service {
     Body selectM03(String carNumber, String recId, String phone,String MustId);
@@ -10,4 +12,8 @@ public interface M03Service {
                    String stopNumber, String stopEndTime,String RecId, String userid );
 
     Body updateStopTransport(String stopTransport,Integer stopNumber,String carid);
+
+    Body selectM03Status(String MustId);
+
+    Body insertM03(M03 m03, TerminalInfo terminalInfo);
 }

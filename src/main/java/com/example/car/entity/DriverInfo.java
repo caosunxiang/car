@@ -53,4 +53,7 @@ public class DriverInfo {
 
     @TableField(exist = false)
     private String endTime;
+
+    @TableField(exist = false)
+    private String carNumber;
 }
