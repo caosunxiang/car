@@ -138,4 +138,6 @@ public class M03 {
     private String stopNumber;
 
     private String stopEndTime;
+
+    private String stopRemark;
 }

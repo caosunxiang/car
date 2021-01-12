@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.car.mapper.sqlserver.AppraiseMapper">
+    <select id="selectAppraise" resultType="com.example.car.entity.Appraise">
+        select * from Appraise where 1=1
+        <if test="deptid!=null and deptid!=''">
+            and deptid=#{deptid}
+        </if>
+        <if test="id!=null and id!=''">
+            and id=#{id}
+        </if>
+        <if test="appraiseLevel!=null and appraiseLevel!=''">
+            and appraiseLevel=#{appraiseLevel}
+        </if>
+    </select>
+    <insert id="insertAppraise">
+        insert into Appraise values (#{deptid},#{appraiseLevel},#{appraiseScore},#{appraiseRemark},#{appraiseTime})
+    </insert>
+    <update id="updateAppraise">
+        update Appraise set
+        deptid=#{deptid}
+        <if test="appraiseLevel!=null and appraiseLevel!=''">
+            ,appraiseLevel=#{appraiseLevel}
+        </if>
+        <if test="appraiseScore!=null and appraiseScore!=''">
+            ,appraiseScore=#{appraiseScore}
+        </if>
+        <if test="appraiseRemark!=null and appraiseRemark!=''">
+            ,appraiseRemark=#{appraiseRemark}
+        </if>
+        <if test="appraiseTime!=null and appraiseTime!=''">
+            ,appraiseTime=#{appraiseTime}
+        </if>
+        where
+        id=#{id}
+    </update>
+    <delete id="deleteAppraise">
+        delete  from Appraise  where id=#{id}
+    </delete>
+</mapper>

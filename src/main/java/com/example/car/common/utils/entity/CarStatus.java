@@ -15,8 +15,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
- * 〈一句话功能简述〉<br> 
+ * 〈一句话功能简述〉<br>
  * 〈〉
  *
  * @author 冷酷的苹果
@@ -27,12 +29,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CarStatus {
-  private String M0331;
-  private String certificationTime;
-  private String EndTime;
-  private String stopTransport;
-  private String stopNumber;
-  private String stopEndTime;
-  @TableField(exist = false)
-  private String status;
+    private String recId;
+    private String M0331;
+    private String certificationTime;
+    private String certificationStatus;
+    private String EndTime;
+    private String stopTransport;
+    private String stopNumber;
+    private String stopRemark;
+    private String stopEndTime;
+    @TableField(exist = false)
+    private String status;
+    @TableField(exist = false)
+    private List<String> permit;
 }

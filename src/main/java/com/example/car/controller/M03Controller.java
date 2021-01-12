@@ -64,9 +64,9 @@ public class M03Controller {
     @RequestMapping("updateM03")
     public Body updateM03(String person, String quality, String dimensions, String scrapTime, String IssuanceDate,
                           String totalQuality, String checkQuality, String tractionQuality, String stopTransport,
-                          String stopNumber, String stopEndTime, String RecId, String userid) {
+                          String stopNumber, String stopEndTime, String RecId, String userid,String stopRemark) {
         return m03Service.updateM03(person, quality, dimensions, scrapTime, IssuanceDate, totalQuality, checkQuality,
-                tractionQuality, stopTransport, stopNumber, stopEndTime, RecId, userid);
+                tractionQuality, stopTransport, stopNumber, stopEndTime, RecId, userid,stopRemark);
     }
 
     /**
@@ -77,8 +77,8 @@ public class M03Controller {
      * @ Date: 2020/12/28 10:42
      */
     @RequestMapping("updateStopTransport")
-    public Body updateStopTransport(String stopTransport, Integer stopNumber, String recId) {
-        return m03Service.updateStopTransport(stopTransport, stopNumber, recId);
+    public Body updateStopTransport(String stopTransport, Integer stopNumber, String recId, String stopRemark) {
+        return m03Service.updateStopTransport(stopTransport, stopNumber, recId, stopRemark);
     }
 
     /**

@@ -4,7 +4,7 @@
     <update id="updateM03">
    update M03 set person=#{person},quality=#{quality},dimensions=#{dimensions},scrapTime=#{scrapTime},
    IssuanceDate=#{IssuanceDate},totalQuality=#{totalQuality},checkQuality=#{checkQuality},tractionQuality=#{tractionQuality},
-   stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndTime=#{stopEndTime}
+   stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndTime=#{stopEndTime},stopRemark=#{stopRemark}
    where
    RecId=#{RecId}
 </update>
@@ -26,16 +26,19 @@
         </if>
     </select>
     <update id="updateStopTransport">
-        update M03 set stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndTime=#{stopEndTime}     where  RecId=#{recId}
+        update M03 set stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndTime=#{stopEndTime},stopRemark=#{stopRemark}     where  RecId=#{recId}
     </update>
 
     <select id="selectM03Status" resultType="com.example.car.common.utils.entity.CarStatus">
         SELECT
+        ISNULL( m.RecId,NULL) recId,
         ISNULL( m.M0331,NULL) M0331,
         ISNULL( c.certificationTime,NULL) certificationTime,
+        ISNULL( c.certificationStatus,NULL) certificationStatus,
         ISNULL( p.EndTime ,NULL) EndTime,
         ISNULL( m.stopTransport,NULL) stopTransport,
         ISNULL( m.stopNumber,NULL) stopNumber,
+        ISNULL( m.stopRemark,NULL) stopRemark,
         ISNULL( m.stopEndTime,NULL) stopEndTime
         FROM
         m03 m
@@ -52,9 +55,15 @@
         p.EndTime,
         m.stopTransport,
         m.stopNumber,
-        m.stopEndTime
+        m.stopEndTime,
+        m.RecId,
+        m.stopRemark,
+        c.certificationStatus
     </select>
     <insert id="insertM03">
         insert into M03 (RecId,Creator,MustId,M0302,M0331,M0325) values (#{RecId},#{Creator},#{MustId},#{M0302},#{M0331},#{M0325})
     </insert>
+    <select id="selectPermitTruck" resultType="java.lang.String">
+        SELECT PermitNo FROM View_PermitTruck WHERE datediff( dd, EndTime, GETDATE( ) ) <![CDATA[ <= ]]> 0 and CarNo=#{CarNo}
+    </select>
 </mapper>

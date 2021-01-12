@@ -9,9 +9,9 @@ public interface M03Service {
 
     Body updateM03(String person, String quality, String dimensions, String scrapTime, String IssuanceDate,
                    String totalQuality, String checkQuality, String tractionQuality, String stopTransport,
-                   String stopNumber, String stopEndTime,String RecId, String userid );
+                   String stopNumber, String stopEndTime,String RecId, String userid,String stopRemark );
 
-    Body updateStopTransport(String stopTransport,Integer stopNumber,String carid);
+    Body updateStopTransport(String stopTransport,Integer stopNumber,String carid,String stopRemark);
 
     Body selectM03Status(String MustId);
 

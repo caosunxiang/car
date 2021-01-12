@@ -88,7 +88,7 @@ public class MuckServiceImpl implements MuckService {
         PageUtils pageUtils = new PageUtils();
         pageUtils.setIndex(index);
         pageUtils.setSize(size);
-        pageUtils.setTotal(list.size());
+        pageUtils.setTotal( this.muckMapper.selectCarInfoCount(carNo, CompanyName, DriverName, EngineNo, CarframeNo, CarType));
         pageUtils.setList(list);
         return Body.newInstance(pageUtils);
     }
@@ -181,7 +181,7 @@ public class MuckServiceImpl implements MuckService {
             objectMap.put("car", strings);
         }
         pageUtils.setList(list);
-        pageUtils.setTotal(list.size());
+        pageUtils.setTotal(this.muckMapper.selectMuckadvancedCount(name, BeginTime, type));
         return Body.newInstance(pageUtils);
     }
 

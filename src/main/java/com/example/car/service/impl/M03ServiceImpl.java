@@ -64,7 +64,7 @@ public class M03ServiceImpl implements M03Service {
     @Override
     public Body updateM03(String person, String quality, String dimensions, String scrapTime, String IssuanceDate,
                           String totalQuality, String checkQuality, String tractionQuality, String stopTransport,
-                          String stopNumber, String stopEndTime, String RecId, String userid) {
+                          String stopNumber, String stopEndTime, String RecId, String userid,String stopRemark) {
         M03 m03 = new M03();
         m03.setPerson(person);
         m03.setQuality(quality);
@@ -78,6 +78,7 @@ public class M03ServiceImpl implements M03Service {
         m03.setStopNumber(stopNumber);
         m03.setStopEndTime(stopEndTime);
         m03.setRecId(RecId);
+        m03.setStopRemark(stopRemark);
         m03Mapper.updateM03(m03);
         OperationLog operationLog = new OperationLog(null, RecId, "修改", "修改车辆信息", DateUtil.getDateFormat(new Date(),
                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
@@ -86,9 +87,9 @@ public class M03ServiceImpl implements M03Service {
     }
 
     @Override
-    public Body updateStopTransport(String stopTransport, Integer stopNumber, String recId) {
+    public Body updateStopTransport(String stopTransport, Integer stopNumber, String recId,String stopRemark) {
         m03Mapper.updateStopTransport(stopTransport, stopNumber,
-                DateUtil.severalDaysAgo(DateUtil.FULL_TIME_SPLIT_PATTERN, -stopNumber), recId);
+                DateUtil.severalDaysAgo(DateUtil.FULL_TIME_SPLIT_PATTERN, -stopNumber), recId,stopRemark);
         return Body.BODY_200;
     }
 
@@ -102,6 +103,7 @@ public class M03ServiceImpl implements M03Service {
                     m03.setStatus("");
                 } else {
                     m03.setStatus(deviceLasposition.getCarstatus().toString());
+                    m03.setPermit(m03Mapper.selectPermitTruck(m03.getM0331()));
                 }
             }
         }

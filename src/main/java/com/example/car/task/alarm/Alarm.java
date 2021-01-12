@@ -93,11 +93,11 @@
 //                            DateUtil.FULL_TIME_SPLIT_PATTERN));
 //                    deviceAlarmSeverity1.setDeptid(Long.valueOf(deviceLasposition.getDeptid()));
 //                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
-//                    List<M03> m03 = m03Mapper.selectM03(deviceLasposition.getCarnumber(), null, null);
+//                    List<M03> m03 = m03Mapper.selectM03(deviceLasposition.getCarnumber(), null, null,null);
 //                    if (m03.size()>0){
 //                        OperationLog operationLog = new OperationLog(null, m03.get(0).getRecId(), "报警", "无准运证行驶",
 //                                DateUtil.getDateFormat(new Date(),
-//                                        DateUtil.FULL_TIME_SPLIT_PATTERN),"系统",null,null);
+//                                        DateUtil.FULL_TIME_SPLIT_PATTERN),"0",null,null);
 //                        operationLogMapper.insertLog(operationLog);
 //                    }
 //                    System.out.println("不好啦！报警了，这个人没有准运证");
@@ -157,11 +157,11 @@
 //                        deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
 //                        System.out.println("不好啦！报警了，离线告警");
 //                        deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
-//                        List<M03> m03 = m03Mapper.selectM03(resultDatum.getCarnumber(), null, null);
-//                        if (m03.size()>0) {1
+//                        List<M03> m03 = m03Mapper.selectM03(resultDatum.getCarnumber(), null, null,null);
+//                        if (m03.size()>0) {
 //                            OperationLog operationLog = new OperationLog(null, m03.get(0).getRecId(), "报警", "离线告警",
 //                                    DateUtil.getDateFormat(new Date(),
-//                                            DateUtil.FULL_TIME_SPLIT_PATTERN),"系统",null,null);
+//                                            DateUtil.FULL_TIME_SPLIT_PATTERN),"0",null,null);
 //                            operationLogMapper.insertLog(operationLog);
 //                        }
 //                    }
@@ -220,11 +220,11 @@
 //                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
 //                    System.out.println("不好啦！报警了，超速告警");
 //                    deviceAlarmSeverityMapper.insertAlarmSeverity(deviceAlarmSeverity1);
-//                    List<M03> m03 = m03Mapper.selectM03(deviceLasposition.getCarnumber(), null, null);
+//                    List<M03> m03 = m03Mapper.selectM03(deviceLasposition.getCarnumber(), null, null,null);
 //                    if (m03.size()>0) {
 //                        OperationLog operationLog = new OperationLog(null, m03.get(0).getRecId(), "报警", "超速告警",
 //                                DateUtil.getDateFormat(new Date(),
-//                                        DateUtil.FULL_TIME_SPLIT_PATTERN),"系统",null,null);
+//                                        DateUtil.FULL_TIME_SPLIT_PATTERN),"0",null,null);
 //                        operationLogMapper.insertLog(operationLog);
 //                    }
 //                } else if (!StringUtils.isEmpty(deviceAlarmSeverity) && deviceAlarms.size() > 0) {

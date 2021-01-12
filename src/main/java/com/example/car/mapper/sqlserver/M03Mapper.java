@@ -14,9 +14,11 @@ public interface M03Mapper {
     Integer updateM03(M03 m03);
 
     Integer updateStopTransport(@Param("stopTransport") String stopTransport, @Param("stopNumber") Integer stopNumber,
-                                @Param("stopEndTime")String stopEndTime, @Param("recId")String recId);
+                                @Param("stopEndTime")String stopEndTime, @Param("recId")String recId,@Param("stopRemark")String stopRemark);
 
     List<CarStatus>selectM03Status(@Param("MustId")String MustId);
 
     void insertM03(M03 m03);
+
+    List<String>selectPermitTruck(@Param("CarNo")String CarNo);
 }
