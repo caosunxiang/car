@@ -41,7 +41,7 @@ public interface MuckService {
 
     Body selectNotice();
 
-    Body selectM01();
+    Body selectM01(String name);
 
     Body selectCountByMuck(String time);
 

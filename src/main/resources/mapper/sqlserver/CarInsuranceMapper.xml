@@ -3,9 +3,11 @@
 <mapper namespace="com.example.car.mapper.sqlserver.CarInsuranceMapper">
     <insert id="insertInsurance">
    insert into car_insurance
-   (jqxId,insuranceUrl,jqxTime,jqxCompany,carId,syxId,jqxMoney,syxTime,syxCompany,annualVerification,verification,examinant,verificationTime)
+   (jqxId,insuranceUrl,jqxTime,jqxCompany,carId,syxId,jqxMoney,syxTime,syxCompany,annualVerification,verification,examinant,
+   verificationTime,syxMoney,useRestrict,carRestrict)
     values
-    (#{jqxId},#{insuranceUrl},#{jqxTime},#{jqxCompany},#{carId},#{syxId},#{jqxMoney},#{syxTime},#{syxCompany},#{annualVerification},#{verification},#{examinant},#{verificationTime})
+    (#{jqxId},#{insuranceUrl},#{jqxTime},#{jqxCompany},#{carId},#{syxId},#{jqxMoney},#{syxTime},#{syxCompany},#{annualVerification},
+    #{verification},#{examinant},#{verificationTime},#{syxMoney},#{useRestrict},#{carRestrict})
 </insert>
     <select id="selectInsuranceByCarId" resultType="com.example.car.entity.CarInsurance">
         SELECT
@@ -19,11 +21,76 @@
         <if test="MustId!=null and MustId!=''">
             AND m03.MustId=#{MustId}
         </if>
-   <if test="carid !=null and carid !=''">
-      and i.carId =#{carid}
-   </if>
+        <if test="name!=null and name!=''">
+            AND m03.M0331 like #{name}+'%'
+        </if>
+        <if test="carid !=null and carid !=''">
+            and i.carId =#{carid}
+        </if>
+        <if test="verificationTime !=null and verificationTime !=''">
+            and datediff( dd, i.verificationTime, #{verificationTime} ) <![CDATA[ = ]]> 0
+        </if>
     </select>
     <update id="updateInsuranceUrl">
         update car_insurance set  insuranceUrl = #{insuranceUrl} where insuranceId=#{insuranceId}
+    </update>
+
+    <select id="selectInsuranceTime" resultType="java.lang.String">
+        SELECT CONVERT(varchar(100), verificationTime, 23) FROM
+        car_insurance WHERE 1=1
+        <if test="carId !=null and carId!=''">
+            and carId=#{carId}
+        </if>
+        GROUP BY CONVERT(varchar(100), verificationTime, 23)
+    </select>
+    <update id="updateInsurance">
+        update car_insurance set
+        carId=#{carId}
+        <if test="annualVerification!=null and annualVerification!=''">
+            , annualVerification=#{annualVerification}
+        </if>
+        <if test="verification!=null and verification!=''">
+            , verification=#{verification}
+        </if>
+        <if test="verificationTime!=null and verificationTime!=''">
+            ,verificationTime=#{verificationTime}
+        </if>
+        <if test="examinant !=null and examinant!=''">
+            ,examinant=#{examinant}
+        </if>
+        <if test="jqxId!=null and jqxId!=''">
+            ,jqxId=#{jqxId}
+        </if>
+        <if test="jqxTime!=null and jqxTime!=''">
+            ,jqxTime=#{jqxTime}
+        </if>
+        <if test="jqxCompany!=null and jqxCompany!=''">
+            ,jqxCompany=#{jqxCompany}
+        </if>
+        <if test="jqxMoney!=null and jqxMoney!=''">
+            ,jqxMoney=#{jqxMoney}
+        </if>
+        <if test="syxId!=null and syxId!=''">
+            ,syxId=#{syxId}
+        </if>
+        <if test="syxTime!=null and syxTime!=''">
+            ,syxTime=#{syxTime}
+        </if>
+        <if test="syxCompany!=null and syxCompany!=''">
+            ,syxCompany=#{syxCompany}
+        </if>
+        <if test="carRestrict!=null and carRestrict!=''">
+            , carRestrict=#{carRestrict}
+        </if>
+        <if test="insuranceUrl !=null and insuranceUrl!=''">
+            , insuranceUrl = #{insuranceUrl}
+        </if>
+        <if test="syxMoney !=null and syxMoney!=''">
+            , syxMoney = #{syxMoney}
+        </if>
+        <if test="useRestrict !=null and useRestrict!=''">
+            , useRestrict = #{useRestrict}
+        </if>
+        where insuranceId=#{insuranceId}
     </update>
 </mapper>

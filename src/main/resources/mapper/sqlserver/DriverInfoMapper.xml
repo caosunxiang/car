@@ -3,10 +3,10 @@
 <mapper namespace="com.example.car.mapper.sqlserver.DriverInfoMapper">
     <insert id="insertDriver" parameterType="com.example.car.entity.DriverInfo"  useGeneratedKeys="true" keyProperty="driverId">
        insert into driver_info (driverName,driverMobile,driverCardNo,driverReviewTime,driverStatus,driverPhotoUrl,driverSex,
-       driverAddress,licenseUrl)
+       driverAddress,licenseUrl,carId,deptid)
         values
          (#{driverName},#{driverMobile},#{driverCardNo},#{driverReviewTime},#{driverStatus},#{driverPhotoUrl},#{driverSex},
-       #{driverAddress},#{licenseUrl})
+       #{driverAddress},#{licenseUrl},#{carId},#{deptid})
    </insert>
     <select id="selectDriverInfo" resultType="com.example.car.entity.DriverInfo">
         select m03.m0331 as carNumber,d.*  FROM  driver_info d RIGHT JOIN M03 m03 ON m03.RecId=d.carId where 1=1
@@ -16,10 +16,43 @@
         <if test="MustId!= null and MustId!=''">
            and  m03.MustId=#{MustId}
         </if>
+        <if test="name!= null and name!=''">
+            and  m03.m0331 like #{name}+'%'
+        </if>
     </select>
     <update id="updateDriver">
-        update driver_info set driverName=#{driverName},driverMobile=#{driverMobile},driverCardNo=#{driverCardNo},driverReviewTime=#{driverReviewTime},
-        driverStatus=#{driverStatus},driverPhotoUrl=#{driverPhotoUrl},driverSex=#{driverSex},driverAddress=#{driverAddress},licenseUrl=#{licenseUrl}
+        update driver_info set
+        driverCardNo=#{driverCardNo}
+        <if test="driverName!=null and driverName!=''">
+            ,driverName=#{driverName}
+        </if>
+        <if test="driverMobile !=null and driverMobile!=''">
+            ,driverMobile=#{driverMobile}
+        </if>
+        <if test="driverReviewTime!=null and driverReviewTime!=''">
+            ,driverReviewTime=#{driverReviewTime}
+        </if>
+        <if test="driverStatus!=null and driverStatus!=''">
+            ,driverStatus=#{driverStatus}
+        </if>
+        <if test="driverPhotoUrl!=null and driverPhotoUrl!=''">
+            ,driverPhotoUrl=#{driverPhotoUrl}
+        </if>
+        <if test="driverSex!=null and driverSex!=''">
+            ,driverSex=#{driverSex}
+        </if>
+        <if test="driverAddress!=null and driverAddress!=''">
+            ,driverAddress=#{driverAddress}
+        </if>
+        <if test="licenseUrl!=null and licenseUrl!=''">
+            ,licenseUrl=#{licenseUrl}
+        </if>
+        <if test="carId!=null and carId!=''">
+            ,carId=#{carId}
+        </if>
+        <if test="deptid!=null and deptid!=''">
+            ,deptid=#{deptid}
+        </if>
         where
         driverId=#{driverId}
     </update>
@@ -41,4 +74,7 @@
            and  h.carId=#{carId}
         </if>
     </select>
+    <delete id="delectDriver">
+delete  from driver_info where driverId=#{driverId}
+    </delete>
 </mapper>

@@ -4,7 +4,10 @@
     <update id="updateM03">
    update M03 set person=#{person},quality=#{quality},dimensions=#{dimensions},scrapTime=#{scrapTime},
    IssuanceDate=#{IssuanceDate},totalQuality=#{totalQuality},checkQuality=#{checkQuality},tractionQuality=#{tractionQuality},
-   stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndTime=#{stopEndTime},stopRemark=#{stopRemark}
+   fileNumber=#{fileNumber},M0304=#{M0304},M0303=#{M0303},M0305=#{M0305},M0306=#{M0306},registration=#{registration}
+   <if test="DLicenseImage!=null and DLicenseImage!=''">
+       ,DLicenseImage=#{DLicenseImage}
+   </if>
    where
    RecId=#{RecId}
 </update>
@@ -15,6 +18,7 @@
             and M0331 LIKE '%'+ #{carNumber}+'%'
         </if>
         <if test="recId !=null and recId !=''">
+
             and RecId=#{recId}
         </if>
         <if test="phone !=null and phone!=''">
@@ -46,8 +50,12 @@
         m.M0331= p.CarNo
         LEFT JOIN car_certification c ON c.carId= m.RecId
         WHERE
+        1=1
         <if test="MustId !=null and MustId!=''">
-            m.MustId=#{MustId}
+            and m.MustId=#{MustId}
+        </if>
+        <if test="name !=null and name!=''">
+            and m.M0331 like #{name}+'%'
         </if>
         GROUP BY
         m.M0331,

@@ -70,9 +70,9 @@
     </update>
 
     <insert id="insertM01">
-    insert into M01 (Creator,M0101,M0102,M0103,M0104,M0105,M0106,M0107,M0108,M0109,ShortSpell)
+    insert into M01 (MustId,Creator,M0101,M0102,M0103,M0104,M0105,M0106,M0107,M0108,M0109,ShortSpell)
      values
-      (#{Creator},#{M0101},#{M0102},#{M0103},#{M0104},#{M0105},#{M0106},#{M0107},#{M0108},#{M0109},#{ShortSpell})
+      (#{MustId},#{Creator},#{M0101},#{M0102},#{M0103},#{M0104},#{M0105},#{M0106},#{M0107},#{M0108},#{M0109},#{ShortSpell})
 </insert>
 
 </mapper>

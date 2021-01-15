@@ -14,8 +14,10 @@ import com.example.car.common.utils.DateUtil;
 import com.example.car.common.utils.FileUploadUtils;
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.CarInsurance;
+import com.example.car.entity.M03;
 import com.example.car.entity.OperationLog;
 import com.example.car.mapper.sqlserver.CarInsuranceMapper;
+import com.example.car.mapper.sqlserver.M03Mapper;
 import com.example.car.mapper.sqlserver.OperationLogMapper;
 import com.example.car.service.CarInsuranceService;
 import lombok.RequiredArgsConstructor;
@@ -45,20 +47,25 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
     private CarInsuranceMapper carInsuranceMapper;
     @Autowired
     private OperationLogMapper operationLogMapper;
+    @Autowired
+    private M03Mapper m03Mapper;
 
     @Override
     public Body insertInsurance(String files, String carid, String jqxId, String jqxTime, String jqxCompany,
                                 String jqxMoney, String syxId, String syxTime, String syxCompany,
                                 String annualVerification, String verification, String examinant,
-                                String verificationTime, String userid) {
+                                String verificationTime, String userid, String syxMoney,String useRestrict, String carRestrict) {
         MultipartFile file = FileUploadUtils.base64Convert(files);
         String url = FileUploadUtils.fileUpload(file, "img");
         CarInsurance carInsurance = new CarInsurance();
         carInsurance.setCarId(carid);
+        carInsurance.setSyxMoney(syxMoney);
         carInsurance.setAnnualVerification(annualVerification);
         carInsurance.setExaminant(examinant);
         carInsurance.setJqxCompany(jqxCompany);
         carInsurance.setJqxId(jqxId);
+        carInsurance.setUseRestrict(useRestrict);
+        carInsurance.setCarRestrict(carRestrict);
         carInsurance.setJqxMoney(jqxMoney);
         carInsurance.setJqxTime(jqxTime);
         carInsurance.setSyxCompany(syxCompany);
@@ -75,8 +82,9 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
     }
 
     @Override
-    public Body selectInsuranceByCarId(String carid,String MustId) {
-        List<CarInsurance> carInsurances = carInsuranceMapper.selectInsuranceByCarId(carid,MustId);
+    public Body selectInsuranceByCarId(String carid, String MustId, String verificationTime, String name) {
+        List<CarInsurance> carInsurances = carInsuranceMapper.selectInsuranceByCarId(carid, MustId, verificationTime,
+                name);
         return Body.newInstance(carInsurances);
     }
 
@@ -92,6 +100,31 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
         operationLogMapper.insertLog(operationLog);
         return Body.newInstance(carInsurance);
+    }
+
+    @Override
+    public Body selectInsuranceTime(String carId) {
+        List<String> list = this.carInsuranceMapper.selectInsuranceTime(carId);
+        return Body.newInstance(list);
+    }
+
+    @Override
+    public Body updateInsurance(CarInsurance carInsurance) {
+        this.carInsuranceMapper.updateInsurance(carInsurance);
+        return Body.BODY_200;
+    }
+
+    @Override
+    public Body synInsurance() {
+        List<M03> m03s = m03Mapper.selectM03(null, null, null, null);
+        for (M03 m03 : m03s) {
+            CarInsurance carInsurance = new CarInsurance(null, null, m03.getM0315(), m03.getM0332(), m03.getM0333(),
+                    null, m03.getM0319(), m03.getM0317(), m03.getM0318(), m03.getM0316(), m03.getM0307(),
+                    m03.getM0330(), m03.getM0329(), m03.getM0328(), m03.getRecId(), m03.getM0313(), m03.getM0314(),
+                    null);
+            this.carInsuranceMapper.insertInsurance(carInsurance);
+        }
+        return Body.BODY_200;
     }
 
 }

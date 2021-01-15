@@ -540,6 +540,11 @@ FROM
 	m.Status
 FROM
 	M01 m
+	where
+	1=1
+	<if test="name !=null and name!=''">
+        m.M0101 like #{name}+'%'
+    </if>
     </select>
 
     <select id="selectCountByMuck" resultType="com.example.car.common.utils.entity.EChatBean7">
@@ -750,9 +755,9 @@ where creator = #{userid} AND STATE = 4
     </select>
 
     <insert id="insertUser">
-        insert into users (UserId,UserName,UserPwd)
+        insert into users (UserId,IsSuspend,UserName,UserPwd)
          values
-          (#{UserId},#{UserName},#{UserPwd})
+          (#{UserId},0,#{UserName},#{UserPwd})
     </insert>
 
     <select id="selectUserId" resultType="java.lang.Integer">

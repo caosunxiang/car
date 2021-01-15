@@ -63,8 +63,9 @@ public class M03ServiceImpl implements M03Service {
 
     @Override
     public Body updateM03(String person, String quality, String dimensions, String scrapTime, String IssuanceDate,
-                          String totalQuality, String checkQuality, String tractionQuality, String stopTransport,
-                          String stopNumber, String stopEndTime, String RecId, String userid,String stopRemark) {
+                          String totalQuality, String checkQuality, String tractionQuality, String M0305,String M0306,
+                          String fileNumber, String M0304, String RecId, String userid,String M0303,String DLicenseImage,
+                          String registration) {
         M03 m03 = new M03();
         m03.setPerson(person);
         m03.setQuality(quality);
@@ -74,11 +75,14 @@ public class M03ServiceImpl implements M03Service {
         m03.setTotalQuality(totalQuality);
         m03.setCheckQuality(checkQuality);
         m03.setTractionQuality(tractionQuality);
-        m03.setStopTransport(stopTransport);
-        m03.setStopNumber(stopNumber);
-        m03.setStopEndTime(stopEndTime);
+        m03.setRegistration(registration);
+        m03.setM0305(M0305);
+        m03.setM0306(M0306);
+        m03.setM0303(M0303);
+        m03.setFileNumber(fileNumber);
         m03.setRecId(RecId);
-        m03.setStopRemark(stopRemark);
+        m03.setDLicenseImage(DLicenseImage);
+        m03.setM0304(M0304);
         m03Mapper.updateM03(m03);
         OperationLog operationLog = new OperationLog(null, RecId, "修改", "修改车辆信息", DateUtil.getDateFormat(new Date(),
                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
@@ -94,8 +98,8 @@ public class M03ServiceImpl implements M03Service {
     }
 
     @Override
-    public Body selectM03Status(String MustId) {
-        List<CarStatus> m03s = m03Mapper.selectM03Status(MustId);
+    public Body selectM03Status(String MustId,String name) {
+        List<CarStatus> m03s = m03Mapper.selectM03Status(MustId,name);
         if (m03s.size() > 0) {
             for (CarStatus m03 : m03s) {
                 DeviceLasposition deviceLasposition = deviceLaspositionMapper.selectLaspositionByCarNo(m03.getM0331());

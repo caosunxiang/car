@@ -237,8 +237,8 @@ public class MuckController {
      * @ Date: 2020/10/30 15:46
      */
     @RequestMapping("selectM01")
-    public Body selectM01() {
-        return this.muckService.selectM01();
+    public Body selectM01(String name) {
+        return this.muckService.selectM01(name);
     }
 
     /*** 

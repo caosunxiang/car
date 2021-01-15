@@ -160,8 +160,8 @@ public class MuckServiceImpl implements MuckService {
     }
 
     @Override
-    public Body selectM01() {
-        return Body.newInstance(this.muckMapper.selectM01());
+    public Body selectM01(String name) {
+        return Body.newInstance(this.muckMapper.selectM01(name));
     }
 
     @Override

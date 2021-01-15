@@ -47,8 +47,8 @@ public class DriverInfoController {
      * @ Date: 2020/12/24 16:01
      */
     @RequestMapping("selectDriverInfo")
-    public Body selectDriverInfo(String driverId,String MustId) {
-        return driverInfoService.selectDriverInfo(driverId,MustId);
+    public Body selectDriverInfo(String driverId, String MustId, String name) {
+        return driverInfoService.selectDriverInfo(driverId, MustId, name);
     }
 
     /**
@@ -62,12 +62,9 @@ public class DriverInfoController {
     @RequestMapping("insertDriver")
     public Body insertDriver(String driverName, String driverMobile, String driverCardNo, String driverReviewTime,
                              String driverStatus, String driverFiles, String driverSex, String driverAddress,
-                             String files, String carId, String userid) {
-        if (StringUtils.isEmpty(files) || StringUtils.isEmpty(driverFiles)) {
-            return Body.newInstance(201, "请上传图片");
-        }
+                             String files, String carId, String userid, String deptid) {
         return driverInfoService.insertDriver(driverName, driverMobile, driverCardNo, driverReviewTime, driverStatus,
-                driverFiles, driverSex, driverAddress, files, carId, userid);
+                driverFiles, driverSex, driverAddress, files, carId, userid, deptid);
     }
 
 
@@ -82,12 +79,9 @@ public class DriverInfoController {
     @RequestMapping("updateDriver")
     public Body updateDriver(Integer driverId, String driverName, String driverMobile, String driverCardNo,
                              String driverReviewTime, String driverStatus, String driverFiles, String driverSex,
-                             String driverAddress, String files, String carId, String userid) {
-        if (StringUtils.isEmpty(files) || StringUtils.isEmpty(driverFiles)) {
-            return Body.newInstance(201, "请上传图片");
-        }
+                             String driverAddress, String files, String carId, String userid, String deptid) {
         return driverInfoService.updateDriver(driverId, driverName, driverMobile, driverCardNo, driverReviewTime,
-                driverStatus, driverFiles, driverSex, driverAddress, files, carId, userid);
+                driverStatus, driverFiles, driverSex, driverAddress, files, carId, userid, deptid);
     }
 
     /**
@@ -100,5 +94,33 @@ public class DriverInfoController {
     @RequestMapping("selectDriverHistorical")
     public Body selectDriverHistorical(String carId) {
         return driverInfoService.selectDriverHistorical(carId);
+    }
+
+    /**
+     * @ Description: 驾驶员绑定多辆车
+     * @ Param: [driverName, driverMobile, driverCardNo, driverReviewTime, driverStatus, driverFile, driverSex,
+     * driverAddress, carNumber, userid]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/14 16:29
+     */
+    @RequestMapping("insertDrivers")
+    public Body insertDrivers(String driverName, String driverMobile, String driverCardNo, String driverReviewTime,
+                              String driverStatus, String driverFile, String driverSex, String driverAddress,
+                              String carNumber, String userid, String deptid) {
+        return driverInfoService.insertDrivers(driverName, driverMobile, driverCardNo, driverReviewTime, driverStatus,
+                driverFile, driverSex, driverAddress, carNumber, userid, deptid);
+    }
+
+    /** 
+    * @ Description: 删除驾驶员
+    * @ Param: [driverId]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2021/1/15 14:04
+    */
+    @RequestMapping("delectDriver")
+    public Body delectDriver(Integer driverId) {
+        return driverInfoService.delectDriver(driverId);
     }
 }

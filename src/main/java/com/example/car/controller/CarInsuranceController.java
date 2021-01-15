@@ -11,6 +11,7 @@
 package com.example.car.controller;
 
 import com.example.car.common.utils.json.Body;
+import com.example.car.entity.CarInsurance;
 import com.example.car.service.CarInsuranceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,12 +51,14 @@ public class CarInsuranceController {
     public Body insertInsurance(String files, String carid, String jqxId, String jqxTime, String jqxCompany,
                                 String jqxMoney, String syxId, String syxTime, String syxCompany,
                                 String annualVerification, String verification, String examinant,
-                                String verificationTime,String userid) {
-        if (StringUtils.isEmpty(files)){
-            return  Body.newInstance(201,"请上传base64格式的图片");
+                                String verificationTime, String userid, String syxMoney, String useRestrict,
+                                String carRestrict) {
+        if (StringUtils.isEmpty(files)) {
+            return Body.newInstance(201, "请上传base64格式的图片");
         }
         return carInsuranceService.insertInsurance(files, carid, jqxId, jqxTime, jqxCompany, jqxMoney, syxId, syxTime
-                , syxCompany, annualVerification, verification, examinant, verificationTime,userid);
+                , syxCompany, annualVerification, verification, examinant, verificationTime, userid, syxMoney,
+                useRestrict, carRestrict);
     }
 
     /**
@@ -66,8 +69,8 @@ public class CarInsuranceController {
      * @ Date: 2020/12/16 10:10
      */
     @RequestMapping("selectInsuranceByCarId")
-    public Body selectInsuranceByCarId(String carid,String MustId) {
-        return carInsuranceService.selectInsuranceByCarId(carid,MustId);
+    public Body selectInsuranceByCarId(String carid, String MustId, String verificationTime, String name) {
+        return carInsuranceService.selectInsuranceByCarId(carid, MustId, verificationTime, name);
     }
 
     /**
@@ -78,7 +81,48 @@ public class CarInsuranceController {
      * @ Date: 2020/12/16 11:15
      */
     @RequestMapping("updateInsuranceUrl")
-    public Body updateInsuranceUrl(String files, Integer insuranceId,String carid,String userid) {
-        return carInsuranceService.updateInsuranceUrl(files, insuranceId,carid,userid);
+    public Body updateInsuranceUrl(String files, Integer insuranceId, String carid, String userid) {
+        return carInsuranceService.updateInsuranceUrl(files, insuranceId, carid, userid);
+    }
+
+    /**
+     * @ Description: 查询年审日期
+     * @ Param: []
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/13 9:12
+     */
+    @RequestMapping("selectInsuranceTime")
+    public Body selectInsuranceTime(String carId) {
+        return carInsuranceService.selectInsuranceTime(carId);
+    }
+
+    /**
+     * @ Description: 修改年审信息
+     * @ Param: [carInsurance]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/14 15:45
+     */
+    @RequestMapping("updateInsurance")
+    public Body updateInsurance(CarInsurance carInsurance) {
+        if (StringUtils.isEmpty(carInsurance.getCarId())) {
+            return Body.BODY_451;
+        }
+        return this.carInsuranceService.updateInsurance(carInsurance);
+    }
+
+    /**
+     * @ Description: 同步保险信息
+     * @ Param: []
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/14 17:44
+     */
+    @RequestMapping("synInsurance")
+    public Body synInsurance() {
+        return this.carInsuranceService.synInsurance();
     }
 }
+
+

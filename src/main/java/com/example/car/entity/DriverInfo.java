@@ -48,6 +48,10 @@ public class DriverInfo {
 
     private String licenseUrl;
 
+    private String carId;
+
+    private String deptid;
+
     @TableField(exist = false)
     private String startTime;
 

@@ -63,10 +63,11 @@ public class M03Controller {
      */
     @RequestMapping("updateM03")
     public Body updateM03(String person, String quality, String dimensions, String scrapTime, String IssuanceDate,
-                          String totalQuality, String checkQuality, String tractionQuality, String stopTransport,
-                          String stopNumber, String stopEndTime, String RecId, String userid,String stopRemark) {
+                          String totalQuality, String checkQuality, String tractionQuality, String M0305,String M0306,
+                          String fileNumber, String M0304, String RecId, String userid,String M0303,String DLicenseImage,
+                          String registration) {
         return m03Service.updateM03(person, quality, dimensions, scrapTime, IssuanceDate, totalQuality, checkQuality,
-                tractionQuality, stopTransport, stopNumber, stopEndTime, RecId, userid,stopRemark);
+                tractionQuality, M0305, M0306, fileNumber,M0304, RecId, userid,M0303,DLicenseImage,registration);
     }
 
     /**
@@ -89,8 +90,8 @@ public class M03Controller {
      * @ Date: 2021/1/7 9:44
      */
     @RequestMapping("selectM03Status")
-    public Body selectM03Status(String MustId) {
-        return m03Service.selectM03Status(MustId);
+    public Body selectM03Status(String MustId,String name) {
+        return m03Service.selectM03Status(MustId,name);
     }
 
     /**

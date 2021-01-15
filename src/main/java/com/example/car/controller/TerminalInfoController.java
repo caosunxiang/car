@@ -81,32 +81,32 @@ public class TerminalInfoController {
                 installstatus, installtime, carNumber);
     }
 
-    /** 
-    * @ Description: 修改设备信息
-    * @ Param: [modifyUser, isDelete, terminal, terminalType, carNumber, terminalId]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2021/1/5 18:21
-    */
+    /**
+     * @ Description: 修改设备信息
+     * @ Param: [modifyUser, isDelete, terminal, terminalType, carNumber, terminalId]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/5 18:21
+     */
     @RequestMapping("updateTerminal")
     public Body updateTerminal(String modifyUser, String isDelete, String terminal, String terminalType,
                                String carNumber, Integer terminalId) {
         if (StringUtils.isEmpty(terminalId) || StringUtils.isEmpty(modifyUser)) {
             return Body.BODY_451;
         }
-        return terminalInfoService.updateTerminal(modifyUser,isDelete,terminal,terminalType,carNumber,terminalId);
+        return terminalInfoService.updateTerminal(modifyUser, isDelete, terminal, terminalType, carNumber, terminalId);
     }
 
     /**
-    * @ Description: 删除设备
-    * @ Param: [terminalId]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2021/1/11 10:08
-    */
+     * @ Description: 删除设备
+     * @ Param: [terminalId]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/11 10:08
+     */
     @RequestMapping("deleteTerminal")
     public Body deleteTerminal(Integer terminalId) {
-        if (StringUtils.isEmpty(terminalId) ) {
+        if (StringUtils.isEmpty(terminalId)) {
             return Body.BODY_451;
         }
         return terminalInfoService.deleteTerminal(terminalId);

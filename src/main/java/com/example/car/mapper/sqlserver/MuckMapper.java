@@ -71,7 +71,7 @@ public interface MuckMapper {
 
     List<Notice> selectNotice();
 
-    List<M01> selectM01();
+    List<M01> selectM01(@Param("name")String name);
 
     List<EChatBean7> selectCountByMuck(@Param("time") String time);
 

@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -63,7 +64,7 @@ public class M01ServiceImpl implements M01Service {
     @Override
     public Body insertM01(String Creator, String M0101, String M0102, String M0103, String M0104, String M0105,
                           String M0106, String M0107, String M0108, String M0109, String ShortSpell) {
-        M01 m01 = new M01(Creator, null, M0101, M0102, M0103, M0104, M0105, M0106, M0107, M0108, M0109, null,
+        M01 m01 = new M01(Creator, null, M0101, M0102, M0103, M0104, M0105, M0106, M0107, M0108, M0109, UUID.randomUUID().toString(),
                 ShortSpell, null, null, null, null, null,null,null);
         m01Mapper.insertM01(m01);
         Integer id=muckMapper.selectUserId();
