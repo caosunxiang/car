@@ -91,9 +91,9 @@ public class M03ServiceImpl implements M03Service {
     }
 
     @Override
-    public Body updateStopTransport(String stopTransport, Integer stopNumber, String recId,String stopRemark) {
+    public Body updateStopTransport(String stopTransport, Integer stopNumber, String recId,String stopRemark,String MustId) {
         m03Mapper.updateStopTransport(stopTransport, stopNumber,
-                DateUtil.severalDaysAgo(DateUtil.FULL_TIME_SPLIT_PATTERN, -stopNumber), recId,stopRemark);
+                DateUtil.severalDaysAgo(DateUtil.FULL_TIME_SPLIT_PATTERN, -stopNumber), recId,stopRemark,MustId);
         return Body.BODY_200;
     }
 
@@ -130,6 +130,12 @@ public class M03ServiceImpl implements M03Service {
         terminalInfo.setModifyDate(DateUtil.getDateFormat(new Date(),DateUtil.FULL_TIME_SPLIT_PATTERN));
         terminalInfo.setModifyUser(m03.getCreator().toString());
         terminalInfoMapper.insertTerminal(terminalInfo);
+        return Body.BODY_200;
+    }
+
+    @Override
+    public Body deleteM03(String RecId) {
+        this.m03Mapper.deleteM03(RecId);
         return Body.BODY_200;
     }
 }

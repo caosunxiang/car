@@ -9,7 +9,7 @@
        #{driverAddress},#{licenseUrl},#{carId},#{deptid})
    </insert>
     <select id="selectDriverInfo" resultType="com.example.car.entity.DriverInfo">
-        select m03.m0331 as carNumber,d.*  FROM  driver_info d RIGHT JOIN M03 m03 ON m03.RecId=d.carId where 1=1
+        select m03.m0331 as carNumber,d.*,m03.DLicenseImage as url  FROM  driver_info d left JOIN M03 m03 ON m03.RecId=d.carId where 1=1
         <if test="driverId !=null and driverId !=''">
             and d.driverId=#{driverId}
         </if>
@@ -18,6 +18,9 @@
         </if>
         <if test="name!= null and name!=''">
             and  m03.m0331 like #{name}+'%'
+        </if>
+        <if test="driverCardNo!= null and driverCardNo!=''">
+            and  d.driverCardNo =#{driverCardNo}
         </if>
     </select>
     <update id="updateDriver">
@@ -76,5 +79,8 @@
     </select>
     <delete id="delectDriver">
 delete  from driver_info where driverId=#{driverId}
+    </delete>
+    <delete id="delectDriverHistorical">
+delete  from driver_historical where driverId=#{driverId}
     </delete>
 </mapper>

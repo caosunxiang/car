@@ -11,11 +11,14 @@ public interface DriverInfoMapper {
 
     void updateDriver(DriverInfo driverInfo);
 
-    List<DriverInfo> selectDriverInfo(@Param("driverId")String driverId,@Param("MustId")String MustId,@Param("name")String name);
+    List<DriverInfo> selectDriverInfo(@Param("driverId") String driverId, @Param("MustId") String MustId, @Param(
+            "name") String name,@Param("driverCardNo") String driverCardNo);
 
     void insertDriverHistorical(DriverHistorical driverHistorical);
 
-    List<DriverInfo>selectDriverHistorical(@Param("carId")String carId);
+    List<DriverInfo> selectDriverHistorical(@Param("carId") String carId);
 
-    void delectDriver(@Param("driverId")Integer driverId);
+    void delectDriver(@Param("driverId") Integer driverId);
+
+    void delectDriverHistorical(@Param("driverId") Integer driverId);
 }

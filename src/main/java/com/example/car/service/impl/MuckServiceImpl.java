@@ -13,8 +13,11 @@ package com.example.car.service.impl;
 import com.example.car.common.utils.entity.Apply;
 import com.example.car.common.utils.json.Body;
 import com.example.car.common.utils.page.PageUtils;
+import com.example.car.entity.Appraise;
+import com.example.car.entity.M01;
 import com.example.car.entity.M04;
 import com.example.car.entity.M07;
+import com.example.car.mapper.sqlserver.AppraiseMapper;
 import com.example.car.mapper.sqlserver.MuckMapper;
 import com.example.car.service.MuckService;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +44,7 @@ public class MuckServiceImpl implements MuckService {
 
     private final MuckMapper muckMapper;
 
+    private final AppraiseMapper appraiseMapper;
 
     @Override
     public Body selectMuck(String carNo, String permitNo, String
@@ -161,7 +165,12 @@ public class MuckServiceImpl implements MuckService {
 
     @Override
     public Body selectM01(String name) {
-        return Body.newInstance(this.muckMapper.selectM01(name));
+        List<M01>list=this.muckMapper.selectM01(name);
+        for (M01 m01 : list) {
+            Double score=appraiseMapper.selectAppraiseAMG(m01.getMustId());
+            m01.setScore(score);
+        }
+        return Body.newInstance(list);
     }
 
     @Override

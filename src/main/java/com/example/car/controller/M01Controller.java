@@ -82,4 +82,19 @@ public class M01Controller {
                           String M0106, String M0107, String M0108, String M0109, String ShortSpell) {
         return m01Service.insertM01(Creator, M0101, M0102, M0103, M0104, M0105, M0106, M0107, M0108, M0109, ShortSpell);
     }
+
+    /** 
+    * @ Description: 上传二维码
+    * @ Param: [files, Status, MustId]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2021/1/19 14:41
+    */
+    @RequestMapping("uploadQRCode")
+    public Body uploadQRCode(String files, String Status, String MustId) {
+        if (StringUtils.isEmpty(files)){
+            return Body.BODY_451;
+        }
+        return  this.m01Service.uploadQRCode(files, Status, MustId);
+    }
 }

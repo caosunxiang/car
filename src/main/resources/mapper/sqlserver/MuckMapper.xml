@@ -148,6 +148,7 @@
         ISNULL(t.Capacity,'') Capacity,
         ISNULL(t.CarNo,'')CarNo,
         ISNULL(t.RecId,'')RecId,
+        ISNULL(t.MustId,'')MustId,
         ISNULL(t.CarType,'')CarType,
         ISNULL(t.CarframeNo,'')CarframeNo,
         ISNULL(t.CompanyName,'')CompanyName,
@@ -543,7 +544,7 @@ FROM
 	where
 	1=1
 	<if test="name !=null and name!=''">
-        m.M0101 like #{name}+'%'
+       and m.M0101 like #{name}+'%'
     </if>
     </select>
 

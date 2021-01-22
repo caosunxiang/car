@@ -12,9 +12,11 @@ public interface M03Service {
                    String fileNumber, String M0304, String RecId, String userid,String M0303,String DLicenseImage,
                    String registration);
 
-    Body updateStopTransport(String stopTransport,Integer stopNumber,String carid,String stopRemark);
+    Body updateStopTransport(String stopTransport,Integer stopNumber,String carid,String stopRemark,String MustId);
 
     Body selectM03Status(String MustId,String name);
 
     Body insertM03(M03 m03, TerminalInfo terminalInfo);
+
+    Body deleteM03(String RecId);
 }

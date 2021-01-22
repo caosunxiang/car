@@ -10,6 +10,7 @@
  */
 package com.example.car.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -46,4 +47,6 @@ public class M01 {
     private String dateEstablishment;
     private String address;
     private String represenPhone;
+    @TableField(exist = false)
+    private Double score;
 }

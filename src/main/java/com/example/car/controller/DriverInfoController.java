@@ -47,8 +47,8 @@ public class DriverInfoController {
      * @ Date: 2020/12/24 16:01
      */
     @RequestMapping("selectDriverInfo")
-    public Body selectDriverInfo(String driverId, String MustId, String name) {
-        return driverInfoService.selectDriverInfo(driverId, MustId, name);
+    public Body selectDriverInfo(String driverId, String MustId, String name, String driverCardNo) {
+        return driverInfoService.selectDriverInfo(driverId, MustId, name,driverCardNo);
     }
 
     /**
@@ -122,5 +122,17 @@ public class DriverInfoController {
     @RequestMapping("delectDriver")
     public Body delectDriver(Integer driverId) {
         return driverInfoService.delectDriver(driverId);
+    }
+
+    /** 
+    * @ Description: 同步驾驶员信息
+    * @ Param: []
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2021/1/18 16:48
+    */
+    @RequestMapping("synDriver")
+    public Body synDriver() {
+        return driverInfoService.synDriver();
     }
 }

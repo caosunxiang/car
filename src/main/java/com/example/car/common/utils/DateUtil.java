@@ -26,6 +26,8 @@ public class DateUtil {
 
     public static final String CST_TIME_PATTERN = "EEE MMM dd HH:mm:ss zzz yyyy";
 
+    public static  final String DATE_TIME_PATTERN="yyyy-MM-dd";
+
     public static String formatFullTime(LocalDateTime localDateTime) {
         return formatFullTime(localDateTime, FULL_TIME_PATTERN);
     }

@@ -47,6 +47,10 @@ public class CarInsurance {
     private String carId;
     private String carRestrict;
     private String useRestrict;
+    private String verificationResult;
+    private String verificationRemark;
+    private String verificationAccessory;
+    private String verificationYear;
     @TableField(exist = false)
     private String carNumber;
 }

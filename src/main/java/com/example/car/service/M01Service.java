@@ -30,4 +30,5 @@ public interface M01Service {
 
     Body insertM01(String Creator,String M0101,String M0102,String M0103,String M0104,String M0105,String M0106,String M0107,String M0108,String M0109,String ShortSpell);
 
+    Body uploadQRCode(String files, String Status, String MustId);
 }

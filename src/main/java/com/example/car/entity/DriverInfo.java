@@ -60,4 +60,7 @@ public class DriverInfo {
 
     @TableField(exist = false)
     private String carNumber;
+
+    @TableField(exist = false)
+    private String url;
 }

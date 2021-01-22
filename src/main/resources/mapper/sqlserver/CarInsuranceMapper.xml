@@ -4,10 +4,11 @@
     <insert id="insertInsurance">
    insert into car_insurance
    (jqxId,insuranceUrl,jqxTime,jqxCompany,carId,syxId,jqxMoney,syxTime,syxCompany,annualVerification,verification,examinant,
-   verificationTime,syxMoney,useRestrict,carRestrict)
+   verificationTime,syxMoney,useRestrict,carRestrict,verificationResult,verificationRemark,verificationAccessory)
     values
     (#{jqxId},#{insuranceUrl},#{jqxTime},#{jqxCompany},#{carId},#{syxId},#{jqxMoney},#{syxTime},#{syxCompany},#{annualVerification},
-    #{verification},#{examinant},#{verificationTime},#{syxMoney},#{useRestrict},#{carRestrict})
+    #{verification},#{examinant},#{verificationTime},#{syxMoney},#{useRestrict},#{carRestrict},#{verificationResult},#{verificationRemark}
+    ,#{verificationAccessory})
 </insert>
     <select id="selectInsuranceByCarId" resultType="com.example.car.entity.CarInsurance">
         SELECT
@@ -30,6 +31,7 @@
         <if test="verificationTime !=null and verificationTime !=''">
             and datediff( dd, i.verificationTime, #{verificationTime} ) <![CDATA[ = ]]> 0
         </if>
+        ORDER BY i.insuranceId DESC
     </select>
     <update id="updateInsuranceUrl">
         update car_insurance set  insuranceUrl = #{insuranceUrl} where insuranceId=#{insuranceId}
@@ -91,6 +93,29 @@
         <if test="useRestrict !=null and useRestrict!=''">
             , useRestrict = #{useRestrict}
         </if>
+        <if test="verificationAccessory !=null and verificationAccessory!=''">
+            , verificationAccessory = #{verificationAccessory}
+        </if>
+        <if test="verificationRemark !=null and verificationRemark!=''">
+            , verificationRemark = #{verificationRemark}
+        </if>
+        <if test="verificationResult !=null and verificationResult!=''">
+            , verificationResult = #{verificationResult}
+        </if>
+        <if test="verificationYear !=null and verificationYear!=''">
+            , verificationYear = #{verificationYear}
+        </if>
+        where insuranceId=#{insuranceId}
+    </update>
+
+    <update id="deleteVerification">
+        update car_insurance set
+        verification=''
+       ,verificationTime=''
+       ,verificationAccessory = ''
+       ,verificationRemark = ''
+       ,verificationResult = ''
+       ,verificationYear=''
         where insuranceId=#{insuranceId}
     </update>
 </mapper>

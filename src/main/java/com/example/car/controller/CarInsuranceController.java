@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+
 /**
  * 〈一句话功能简述〉<br>
  * 〈〉
@@ -52,13 +54,14 @@ public class CarInsuranceController {
                                 String jqxMoney, String syxId, String syxTime, String syxCompany,
                                 String annualVerification, String verification, String examinant,
                                 String verificationTime, String userid, String syxMoney, String useRestrict,
-                                String carRestrict) {
+                                String carRestrict, String verificationResult, String verificationRemark,
+                                String verificationAccessory) {
         if (StringUtils.isEmpty(files)) {
             return Body.newInstance(201, "请上传base64格式的图片");
         }
         return carInsuranceService.insertInsurance(files, carid, jqxId, jqxTime, jqxCompany, jqxMoney, syxId, syxTime
                 , syxCompany, annualVerification, verification, examinant, verificationTime, userid, syxMoney,
-                useRestrict, carRestrict);
+                useRestrict, carRestrict, verificationResult, verificationRemark, verificationAccessory);
     }
 
     /**
@@ -93,7 +96,7 @@ public class CarInsuranceController {
      * @ Date: 2021/1/13 9:12
      */
     @RequestMapping("selectInsuranceTime")
-    public Body selectInsuranceTime(String carId) {
+    public Body selectInsuranceTime(String carId) throws ParseException {
         return carInsuranceService.selectInsuranceTime(carId);
     }
 
@@ -122,6 +125,19 @@ public class CarInsuranceController {
     @RequestMapping("synInsurance")
     public Body synInsurance() {
         return this.carInsuranceService.synInsurance();
+    }
+
+
+    /**
+     * @ Description: 清空年审记录
+     * @ Param: [insuranceId]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/21 15:01
+     */
+    @RequestMapping("deleteVerification")
+    public Body deleteVerification(Integer insuranceId) {
+        return this.carInsuranceService.deleteVerification(insuranceId);
     }
 }
 

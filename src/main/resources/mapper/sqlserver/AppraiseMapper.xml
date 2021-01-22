@@ -37,4 +37,8 @@
     <delete id="deleteAppraise">
         delete  from Appraise  where id=#{id}
     </delete>
+    <select id="selectAppraiseAMG" resultType="java.lang.Double">
+    select AVG(appraise.appraiseScore) from Appraise where 1=1
+        and deptid=#{deptid}
+    </select>
 </mapper>

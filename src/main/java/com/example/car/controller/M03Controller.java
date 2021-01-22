@@ -63,11 +63,12 @@ public class M03Controller {
      */
     @RequestMapping("updateM03")
     public Body updateM03(String person, String quality, String dimensions, String scrapTime, String IssuanceDate,
-                          String totalQuality, String checkQuality, String tractionQuality, String M0305,String M0306,
-                          String fileNumber, String M0304, String RecId, String userid,String M0303,String DLicenseImage,
+                          String totalQuality, String checkQuality, String tractionQuality, String M0305, String M0306,
+                          String fileNumber, String M0304, String RecId, String userid, String M0303,
+                          String DLicenseImage,
                           String registration) {
         return m03Service.updateM03(person, quality, dimensions, scrapTime, IssuanceDate, totalQuality, checkQuality,
-                tractionQuality, M0305, M0306, fileNumber,M0304, RecId, userid,M0303,DLicenseImage,registration);
+                tractionQuality, M0305, M0306, fileNumber, M0304, RecId, userid, M0303, DLicenseImage, registration);
     }
 
     /**
@@ -78,8 +79,13 @@ public class M03Controller {
      * @ Date: 2020/12/28 10:42
      */
     @RequestMapping("updateStopTransport")
-    public Body updateStopTransport(String stopTransport, Integer stopNumber, String recId, String stopRemark) {
-        return m03Service.updateStopTransport(stopTransport, stopNumber, recId, stopRemark);
+    public Body updateStopTransport(String stopTransport, Integer stopNumber, String recId, String stopRemark,
+                                    String MustId) {
+        if (StringUtils.isEmpty(MustId)&&StringUtils.isEmpty(recId)){
+            return Body.BODY_451;
+        }
+        return m03Service.updateStopTransport(stopTransport, stopNumber, recId, stopRemark, MustId);
+
     }
 
     /**
@@ -90,8 +96,8 @@ public class M03Controller {
      * @ Date: 2021/1/7 9:44
      */
     @RequestMapping("selectM03Status")
-    public Body selectM03Status(String MustId,String name) {
-        return m03Service.selectM03Status(MustId,name);
+    public Body selectM03Status(String MustId, String name) {
+        return m03Service.selectM03Status(MustId, name);
     }
 
     /**
@@ -107,5 +113,20 @@ public class M03Controller {
             return Body.BODY_451;
         }
         return this.m03Service.insertM03(m03, terminalInfo);
+    }
+
+    /**
+     * @ Description: 删除车辆信息
+     * @ Param: [RecId]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/19 13:56
+     */
+    @RequestMapping("deleteM03")
+    public Body deleteM03(String RecId) {
+        if (StringUtils.isEmpty(RecId)) {
+            return Body.BODY_451;
+        }
+        return this.m03Service.deleteM03(RecId);
     }
 }

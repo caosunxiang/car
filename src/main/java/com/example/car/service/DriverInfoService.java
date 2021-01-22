@@ -3,7 +3,7 @@ package com.example.car.service;
 import com.example.car.common.utils.json.Body;
 
 public interface DriverInfoService {
-    Body selectDriverInfo(String driverId,String MustId,String name);
+    Body selectDriverInfo(String driverId,String MustId,String name, String driverCardNo);
 
     Body insertDriver(String driverName,String driverMobile,String driverCardNo,String driverReviewTime,String driverStatus,
                       String driverFile,String driverSex,String driverAddress,String files,String carId,String userid,String deptid);
@@ -18,4 +18,6 @@ public interface DriverInfoService {
 
     Body delectDriver(Integer driverId);
 
+
+    Body synDriver();
 }

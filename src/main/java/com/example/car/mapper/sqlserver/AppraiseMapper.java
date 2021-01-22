@@ -14,4 +14,6 @@ public interface AppraiseMapper {
     void updateAppraise(Appraise appraise);
 
     void deleteAppraise(@Param("id")Integer id);
+
+    Double selectAppraiseAMG(@Param("deptid") String deptid);
 }

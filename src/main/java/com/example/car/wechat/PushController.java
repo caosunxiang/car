@@ -65,8 +65,8 @@ public class PushController {
 
         WxMpService wxMpService = new WxMpServiceImpl();
         WxMpInRedisConfigStorage redisConfigStorage=new WxMpInRedisConfigStorage(redisConfigure.redisPoolFactory());
-        redisConfigStorage.setAppId("wx7513f9ef191ec705");
-        redisConfigStorage.setSecret("d33477fd7f24a92a7d7f56288c42048b");
+        redisConfigStorage.setAppId("wx1bff2ac95b861a25");
+        redisConfigStorage.setSecret("ce705f5ed49c031e25250c36b7b35939");
         wxMpService.setWxMpConfigStorage(redisConfigStorage);
         Integer count = deviceAlarmSeverityMapper.selectAlarmNowCount();
         count+=deviceAlarmMapper.selectAlarmNowCount(2);
@@ -86,11 +86,12 @@ public class PushController {
             //3,推送消息
             WxMpTemplateMessage templateMessage = WxMpTemplateMessage.builder()
                     .toUser(s)//要推送的用户openid
-                    .templateId("N4q58QS0L1fXXFpVvepluhlnNpqWkDGTmMyz5cB-Cjs")//模版id
+                    .templateId("rDaZtba4I9NW-Xb_grHjMK3qA55wfRPmtvAuuTvAJws")//模版id
                     .url("https://www.merbang.cn/MerSlag/report.html")//点击模版消息要访问的网址
                     .build();
             //4,如果是正式版发送模版消息，这里需要配置你的信息
-            templateMessage.addData(new WxMpTemplateData("first", "报警通知", "#000000"));
+            templateMessage.addData(new WxMpTemplateData(
+                    "first", "报警通知", "#000000"));
             templateMessage.addData(new WxMpTemplateData("performance", "当前系统有"+count+"条报警信息。", "#000000"));
             templateMessage.addData(new WxMpTemplateData("time", DateUtil.getDateFormat(new Date(),
                     DateUtil.FULL_TIME_SPLIT_PATTERN), "#000000"));

@@ -30,7 +30,14 @@
         </if>
     </select>
     <update id="updateStopTransport">
-        update M03 set stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndTime=#{stopEndTime},stopRemark=#{stopRemark}     where  RecId=#{recId}
+        update M03 set stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndTime=#{stopEndTime},stopRemark=#{stopRemark}     where
+        <if test=" recId!=null and recId!=''">
+            RecId=#{recId}
+        </if>
+        <if test="MustId !=null and MustId!=''">
+           MustId =#{MustId}
+
+        </if>
     </update>
 
     <select id="selectM03Status" resultType="com.example.car.common.utils.entity.CarStatus">
@@ -74,4 +81,7 @@
     <select id="selectPermitTruck" resultType="java.lang.String">
         SELECT PermitNo FROM View_PermitTruck WHERE datediff( dd, EndTime, GETDATE( ) ) <![CDATA[ <= ]]> 0 and CarNo=#{CarNo}
     </select>
+    <delete id="deleteM03">
+        delete  from M03 where RecId = #{RecId}
+    </delete>
 </mapper>

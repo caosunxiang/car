@@ -17,4 +17,5 @@ public interface CarInsuranceMapper {
 
     void updateInsurance(CarInsurance carInsurance);
 
+    void deleteVerification(@Param("insuranceId")Integer insuranceId);
 }
