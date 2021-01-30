@@ -51,6 +51,7 @@ public class CarInsurance {
     private String verificationRemark;
     private String verificationAccessory;
     private String verificationYear;
+    private String auditStatus;
     @TableField(exist = false)
     private String carNumber;
 }

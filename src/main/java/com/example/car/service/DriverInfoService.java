@@ -13,11 +13,13 @@ public interface DriverInfoService {
 
     Body selectDriverHistorical(String carId);
 
-    Body insertDrivers(String driverName,String driverMobile,String driverCardNo,String driverReviewTime,String driverStatus,
+    Body insertDrivers(String driverName,String driverMobile,String driverCardNo,String driverReviewTime,
                       String driverFile,String driverSex,String driverAddress,String carNumber,String userid,String deptid);
 
     Body delectDriver(Integer driverId);
 
 
     Body synDriver();
+
+    Body selectDriverCount(String driverStatus, String deptid);
 }

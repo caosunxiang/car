@@ -2,15 +2,56 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.car.mapper.sqlserver.M03Mapper">
     <update id="updateM03">
-   update M03 set person=#{person},quality=#{quality},dimensions=#{dimensions},scrapTime=#{scrapTime},
-   IssuanceDate=#{IssuanceDate},totalQuality=#{totalQuality},checkQuality=#{checkQuality},tractionQuality=#{tractionQuality},
-   fileNumber=#{fileNumber},M0304=#{M0304},M0303=#{M0303},M0305=#{M0305},M0306=#{M0306},registration=#{registration}
-   <if test="DLicenseImage!=null and DLicenseImage!=''">
-       ,DLicenseImage=#{DLicenseImage}
-   </if>
-   where
-   RecId=#{RecId}
-</update>
+        update M03 set
+        auditStatus=#{auditStatus}
+        <if test="person!=null and person!=''">
+            ,person=#{person}
+        </if>
+        <if test="quality!=null and quality!=''">
+            ,quality=#{quality}
+        </if>
+        <if test="dimensions!=null and dimensions!=''">
+            ,dimensions=#{dimensions}
+        </if>
+        <if test="scrapTime!=null and scrapTime!=''">
+            ,scrapTime=#{scrapTime}
+        </if>
+        <if test="IssuanceDate!=null and IssuanceDate!=''">
+            ,IssuanceDate=#{IssuanceDate}
+        </if>
+        <if test="totalQuality!=null and totalQuality!=''">
+            ,totalQuality=#{totalQuality}
+        </if>
+        <if test="checkQuality!=null and checkQuality!=''">
+            ,checkQuality=#{checkQuality}
+        </if>
+        <if test="tractionQuality!=null and tractionQuality!=''">
+            ,tractionQuality=#{tractionQuality}
+        </if>
+        <if test="fileNumber!=null and fileNumber!=''">
+            ,fileNumber=#{fileNumber}
+        </if>
+        <if test="M0304!=null and M0304!=''">
+            ,M0304=#{M0304}
+        </if>
+        <if test="M0303!=null and M0303!=''">
+            ,M0303=#{M0303}
+        </if>
+        <if test="M0305!=null and M0305!=''">
+            ,M0305=#{M0305}
+        </if>
+        <if test="M0306!=null and M0306!=''">
+            ,M0306=#{M0306}
+        </if>
+        <if test="registration!=null and registration!=''">
+            ,registration=#{registration}
+        </if>
+        <if test="DLicenseImage!=null and DLicenseImage!=''">
+            ,DLicenseImage=#{DLicenseImage}
+        </if>
+        where
+        RecId=#{RecId}
+    </update>
     <select id="selectM03" resultType="com.example.car.entity.M03">
         select * from M03 where
         1=1
@@ -30,12 +71,14 @@
         </if>
     </select>
     <update id="updateStopTransport">
-        update M03 set stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndTime=#{stopEndTime},stopRemark=#{stopRemark}     where
+        update M03 set
+        stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndTime=#{stopEndTime},stopRemark=#{stopRemark}
+        where
         <if test=" recId!=null and recId!=''">
             RecId=#{recId}
         </if>
         <if test="MustId !=null and MustId!=''">
-           MustId =#{MustId}
+            MustId =#{MustId}
 
         </if>
     </update>
@@ -84,4 +127,35 @@
     <delete id="deleteM03">
         delete  from M03 where RecId = #{RecId}
     </delete>
+    <update id="updateM0331">
+        update M03 set M0331=#{M0331}
+        where
+        RecId=#{RecId}
+    </update>
+    <select id="selectM03Count" resultType="java.lang.Integer">
+        SELECT COUNT
+        ( 1 )
+        FROM
+        m03
+        WHERE
+        1=1
+        <if test="auditStatus!=null and auditStatus!=''">
+            and auditStatus=#{auditStatus}
+        </if>
+        <if test="MustId!=null and MustId!=''">
+            and MustId=#{MustId}
+        </if>
+    </select>
+    <update id="updateM0329">
+        update M03 set M0329=#{M0329}
+        where
+        MustId=#{MustId}
+    </update>
+    <select id="selectTransport" resultType="com.example.car.entity.M03">
+select * from M03 where stopTransport='1' and datediff( dd, stopEndTime, GETDATE( ) ) <![CDATA[ >= ]]> 0
+    </select>
+    <update id="updateTransportAuto">
+update  M03 set stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndTime=#{stopEndTime}
+,stopRemark=#{stopRemark} where datediff( dd, stopEndTime, GETDATE( ) ) <![CDATA[ >= ]]> 0
+    </update>
 </mapper>

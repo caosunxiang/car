@@ -28,10 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -59,10 +56,14 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
     public Body insertInsurance(String files, String carid, String jqxId, String jqxTime, String jqxCompany,
                                 String jqxMoney, String syxId, String syxTime, String syxCompany,
                                 String annualVerification, String verification, String examinant,
-                                String verificationTime, String userid, String syxMoney,String useRestrict, String carRestrict,
-                                String verificationResult,String verificationRemark,String verificationAccessory) {
-        MultipartFile file = FileUploadUtils.base64Convert(files);
-        String url = FileUploadUtils.fileUpload(file, "img");
+                                String verificationTime, String userid, String syxMoney, String useRestrict,
+                                String carRestrict,
+                                String verificationResult, String verificationRemark, String verificationAccessory) {
+        String url = null;
+        if (!StringUtils.isEmpty(files)) {
+            MultipartFile file = FileUploadUtils.base64Convert(files);
+            url = FileUploadUtils.fileUpload(file, "img");
+        }
         CarInsurance carInsurance = new CarInsurance();
         carInsurance.setCarId(carid);
         carInsurance.setSyxMoney(syxMoney);
@@ -94,9 +95,21 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
     public Body selectInsuranceByCarId(String carid, String MustId, String verificationTime, String name) {
         List<CarInsurance> carInsurances = carInsuranceMapper.selectInsuranceByCarId(carid, MustId, verificationTime,
                 name);
-        List<CarInsurance>list=new ArrayList<>();
+        List<CarInsurance> list = new ArrayList<>();
         for (CarInsurance carInsurance : carInsurances) {
-            if (!StringUtils.isEmpty(carInsurance.getCarId())){
+            if (!StringUtils.isEmpty(carInsurance.getVerificationTime())) {
+                carInsurance.setVerificationTime(DateUtil.changeTime(carInsurance.getVerificationTime(),
+                        "yyyy年MM月dd日"));
+            }
+            if (!StringUtils.isEmpty(carInsurance.getJqxTime())) {
+                carInsurance.setJqxTime(DateUtil.changeTime(carInsurance.getJqxTime(),
+                        "yyyy年MM月dd日"));
+            }
+            if (!StringUtils.isEmpty(carInsurance.getSyxTime())) {
+                carInsurance.setSyxTime(DateUtil.changeTime(carInsurance.getSyxTime(),
+                        "yyyy年MM月dd日"));
+            }
+            if (!StringUtils.isEmpty(carInsurance.getCarId())) {
                 list.add(carInsurance);
             }
         }
@@ -118,15 +131,13 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
     }
 
     @Override
-    public Body selectInsuranceTime(String carId) throws ParseException {
+    public Body selectInsuranceTime(String carId) {
         List<String> list = this.carInsuranceMapper.selectInsuranceTime(carId);
-        List<String> strings=new ArrayList<>();
+        List<String> strings = new ArrayList<>();
         for (String s : list) {
-            if (!StringUtils.isEmpty(s)&&!s.equals("1")&&!s.equals("0")){
-                    System.out.println(s);
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    Date date = simpleDateFormat.parse(s);
-                    strings.add(DateUtil.getDateFormat(date,DateUtil.DATE_TIME_PATTERN));
+            if (!StringUtils.isEmpty(s) && !s.equals("1") && !s.equals("0")) {
+                System.out.println(s);
+                strings.add(DateUtil.changeTime(s,"yyyy年MM月dd日"));
             }
         }
         return Body.newInstance(strings);
@@ -134,7 +145,7 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
 
     @Override
     public Body updateInsurance(CarInsurance carInsurance) {
-        if (!StringUtils.isEmpty(carInsurance.getVerificationAccessory())){
+        if (!StringUtils.isEmpty(carInsurance.getVerificationAccessory())) {
             MultipartFile file = FileUploadUtils.base64Convert(carInsurance.getVerificationAccessory());
             String url = FileUploadUtils.fileUpload(file, "img");
             carInsurance.setVerificationAccessory(url);
@@ -150,7 +161,7 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
             CarInsurance carInsurance = new CarInsurance(null, null, m03.getM0315(), m03.getM0332(), m03.getM0333(),
                     null, m03.getM0319(), m03.getM0317(), m03.getM0318(), m03.getM0316(), m03.getM0307(),
                     m03.getM0330(), m03.getM0329(), m03.getM0328(), m03.getRecId(), m03.getM0313(), m03.getM0314(),
-                    null,null,null,null,null);
+                    null, null, null, null, "0",null);
             this.carInsuranceMapper.insertInsurance(carInsurance);
         }
         return Body.BODY_200;
@@ -160,6 +171,11 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
     public Body deleteVerification(Integer insuranceId) {
         this.carInsuranceMapper.deleteVerification(insuranceId);
         return Body.BODY_200;
+    }
+
+    @Override
+    public Body selectInsuranceCount(String auditStatus, String MustId) {
+        return Body.newInstance(this.carInsuranceMapper.selectInsuranceCount(auditStatus,MustId));
     }
 
 }

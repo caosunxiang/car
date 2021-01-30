@@ -965,7 +965,10 @@ public class APIManage {
      * @ Date: 2020/12/2 17:20
      */
     @RequestMapping("uploadImg")
-    public Body uploadImg(String files, String carNo,String carid,String userid) {
+    public Body uploadImg(String files, String carNo, String carid, String userid) {
+        if (StringUtils.isEmpty(files)) {
+            return Body.newInstance(201, "请上传图片");
+        }
         MultipartFile file = FileUploadUtils.base64Convert(files);
         String url = FileUploadUtils.fileUpload(file, "img");
         muckMapper.uploadImg(url, carNo);

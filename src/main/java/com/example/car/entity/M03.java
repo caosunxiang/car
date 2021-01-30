@@ -144,4 +144,6 @@ public class M03 {
     private String fileNumber;
 
     private String registration;
+
+    private String auditStatus;
 }

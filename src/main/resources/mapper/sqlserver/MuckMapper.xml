@@ -176,7 +176,11 @@
         ISNULL(t.tractionQuality,'')tractionQuality,
         ISNULL( t.stopTransport, '' ) stopTransport,
         ISNULL(t.stopEndTime,'')stopEndTime,
-        ISNULL(t.DLicenseImage,'')DLicenseImage
+        ISNULL(t.DLicenseImage,'')DLicenseImage,
+        ISNULL(t.carRestrict,'')carRestrict,
+        ISNULL(t.useRestrict,'')useRestrict,
+        ISNULL(t.examinant,'')examinant,
+        ISNULL(t.verificationTime,'')verificationTime
         FROM
         View_TruckInfo t
         WHERE
@@ -717,13 +721,19 @@ select * from UserRole where UserId = #{userid} and RoleId = 1;
         update M07  set valid=#{valid}  where   RecId=#{RecId}
     </update>
     <select id="selectUserRole" resultType="java.util.Map">
-        select * from UserRole where
-        1=1
+        SELECT
+        userrole.*,
+        users.fullname
+        FROM
+        UserRole
+        LEFT JOIN users ON users.userid= userrole.userid
+        WHERE
+        1 =1
         <if test="UserId !=null and UserId!=''">
-            and UserId = #{UserId}
+            and userrole.UserId = #{UserId}
         </if>
         <if test="RoleId!=null and RoleId!=''">
-            and RoleId = #{RoleId}
+            and userrole.RoleId = #{RoleId}
         </if>
 
     </select>
@@ -756,9 +766,9 @@ where creator = #{userid} AND STATE = 4
     </select>
 
     <insert id="insertUser">
-        insert into users (UserId,IsSuspend,UserName,UserPwd)
+        insert into users (UserId,IsSuspend,UserName,UserPwd,FullName)
          values
-          (#{UserId},0,#{UserName},#{UserPwd})
+          (#{UserId},0,#{UserName},#{UserPwd},#{name})
     </insert>
 
     <select id="selectUserId" resultType="java.lang.Integer">
@@ -768,4 +778,8 @@ select MAX(userid) from users
     <insert id="insertUserRole">
         insert into UserRole values (#{userid},4)
     </insert>
+
+    <select id="selectUserName" resultType="java.lang.Integer">
+select count(1) from users where UserName=#{UserName}
+    </select>
 </mapper>

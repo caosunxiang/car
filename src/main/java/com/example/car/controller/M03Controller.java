@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+
 /**
  * 〈一句话功能简述〉<br>
  * 〈〉
@@ -49,7 +51,7 @@ public class M03Controller {
      * @ Date: 2020/12/23 14:13
      */
     @RequestMapping("selectM03")
-    public Body selectM03(String carNumber, String recId, String phone, String MustId) {
+    public Body selectM03(String carNumber, String recId, String phone, String MustId) throws ParseException {
         return m03Service.selectM03(carNumber, recId, phone, MustId);
     }
 
@@ -62,13 +64,8 @@ public class M03Controller {
      * @ Date: 2020/12/23 14:14
      */
     @RequestMapping("updateM03")
-    public Body updateM03(String person, String quality, String dimensions, String scrapTime, String IssuanceDate,
-                          String totalQuality, String checkQuality, String tractionQuality, String M0305, String M0306,
-                          String fileNumber, String M0304, String RecId, String userid, String M0303,
-                          String DLicenseImage,
-                          String registration) {
-        return m03Service.updateM03(person, quality, dimensions, scrapTime, IssuanceDate, totalQuality, checkQuality,
-                tractionQuality, M0305, M0306, fileNumber, M0304, RecId, userid, M0303, DLicenseImage, registration);
+    public Body updateM03(M03 m03, String userid) {
+        return m03Service.updateM03(m03, userid);
     }
 
     /**
@@ -80,11 +77,11 @@ public class M03Controller {
      */
     @RequestMapping("updateStopTransport")
     public Body updateStopTransport(String stopTransport, Integer stopNumber, String recId, String stopRemark,
-                                    String MustId) {
-        if (StringUtils.isEmpty(MustId)&&StringUtils.isEmpty(recId)){
+                                    String MustId, String userid) {
+        if (StringUtils.isEmpty(MustId) && StringUtils.isEmpty(recId)) {
             return Body.BODY_451;
         }
-        return m03Service.updateStopTransport(stopTransport, stopNumber, recId, stopRemark, MustId);
+        return m03Service.updateStopTransport(stopTransport, stopNumber, recId, stopRemark, MustId, userid);
 
     }
 
@@ -96,7 +93,7 @@ public class M03Controller {
      * @ Date: 2021/1/7 9:44
      */
     @RequestMapping("selectM03Status")
-    public Body selectM03Status(String MustId, String name) {
+    public Body selectM03Status(String MustId, String name) throws ParseException {
         return m03Service.selectM03Status(MustId, name);
     }
 
@@ -128,5 +125,17 @@ public class M03Controller {
             return Body.BODY_451;
         }
         return this.m03Service.deleteM03(RecId);
+    }
+
+    /**
+     * @ Description: 查找不同状态车辆的条数
+     * @ Param: [auditStatus, MustId]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/27 18:16
+     */
+    @RequestMapping("selectM03Count")
+    public Body selectM03Count(String auditStatus, String MustId) {
+        return this.m03Service.selectM03Count(auditStatus, MustId);
     }
 }

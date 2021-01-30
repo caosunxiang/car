@@ -21,4 +21,6 @@ public interface DriverInfoMapper {
     void delectDriver(@Param("driverId") Integer driverId);
 
     void delectDriverHistorical(@Param("driverId") Integer driverId);
+
+    Integer selectDriverCount(@Param("driverStatus")String driverStatus,@Param("deptid") String deptid);
 }

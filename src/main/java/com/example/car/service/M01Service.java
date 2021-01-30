@@ -13,6 +13,8 @@ package com.example.car.service;
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.M01;
 
+import java.text.ParseException;
+
 /**
  * 〈一句话功能简述〉<br>
  * 〈〉
@@ -22,13 +24,15 @@ import com.example.car.entity.M01;
  * @since 1.0.0
  */
 public interface M01Service {
-    Body selectM01Details(String MustId, String name, String phone);
+    Body selectM01Details(String MustId, String name, String phone) throws ParseException;
 
     Body updateM01(String Status,String ShortSpell, String M0109, String M0104, String M0108, String M0105, String M0107, String M0106,
                    String M0102, String M0103, String M0101, String representative, String registeredCapital,
-                   String dateEstablishment, String address, String MustId,String QRCode,String represenPhone);
+                   String dateEstablishment, String address, String MustId,String QRCode,String businessScope,String license);
 
     Body insertM01(String Creator,String M0101,String M0102,String M0103,String M0104,String M0105,String M0106,String M0107,String M0108,String M0109,String ShortSpell);
 
     Body uploadQRCode(String files, String Status, String MustId);
+
+    Body M01Check(String MustId,String Status);
 }

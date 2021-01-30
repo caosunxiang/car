@@ -12,7 +12,7 @@ public interface CarInsuranceService {
                          String userid,String syxMoney,String useRestrict, String carRestrict,
                          String verificationResult,String verificationRemark,String verificationAccessory);
 
-    Body selectInsuranceByCarId(String carid,String MustId,String verificationTime,String name);
+    Body selectInsuranceByCarId(String carid,String MustId,String verificationTime,String name) throws ParseException;
 
     Body updateInsuranceUrl(String files, Integer insuranceId,String carid,String userid);
 
@@ -23,4 +23,6 @@ public interface CarInsuranceService {
     Body synInsurance();
 
     Body deleteVerification(Integer insuranceId);
+
+    Body selectInsuranceCount(String auditStatus,String MustId);
 }

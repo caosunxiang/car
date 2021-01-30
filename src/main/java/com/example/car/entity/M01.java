@@ -47,6 +47,8 @@ public class M01 {
     private String dateEstablishment;
     private String address;
     private String represenPhone;
+    private String businessScope;
+    private String license;
     @TableField(exist = false)
     private Double score;
 }

@@ -66,6 +66,12 @@
         <if test="represenPhone!=null and represenPhone!=''">
             ,represenPhone=#{represenPhone}
         </if>
+        <if test="license!=null and license!=''">
+            ,license=#{license}
+        </if>
+        <if test="businessScope!=null and businessScope!=''">
+            ,businessScope=#{businessScope}
+        </if>
         where MustId=#{MustId}
     </update>
 

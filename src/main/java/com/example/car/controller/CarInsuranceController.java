@@ -56,9 +56,6 @@ public class CarInsuranceController {
                                 String verificationTime, String userid, String syxMoney, String useRestrict,
                                 String carRestrict, String verificationResult, String verificationRemark,
                                 String verificationAccessory) {
-        if (StringUtils.isEmpty(files)) {
-            return Body.newInstance(201, "请上传base64格式的图片");
-        }
         return carInsuranceService.insertInsurance(files, carid, jqxId, jqxTime, jqxCompany, jqxMoney, syxId, syxTime
                 , syxCompany, annualVerification, verification, examinant, verificationTime, userid, syxMoney,
                 useRestrict, carRestrict, verificationResult, verificationRemark, verificationAccessory);
@@ -72,7 +69,7 @@ public class CarInsuranceController {
      * @ Date: 2020/12/16 10:10
      */
     @RequestMapping("selectInsuranceByCarId")
-    public Body selectInsuranceByCarId(String carid, String MustId, String verificationTime, String name) {
+    public Body selectInsuranceByCarId(String carid, String MustId, String verificationTime, String name) throws ParseException {
         return carInsuranceService.selectInsuranceByCarId(carid, MustId, verificationTime, name);
     }
 
@@ -138,6 +135,18 @@ public class CarInsuranceController {
     @RequestMapping("deleteVerification")
     public Body deleteVerification(Integer insuranceId) {
         return this.carInsuranceService.deleteVerification(insuranceId);
+    }
+
+    /** 
+    * @ Description: 查找不同状态的保险信息
+    * @ Param: [auditStatus, MustId]
+    * @ return: com.example.car.common.utils.json.Body
+    * @ Author: 冷酷的苹果
+    * @ Date: 2021/1/27 18:15
+    */
+    @RequestMapping("selectInsuranceCount")
+    public Body selectInsuranceCount(String auditStatus, String MustId) {
+return this.carInsuranceService.selectInsuranceCount(auditStatus,MustId);
     }
 }
 

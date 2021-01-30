@@ -48,7 +48,7 @@ public class DriverInfoController {
      */
     @RequestMapping("selectDriverInfo")
     public Body selectDriverInfo(String driverId, String MustId, String name, String driverCardNo) {
-        return driverInfoService.selectDriverInfo(driverId, MustId, name,driverCardNo);
+        return driverInfoService.selectDriverInfo(driverId, MustId, name, driverCardNo);
     }
 
     /**
@@ -106,33 +106,45 @@ public class DriverInfoController {
      */
     @RequestMapping("insertDrivers")
     public Body insertDrivers(String driverName, String driverMobile, String driverCardNo, String driverReviewTime,
-                              String driverStatus, String driverFile, String driverSex, String driverAddress,
+                              String driverFile, String driverSex, String driverAddress,
                               String carNumber, String userid, String deptid) {
-        return driverInfoService.insertDrivers(driverName, driverMobile, driverCardNo, driverReviewTime, driverStatus,
+        return driverInfoService.insertDrivers(driverName, driverMobile, driverCardNo, driverReviewTime,
                 driverFile, driverSex, driverAddress, carNumber, userid, deptid);
     }
 
-    /** 
-    * @ Description: 删除驾驶员
-    * @ Param: [driverId]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2021/1/15 14:04
-    */
+    /**
+     * @ Description: 删除驾驶员
+     * @ Param: [driverId]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/15 14:04
+     */
     @RequestMapping("delectDriver")
     public Body delectDriver(Integer driverId) {
         return driverInfoService.delectDriver(driverId);
     }
 
-    /** 
-    * @ Description: 同步驾驶员信息
-    * @ Param: []
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2021/1/18 16:48
-    */
+    /**
+     * @ Description: 同步驾驶员信息
+     * @ Param: []
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/18 16:48
+     */
     @RequestMapping("synDriver")
     public Body synDriver() {
         return driverInfoService.synDriver();
+    }
+
+    /**
+     * @ Description: 查找驾驶员条数
+     * @ Param: [driverStatus, deptid]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/27 18:15
+     */
+    @RequestMapping("selectDriverCount")
+    public Body selectDriverCount(String driverStatus, String deptid) {
+        return this.driverInfoService.selectDriverCount(driverStatus, deptid);
     }
 }

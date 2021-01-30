@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 〈一句话功能简述〉<br> 
+ * 〈一句话功能简述〉<br>
  * 〈〉
  *
  * @author 冷酷的苹果
@@ -42,7 +42,7 @@ import java.util.List;
 @Transactional(transactionManager = "otherTransactionManager", propagation = Propagation.SUPPORTS, readOnly = true)
 public class TerminalInfoServiceImpl implements TerminalInfoService {
 
-    private  final TerminalInfoMapper terminalInfoMapper;
+    private final TerminalInfoMapper terminalInfoMapper;
 
     private final DeviceInfoMapper deviceInfoMapper;
 
@@ -52,9 +52,9 @@ public class TerminalInfoServiceImpl implements TerminalInfoService {
 
     @Override
     public Body insertTerminalInfo() {
-        List<DeviceInfo> deviceInfos=deviceInfoMapper.selectDeviceInfo();
+        List<DeviceInfo> deviceInfos = deviceInfoMapper.selectDeviceInfo();
         for (DeviceInfo deviceInfo : deviceInfos) {
-            TerminalInfo terminalInfo=new TerminalInfo();
+            TerminalInfo terminalInfo = new TerminalInfo();
             terminalInfo.setCarNumber(deviceInfo.getCarnumber());
             terminalInfo.setCreateDate(deviceInfo.getCreate_date());
             terminalInfo.setCreateUser(deviceInfo.getCreate_user());
@@ -65,23 +65,24 @@ public class TerminalInfoServiceImpl implements TerminalInfoService {
             terminalInfo.setModifyUser(deviceInfo.getModify_user());
             terminalInfo.setTerminal(deviceInfo.getTerminal());
             terminalInfo.setTerminalType(deviceInfo.getDevicetype());
-            List<M03> m03=m03Mapper.selectM03(deviceInfo.getCarnumber(),null,null,null);
-            if (m03.size()>0){
+            List<M03> m03 = m03Mapper.selectM03(deviceInfo.getCarnumber(), null, null, null);
+            if (m03.size() > 0) {
                 terminalInfo.setCarId(m03.get(0).getRecId());
                 terminalInfo.setDeptid(m03.get(0).getMustId());
             }
-               terminalInfoMapper.insertTerminal(terminalInfo);
+            terminalInfoMapper.insertTerminal(terminalInfo);
         }
         return Body.BODY_200;
     }
 
     @Override
-    public Body selectTerminal(String deptid,String carId,String carNumber) {
-        List<TerminalInfo> terminalInfos=terminalInfoMapper.selectTerminal(carNumber,carId,deptid);
-        if (terminalInfos.size()>0){
+    public Body selectTerminal(String deptid, String carId, String carNumber) {
+        List<TerminalInfo> terminalInfos = terminalInfoMapper.selectTerminal(carNumber, carId, deptid);
+        if (terminalInfos.size() > 0) {
             for (TerminalInfo terminalInfo : terminalInfos) {
-                DeviceLasposition deviceLasposition=deviceLaspositionMapper.selectLaspositionByCarNo(terminalInfo.getCarNumber());
-                terminalInfo.setStatus(deviceLasposition==null?"":deviceLasposition.getCarstatus().toString());
+                DeviceLasposition deviceLasposition =
+                        deviceLaspositionMapper.selectLaspositionByCarNo(terminalInfo.getCarNumber());
+                terminalInfo.setStatus(deviceLasposition == null ? "10" : deviceLasposition.getCarstatus().toString());
             }
         }
         return Body.newInstance(terminalInfos);
@@ -90,14 +91,14 @@ public class TerminalInfoServiceImpl implements TerminalInfoService {
     @Override
     public Body insertTerminalInfo(String terminal, String terminalType, String createUser, String carId,
                                    String deptid, String installstatus, String installtime, String carNumber) {
-        TerminalInfo terminalInfo=new TerminalInfo();
+        TerminalInfo terminalInfo = new TerminalInfo();
         terminalInfo.setCarNumber(carNumber);
-        terminalInfo.setCreateDate(DateUtil.getDateFormat(new Date(),DateUtil.FULL_TIME_SPLIT_PATTERN));
+        terminalInfo.setCreateDate(DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN));
         terminalInfo.setCreateUser(createUser);
         terminalInfo.setInstallstatus(installstatus);
         terminalInfo.setInstalltime(installtime);
         terminalInfo.setIsDelete("0");
-        terminalInfo.setModifyDate(DateUtil.getDateFormat(new Date(),DateUtil.FULL_TIME_SPLIT_PATTERN));
+        terminalInfo.setModifyDate(DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN));
         terminalInfo.setModifyUser(createUser);
         terminalInfo.setCarId(carId);
         terminalInfo.setDeptid(deptid);
@@ -109,16 +110,20 @@ public class TerminalInfoServiceImpl implements TerminalInfoService {
 
     @Override
     public Body updateTerminal(String modifyUser, String isDelete, String terminal, String terminalType,
-                               String carNumber, Integer terminalId) {
-        TerminalInfo terminalInfo=new TerminalInfo();
+                               String carNumber, Integer terminalId, String carid) {
+        TerminalInfo terminalInfo = new TerminalInfo();
         terminalInfo.setTerminalType(terminalType);
         terminalInfo.setTerminal(terminal);
         terminalInfo.setModifyUser(modifyUser);
         terminalInfo.setIsDelete(isDelete);
         terminalInfo.setCarNumber(carNumber);
-        terminalInfo.setModifyDate(DateUtil.getDateFormat(new Date(),DateUtil.FULL_TIME_SPLIT_PATTERN));
+        terminalInfo.setModifyDate(DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN));
         terminalInfo.setTerminalId(terminalId);
         terminalInfoMapper.updateTerminal(terminalInfo);
+        M03 m03 = new M03();
+        m03.setRecId(carid);
+        m03.setM0331(carNumber);
+        m03Mapper.updateM0331(m03);
         return Body.BODY_200;
     }
 

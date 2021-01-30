@@ -112,9 +112,12 @@ public interface MuckMapper {
 
     Integer selectOverApply(@Param("userid")String userid);
 
-    Integer insertUser(@Param("UserId") Integer UserId,@Param("UserName")String UserName,@Param("UserPwd")String UserPwd);
+    Integer insertUser(@Param("UserId") Integer UserId,@Param("UserName")String UserName,@Param("UserPwd")String UserPwd,
+                       @Param("name")String name);
 
     Integer selectUserId();
 
     void insertUserRole(@Param("userid") Integer UserId);
+
+    Integer selectUserName(@Param("UserName")String UserName);
 }

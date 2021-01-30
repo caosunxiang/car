@@ -24,4 +24,15 @@ public interface M03Mapper {
     List<String>selectPermitTruck(@Param("CarNo")String CarNo);
 
     Integer deleteM03(@Param("RecId") String RecId);
+
+    void updateM0331(M03 m03);
+
+    Integer selectM03Count(@Param("auditStatus")String auditStatus,@Param("MustId")String MustId);
+
+    void updateM0329(M03 m03);
+
+    List<M03> selectTransport();
+
+    void updateTransportAuto(@Param("stopTransport") String stopTransport, @Param("stopNumber") Integer stopNumber,
+                             @Param("stopEndTime")String stopEndTime);
 }

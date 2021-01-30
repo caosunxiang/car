@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.car.mapper.sqlserver.DriverInfoMapper">
     <insert id="insertDriver" parameterType="com.example.car.entity.DriverInfo"  useGeneratedKeys="true" keyProperty="driverId">
-       insert into driver_info (driverName,driverMobile,driverCardNo,driverReviewTime,driverStatus,driverPhotoUrl,driverSex,
+       insert into driver_info (driverName,driverMobile,driverCardNo,driverReviewTime,driverPhotoUrl,driverSex,
        driverAddress,licenseUrl,carId,deptid)
         values
-         (#{driverName},#{driverMobile},#{driverCardNo},#{driverReviewTime},#{driverStatus},#{driverPhotoUrl},#{driverSex},
+         (#{driverName},#{driverMobile},#{driverCardNo},#{driverReviewTime},#{driverPhotoUrl},#{driverSex},
        #{driverAddress},#{licenseUrl},#{carId},#{deptid})
    </insert>
     <select id="selectDriverInfo" resultType="com.example.car.entity.DriverInfo">
@@ -83,4 +83,18 @@ delete  from driver_info where driverId=#{driverId}
     <delete id="delectDriverHistorical">
 delete  from driver_historical where driverId=#{driverId}
     </delete>
+    <select id="selectDriverCount" resultType="java.lang.Integer">
+        SELECT COUNT
+        ( 1 )
+        FROM
+        driver_info
+        WHERE
+        1=1
+        <if test="driverStatus!=null and driverStatus!=''">
+            and driverStatus=#{driverStatus}
+        </if>
+        <if test="deptid!=null and deptid!=''">
+            and deptid=#{deptid}
+        </if>
+    </select>
 </mapper>

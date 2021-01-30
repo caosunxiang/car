@@ -101,8 +101,8 @@ public class DriverInfoServiceImpl implements DriverInfoService {
             MultipartFile file1 = FileUploadUtils.base64Convert(driverFile);
             url1 = FileUploadUtils.fileUpload(file1, "img");
         }
-        DriverInfo driverInfo = new DriverInfo(driverId, driverName, driverMobile, driverCardNo, driverReviewTime,
-                driverStatus, url1, driverSex, driverAddress, url, carId, deptid, null, null, null,null);
+        DriverInfo driverInfo = new DriverInfo(driverId, driverName, driverMobile, driverCardNo, driverReviewTime,null,
+                url1, driverSex, driverAddress, url, carId, deptid, null, null, null,null);
         driverInfoMapper.updateDriver(driverInfo);
         OperationLog operationLog = new OperationLog(null, carId, "修改", "修改驾驶员信息", DateUtil.getDateFormat(new Date(),
                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
@@ -118,7 +118,7 @@ public class DriverInfoServiceImpl implements DriverInfoService {
 
     @Override
     public Body insertDrivers(String driverName, String driverMobile, String driverCardNo, String driverReviewTime,
-                              String driverStatus, String driverFile, String driverSex, String driverAddress,
+                               String driverFile, String driverSex, String driverAddress,
                               String carNumber, String userid, String deptid) {
         String url = null;
         if (!StringUtils.isEmpty(driverFile)) {
@@ -132,15 +132,15 @@ public class DriverInfoServiceImpl implements DriverInfoService {
             }
             if (m03Mapper.selectM03(s, null, null, null).size() > 0) {
                 DriverInfo driverInfo = new DriverInfo(null, driverName, driverMobile, driverCardNo, driverReviewTime,
-                        driverStatus, null, driverSex, driverAddress, url, m03Mapper.selectM03(s, null, null,
-                        null).get(0).getRecId(), deptid, null, null, null,null);
+                        null, null, driverSex, driverAddress, url, m03Mapper.selectM03(s, null, null,
+                        deptid).get(0).getRecId(), deptid, null, null, null,null);
                 driverInfoMapper.insertDriver(driverInfo);
                 DriverHistorical driverHistorical = new DriverHistorical(null, m03Mapper.selectM03(s, null, null,
-                        null).get(0).getRecId(), driverInfo.getDriverId().toString(),
+                        deptid).get(0).getRecId(), driverInfo.getDriverId().toString(),
                         DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN), null);
                 driverInfoMapper.insertDriverHistorical(driverHistorical);
                 OperationLog operationLog = new OperationLog(null,
-                        m03Mapper.selectM03(s, null, null, null).get(0).getRecId(), "添加", "添加驾驶员",
+                        m03Mapper.selectM03(s, null, null, deptid).get(0).getRecId(), "添加", "添加驾驶员",
                         DateUtil.getDateFormat(new Date(),
                                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
                 operationLogMapper.insertLog(operationLog);
@@ -170,6 +170,11 @@ public class DriverInfoServiceImpl implements DriverInfoService {
             driverInfoMapper.insertDriverHistorical(driverHistorical);
         }
         return Body.BODY_200;
+    }
+
+    @Override
+    public Body selectDriverCount(String driverStatus, String deptid) {
+        return Body.newInstance(driverInfoMapper.selectDriverCount(driverStatus,deptid));
     }
 }
 

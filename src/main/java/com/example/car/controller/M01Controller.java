@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+
 /**
  * 〈一句话功能简述〉<br>
  * 〈〉
@@ -45,7 +47,7 @@ public class M01Controller {
      * @ Date: 2020/12/30 17:22
      */
     @RequestMapping("selectM01Details")
-    public Body selectM01Details(String MustId, String name, String phone) {
+    public Body selectM01Details(String MustId, String name, String phone) throws ParseException {
         return m01Service.selectM01Details(MustId, name, phone);
     }
 
@@ -61,40 +63,56 @@ public class M01Controller {
     public Body updateM01(String Status, String ShortSpell, String M0109, String M0104, String M0108, String M0105,
                           String M0107, String M0106, String M0102, String M0103, String M0101, String representative,
                           String registeredCapital, String dateEstablishment, String address, String MustId,
-                          String QRCode,String represenPhone) {
+                          String QRCode, String businessScope, String license) {
         if (StringUtils.isEmpty(Status)) {
             return Body.newInstance(201, "Status字段不能为空");
         }
         return m01Service.updateM01(Status, ShortSpell, M0109, M0104, M0108, M0105, M0107, M0106, M0102, M0103, M0101
-                , representative, registeredCapital, dateEstablishment, address, MustId, QRCode,represenPhone);
+                , representative, registeredCapital, dateEstablishment, address, MustId, QRCode, businessScope,
+                license);
     }
 
-    
-    /** 
-    * @ Description: 添加公司详情
-    * @ Param: [Creator, M0101, M0102, M0103, M0104, M0105, M0106, M0107, M0108, M0109, ShortSpell]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2020/12/31 10:07
-    */
+
+    /**
+     * @ Description: 添加公司详情
+     * @ Param: [Creator, M0101, M0102, M0103, M0104, M0105, M0106, M0107, M0108, M0109, ShortSpell]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/12/31 10:07
+     */
     @RequestMapping("insertM01")
     public Body insertM01(String Creator, String M0101, String M0102, String M0103, String M0104, String M0105,
                           String M0106, String M0107, String M0108, String M0109, String ShortSpell) {
         return m01Service.insertM01(Creator, M0101, M0102, M0103, M0104, M0105, M0106, M0107, M0108, M0109, ShortSpell);
     }
 
-    /** 
-    * @ Description: 上传二维码
-    * @ Param: [files, Status, MustId]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2021/1/19 14:41
-    */
+    /**
+     * @ Description: 上传二维码
+     * @ Param: [files, Status, MustId]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/19 14:41
+     */
     @RequestMapping("uploadQRCode")
     public Body uploadQRCode(String files, String Status, String MustId) {
-        if (StringUtils.isEmpty(files)){
+        if (StringUtils.isEmpty(files)) {
             return Body.BODY_451;
         }
-        return  this.m01Service.uploadQRCode(files, Status, MustId);
+        return this.m01Service.uploadQRCode(files, Status, MustId);
+    }
+
+    /**
+     * @ Description: 管理员审核
+     * @ Param: [MustId, Status]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/28 15:12
+     */
+    @RequestMapping("M01Check")
+    public Body M01Check(String MustId, String Status) {
+        if (StringUtils.isEmpty(MustId) && StringUtils.isEmpty(Status)) {
+            return Body.BODY_451;
+        }
+        return this.m01Service.M01Check(MustId, Status);
     }
 }

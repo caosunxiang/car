@@ -51,6 +51,9 @@
         <if test="annualVerification!=null and annualVerification!=''">
             , annualVerification=#{annualVerification}
         </if>
+        <if test="auditStatus!=null and auditStatus!=''">
+            , auditStatus=#{auditStatus}
+        </if>
         <if test="verification!=null and verification!=''">
             , verification=#{verification}
         </if>
@@ -118,4 +121,19 @@
        ,verificationYear=''
         where insuranceId=#{insuranceId}
     </update>
+    <select id="selectInsuranceCount" resultType="java.lang.Integer">
+        SELECT COUNT
+        ( 1 )
+        FROM
+        car_insurance
+        LEFT JOIN m03 ON car_insurance.carId= m03.recid
+        WHERE
+        1=1
+        <if test="auditStatus!=null and auditStatus!=''">
+            and car_insurance.auditStatus=#{auditStatus}
+        </if>
+        <if test="MustId!=null and MustId!=''">
+            and m03.MustId=#{MustId}
+        </if>
+    </select>
 </mapper>

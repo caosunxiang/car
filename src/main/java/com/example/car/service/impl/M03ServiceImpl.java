@@ -58,53 +58,67 @@ public class M03ServiceImpl implements M03Service {
     @Override
     public Body selectM03(String carNumber, String recId, String phone, String MustId) {
         List<M03> m03s = m03Mapper.selectM03(carNumber, recId, phone, MustId);
+        for (M03 m03 : m03s) {
+            if (!StringUtils.isEmpty(m03.getIssuanceDate())) {
+                m03.setIssuanceDate(DateUtil.changeTime(m03.getIssuanceDate(), "yyyy年MM月dd日"));
+            }
+            if (!StringUtils.isEmpty(m03.getScrapTime())) {
+                m03.setScrapTime(DateUtil.changeTime(m03.getScrapTime(), "yyyy年MM月dd日"));
+            }
+            if (!StringUtils.isEmpty(m03.getRegistration())) {
+                m03.setRegistration(DateUtil.changeTime(m03.getRegistration(), "yyyy年MM月dd日"));
+            }
+        }
         return Body.newInstance(m03s);
     }
 
     @Override
-    public Body updateM03(String person, String quality, String dimensions, String scrapTime, String IssuanceDate,
-                          String totalQuality, String checkQuality, String tractionQuality, String M0305,String M0306,
-                          String fileNumber, String M0304, String RecId, String userid,String M0303,String DLicenseImage,
-                          String registration) {
-        M03 m03 = new M03();
-        m03.setPerson(person);
-        m03.setQuality(quality);
-        m03.setDimensions(dimensions);
-        m03.setScrapTime(scrapTime);
-        m03.setIssuanceDate(IssuanceDate);
-        m03.setTotalQuality(totalQuality);
-        m03.setCheckQuality(checkQuality);
-        m03.setTractionQuality(tractionQuality);
-        m03.setRegistration(registration);
-        m03.setM0305(M0305);
-        m03.setM0306(M0306);
-        m03.setM0303(M0303);
-        m03.setFileNumber(fileNumber);
-        m03.setRecId(RecId);
-        m03.setDLicenseImage(DLicenseImage);
-        m03.setM0304(M0304);
+    public Body updateM03(M03 m03, String userid) {
         m03Mapper.updateM03(m03);
-        OperationLog operationLog = new OperationLog(null, RecId, "修改", "修改车辆信息", DateUtil.getDateFormat(new Date(),
+        OperationLog operationLog = new OperationLog(null, m03.getRecId(), "修改", "修改车辆信息", DateUtil.getDateFormat(new Date(),
                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
         operationLogMapper.insertLog(operationLog);
         return Body.BODY_200;
     }
 
     @Override
-    public Body updateStopTransport(String stopTransport, Integer stopNumber, String recId,String stopRemark,String MustId) {
+    public Body updateStopTransport(String stopTransport, Integer stopNumber, String recId, String stopRemark,
+                                    String MustId, String userid) {
         m03Mapper.updateStopTransport(stopTransport, stopNumber,
-                DateUtil.severalDaysAgo(DateUtil.FULL_TIME_SPLIT_PATTERN, -stopNumber), recId,stopRemark,MustId);
+                DateUtil.severalDaysAgo(DateUtil.FULL_TIME_SPLIT_PATTERN, -stopNumber), recId, stopRemark, MustId);
+        if (StringUtils.isEmpty(MustId)) {
+            OperationLog operationLog = new OperationLog(null, recId, "停运", "禁止车辆运输", DateUtil.getDateFormat(new Date(),
+                    DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
+            operationLogMapper.insertLog(operationLog);
+        } else {
+            List<M03> m03s = m03Mapper.selectM03(null, null, null, MustId);
+            for (M03 m03 : m03s) {
+                OperationLog operationLog = new OperationLog(null, m03.getRecId(), "停运", "禁止车辆运输",
+                        DateUtil.getDateFormat(new Date(),
+                                DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
+                operationLogMapper.insertLog(operationLog);
+            }
+        }
         return Body.BODY_200;
     }
 
     @Override
-    public Body selectM03Status(String MustId,String name) {
-        List<CarStatus> m03s = m03Mapper.selectM03Status(MustId,name);
+    public Body selectM03Status(String MustId, String name) {
+        List<CarStatus> m03s = m03Mapper.selectM03Status(MustId, name);
         if (m03s.size() > 0) {
             for (CarStatus m03 : m03s) {
+                if (!StringUtils.isEmpty(m03.getCertificationTime())) {
+                    m03.setCertificationTime(DateUtil.changeTime(m03.getCertificationTime(), "yyyy年MM月dd日"));
+                }
+                if (!StringUtils.isEmpty(m03.getEndTime())) {
+                    m03.setEndTime(DateUtil.changeTime(m03.getEndTime(), "yyyy年MM月dd日"));
+                }
+                if (!StringUtils.isEmpty(m03.getStopEndTime())) {
+                    m03.setStopEndTime(DateUtil.changeTime(m03.getStopEndTime(), "yyyy年MM月dd日"));
+                }
                 DeviceLasposition deviceLasposition = deviceLaspositionMapper.selectLaspositionByCarNo(m03.getM0331());
                 if (StringUtils.isEmpty(deviceLasposition)) {
-                    m03.setStatus("");
+                    m03.setStatus("10");
                 } else {
                     m03.setStatus(deviceLasposition.getCarstatus().toString());
                     m03.setPermit(m03Mapper.selectPermitTruck(m03.getM0331()));
@@ -116,18 +130,18 @@ public class M03ServiceImpl implements M03Service {
 
     @Override
     public Body insertM03(M03 m03, TerminalInfo terminalInfo) {
-        String recId= UUID.randomUUID().toString();
+        String recId = UUID.randomUUID().toString();
         m03.setRecId(recId);
         this.m03Mapper.insertM03(m03);
         terminalInfo.setCarNumber(m03.getM0331());
-        terminalInfo.setCreateDate(DateUtil.getDateFormat(new Date(),DateUtil.FULL_TIME_SPLIT_PATTERN));
+        terminalInfo.setCreateDate(DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN));
         terminalInfo.setCreateUser(m03.getCreator().toString());
         terminalInfo.setInstallstatus("0");
-        terminalInfo.setInstalltime(DateUtil.getDateFormat(new Date(),DateUtil.FULL_TIME_SPLIT_PATTERN));
+        terminalInfo.setInstalltime(DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN));
         terminalInfo.setIsDelete("0");
         terminalInfo.setCarId(recId);
         terminalInfo.setDeptid(m03.getMustId());
-        terminalInfo.setModifyDate(DateUtil.getDateFormat(new Date(),DateUtil.FULL_TIME_SPLIT_PATTERN));
+        terminalInfo.setModifyDate(DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN));
         terminalInfo.setModifyUser(m03.getCreator().toString());
         terminalInfoMapper.insertTerminal(terminalInfo);
         return Body.BODY_200;
@@ -137,5 +151,10 @@ public class M03ServiceImpl implements M03Service {
     public Body deleteM03(String RecId) {
         this.m03Mapper.deleteM03(RecId);
         return Body.BODY_200;
+    }
+
+    @Override
+    public Body selectM03Count(String auditStatus, String MustId) {
+        return Body.newInstance(this.m03Mapper.selectM03Count(auditStatus, MustId));
     }
 }

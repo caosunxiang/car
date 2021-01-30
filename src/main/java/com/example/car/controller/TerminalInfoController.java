@@ -90,11 +90,12 @@ public class TerminalInfoController {
      */
     @RequestMapping("updateTerminal")
     public Body updateTerminal(String modifyUser, String isDelete, String terminal, String terminalType,
-                               String carNumber, Integer terminalId) {
+                               String carNumber, Integer terminalId, String carid) {
         if (StringUtils.isEmpty(terminalId) || StringUtils.isEmpty(modifyUser)) {
             return Body.BODY_451;
         }
-        return terminalInfoService.updateTerminal(modifyUser, isDelete, terminal, terminalType, carNumber, terminalId);
+        return terminalInfoService.updateTerminal(modifyUser, isDelete, terminal, terminalType, carNumber, terminalId
+                , carid);
     }
 
     /**

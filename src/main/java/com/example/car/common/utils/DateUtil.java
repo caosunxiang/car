@@ -201,9 +201,22 @@ public class DateUtil {
         return format.format(date);
     }
 
+    public static String changeTime(String time,String type){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_TIME_PATTERN);
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+       return DateUtil.getDateFormat(date,type);
+    }
+
     public static void main(String[] args) {
-        String var=DateUtil.severalDaysAgo("yyyy-MM-dd",-3);
+        String var=DateUtil.severalDaysAgo("yyyy-MM-dd",-365);
         System.out.println(var);
         System.out.println( UUID.randomUUID().toString());
+        String time=DateUtil.changeTime("2021-01-27 00:00:00.0","yyyy年MM月dd日");
+        System.out.println(time);
     }
 }
