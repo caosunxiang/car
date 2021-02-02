@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.car.mapper.sqlserver.DriverInfoMapper">
-    <insert id="insertDriver" parameterType="com.example.car.entity.DriverInfo"  useGeneratedKeys="true" keyProperty="driverId">
+    <insert id="insertDriver" parameterType="com.example.car.entity.DriverInfo" useGeneratedKeys="true"
+            keyProperty="driverId">
        insert into driver_info (driverName,driverMobile,driverCardNo,driverReviewTime,driverPhotoUrl,driverSex,
        driverAddress,licenseUrl,carId,deptid)
         values
@@ -9,18 +10,19 @@
        #{driverAddress},#{licenseUrl},#{carId},#{deptid})
    </insert>
     <select id="selectDriverInfo" resultType="com.example.car.entity.DriverInfo">
-        select m03.m0331 as carNumber,d.*,m03.DLicenseImage as url  FROM  driver_info d left JOIN M03 m03 ON m03.RecId=d.carId where 1=1
+        select m03.m0331 as carNumber,d.*,m03.DLicenseImage as url
+        FROM driver_info d left JOIN M03 m03 ON m03.RecId=d.carId where 1=1
         <if test="driverId !=null and driverId !=''">
             and d.driverId=#{driverId}
         </if>
         <if test="MustId!= null and MustId!=''">
-           and  m03.MustId=#{MustId}
+            and m03.MustId=#{MustId}
         </if>
         <if test="name!= null and name!=''">
-            and  m03.m0331 like #{name}+'%'
+            and m03.m0331 like '%'+#{name}+'%'
         </if>
         <if test="driverCardNo!= null and driverCardNo!=''">
-            and  d.driverCardNo =#{driverCardNo}
+            and d.driverCardNo =#{driverCardNo}
         </if>
     </select>
     <update id="updateDriver">
@@ -56,6 +58,12 @@
         <if test="deptid!=null and deptid!=''">
             ,deptid=#{deptid}
         </if>
+        <if test="driverCardNo1!=null and driverCardNo1!=''">
+            ,driverCardNo1=#{driverCardNo1}
+        </if>
+        <if test="driverCardNo2!=null and driverCardNo2!=''">
+            ,driverCardNo2=#{driverCardNo2}
+        </if>
         where
         driverId=#{driverId}
     </update>
@@ -74,7 +82,7 @@
         WHERE
         1 =1
         <if test="carId !=null and carId!=''">
-           and  h.carId=#{carId}
+            and h.carId=#{carId}
         </if>
     </select>
     <delete id="delectDriver">

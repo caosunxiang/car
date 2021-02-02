@@ -25,7 +25,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -76,16 +78,28 @@ public class TerminalInfoServiceImpl implements TerminalInfoService {
     }
 
     @Override
-    public Body selectTerminal(String deptid, String carId, String carNumber) {
+    public Body selectTerminal(String deptid, String carId, String carNumber, String type) {
         List<TerminalInfo> terminalInfos = terminalInfoMapper.selectTerminal(carNumber, carId, deptid);
-        if (terminalInfos.size() > 0) {
+        if (type.equals("0")) {
             for (TerminalInfo terminalInfo : terminalInfos) {
                 DeviceLasposition deviceLasposition =
                         deviceLaspositionMapper.selectLaspositionByCarNo(terminalInfo.getCarNumber());
                 terminalInfo.setStatus(deviceLasposition == null ? "10" : deviceLasposition.getCarstatus().toString());
             }
+            return Body.newInstance(terminalInfos);
+        } else {
+            List<TerminalInfo> list=new ArrayList<>();
+            for (TerminalInfo terminalInfo : terminalInfos) {
+                if (!StringUtils.isEmpty(terminalInfo.getTerminal())){
+                    DeviceLasposition deviceLasposition =
+                            deviceLaspositionMapper.selectLaspositionByCarNo(terminalInfo.getCarNumber());
+                    terminalInfo.setStatus(deviceLasposition == null ? "10" : deviceLasposition.getCarstatus().toString());
+                    list.add(terminalInfo);
+                }
+            }
+            return Body.newInstance(list);
         }
-        return Body.newInstance(terminalInfos);
+
     }
 
     @Override

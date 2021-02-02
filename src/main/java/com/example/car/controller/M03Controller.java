@@ -51,8 +51,11 @@ public class M03Controller {
      * @ Date: 2020/12/23 14:13
      */
     @RequestMapping("selectM03")
-    public Body selectM03(String carNumber, String recId, String phone, String MustId) throws ParseException {
-        return m03Service.selectM03(carNumber, recId, phone, MustId);
+    public Body selectM03(String carNumber, String recId, String phone, String MustId,String type)  {
+        if (StringUtils.isEmpty(type)){
+            return Body.BODY_451;
+        }
+        return m03Service.selectM03(carNumber, recId, phone, MustId,type);
     }
 
     /**
@@ -93,8 +96,11 @@ public class M03Controller {
      * @ Date: 2021/1/7 9:44
      */
     @RequestMapping("selectM03Status")
-    public Body selectM03Status(String MustId, String name) throws ParseException {
-        return m03Service.selectM03Status(MustId, name);
+    public Body selectM03Status(String MustId, String name,String type){
+        if (StringUtils.isEmpty(type)){
+            return Body.BODY_451;
+        }
+        return m03Service.selectM03Status(MustId, name ,type);
     }
 
     /**

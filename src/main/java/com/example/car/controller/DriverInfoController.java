@@ -11,6 +11,7 @@
 package com.example.car.controller;
 
 import com.example.car.common.utils.json.Body;
+import com.example.car.entity.DriverInfo;
 import com.example.car.service.DriverInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,11 +61,8 @@ public class DriverInfoController {
      * @ Date: 2020/12/24 16:02
      */
     @RequestMapping("insertDriver")
-    public Body insertDriver(String driverName, String driverMobile, String driverCardNo, String driverReviewTime,
-                             String driverStatus, String driverFiles, String driverSex, String driverAddress,
-                             String files, String carId, String userid, String deptid) {
-        return driverInfoService.insertDriver(driverName, driverMobile, driverCardNo, driverReviewTime, driverStatus,
-                driverFiles, driverSex, driverAddress, files, carId, userid, deptid);
+    public Body insertDriver(DriverInfo driverInfo, String userid) {
+        return driverInfoService.insertDriver(driverInfo, userid);
     }
 
 
@@ -77,11 +75,8 @@ public class DriverInfoController {
      * @ Date: 2020/12/24 16:02
      */
     @RequestMapping("updateDriver")
-    public Body updateDriver(Integer driverId, String driverName, String driverMobile, String driverCardNo,
-                             String driverReviewTime, String driverStatus, String driverFiles, String driverSex,
-                             String driverAddress, String files, String carId, String userid, String deptid) {
-        return driverInfoService.updateDriver(driverId, driverName, driverMobile, driverCardNo, driverReviewTime,
-                driverStatus, driverFiles, driverSex, driverAddress, files, carId, userid, deptid);
+    public Body updateDriver(DriverInfo driverInfo, String userid) {
+        return driverInfoService.updateDriver(driverInfo, userid);
     }
 
     /**
@@ -105,11 +100,8 @@ public class DriverInfoController {
      * @ Date: 2021/1/14 16:29
      */
     @RequestMapping("insertDrivers")
-    public Body insertDrivers(String driverName, String driverMobile, String driverCardNo, String driverReviewTime,
-                              String driverFile, String driverSex, String driverAddress,
-                              String carNumber, String userid, String deptid) {
-        return driverInfoService.insertDrivers(driverName, driverMobile, driverCardNo, driverReviewTime,
-                driverFile, driverSex, driverAddress, carNumber, userid, deptid);
+    public Body insertDrivers(DriverInfo driverInfo,String carNumber, String userid) {
+        return driverInfoService.insertDrivers(driverInfo,carNumber, userid);
     }
 
     /**

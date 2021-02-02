@@ -52,6 +52,10 @@ public class DriverInfo {
 
     private String deptid;
 
+    private String driverCardNo1;
+
+    private String driverCardNo2;
+
     @TableField(exist = false)
     private String startTime;
 

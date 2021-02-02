@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -56,8 +57,13 @@ public class M03ServiceImpl implements M03Service {
 
 
     @Override
-    public Body selectM03(String carNumber, String recId, String phone, String MustId) {
-        List<M03> m03s = m03Mapper.selectM03(carNumber, recId, phone, MustId);
+    public Body selectM03(String carNumber, String recId, String phone, String MustId,String type) {
+        List<M03> m03s;
+      if (type.equals("1")){
+          m03s = m03Mapper.selectM03Usable(carNumber, recId, phone, MustId);
+      }else {
+          m03s=m03Mapper.selectM03(carNumber, recId, phone, MustId);
+      }
         for (M03 m03 : m03s) {
             if (!StringUtils.isEmpty(m03.getIssuanceDate())) {
                 m03.setIssuanceDate(DateUtil.changeTime(m03.getIssuanceDate(), "yyyy年MM月dd日"));
@@ -103,8 +109,15 @@ public class M03ServiceImpl implements M03Service {
     }
 
     @Override
-    public Body selectM03Status(String MustId, String name) {
-        List<CarStatus> m03s = m03Mapper.selectM03Status(MustId, name);
+    public Body selectM03Status(String MustId, String name,String type) {
+
+        List<CarStatus> m03s;
+        if (type.equals("1")){
+            m03s= m03Mapper.selectM03StatusUsable(MustId, name);
+        }else {
+            m03s= m03Mapper.selectM03Status(MustId, name);
+        }
+
         if (m03s.size() > 0) {
             for (CarStatus m03 : m03s) {
                 if (!StringUtils.isEmpty(m03.getCertificationTime())) {

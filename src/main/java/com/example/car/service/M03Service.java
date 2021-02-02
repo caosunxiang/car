@@ -7,14 +7,14 @@ import com.example.car.entity.TerminalInfo;
 import java.text.ParseException;
 
 public interface M03Service {
-    Body selectM03(String carNumber, String recId, String phone,String MustId) throws ParseException;
+    Body selectM03(String carNumber, String recId, String phone,String MustId,String type) ;
 
     Body updateM03(M03 m03, String userid);
 
     Body updateStopTransport(String stopTransport,Integer stopNumber,String carid,String stopRemark,String MustId,String
                               userid);
 
-    Body selectM03Status(String MustId,String name) throws ParseException;
+    Body selectM03Status(String MustId,String name,String type) ;
 
     Body insertM03(M03 m03, TerminalInfo terminalInfo);
 

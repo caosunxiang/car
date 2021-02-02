@@ -35,4 +35,9 @@ public interface M03Mapper {
 
     void updateTransportAuto(@Param("stopTransport") String stopTransport, @Param("stopNumber") Integer stopNumber,
                              @Param("stopEndTime")String stopEndTime);
+
+    List<M03>selectM03Usable(@Param("carNumber") String carNumber, @Param("recId") String recId,
+                             @Param("phone") String phone,@Param("MustId")String MustId);
+
+    List<CarStatus>selectM03StatusUsable(@Param("MustId")String MustId,@Param("name")String name);
 }

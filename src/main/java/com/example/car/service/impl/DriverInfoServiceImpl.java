@@ -13,6 +13,7 @@ package com.example.car.service.impl;
 import com.example.car.common.utils.CutString;
 import com.example.car.common.utils.DateUtil;
 import com.example.car.common.utils.FileUploadUtils;
+import com.example.car.common.utils.entity.DriverBean;
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.DriverHistorical;
 import com.example.car.entity.DriverInfo;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,54 +59,70 @@ public class DriverInfoServiceImpl implements DriverInfoService {
     @Override
     public Body selectDriverInfo(String driverId, String MustId, String name, String driverCardNo) {
         List<DriverInfo> driverInfos = driverInfoMapper.selectDriverInfo(driverId, MustId, name,driverCardNo);
-        return Body.newInstance(driverInfos);
+        List<DriverBean>driverBeans = new ArrayList<>();
+        for (int i = 0; i <driverInfos.size() ; i++) {
+            List<String> list=new ArrayList<>();
+            DriverBean driverBean=new DriverBean();
+            driverBean.setDriver(driverInfos.get(i));
+            for (DriverInfo driverInfo : driverInfos) {
+                if (driverInfo.getDriverId().equals(driverInfos.get(i).getDriverId())) {
+                    list.add(driverInfo.getCarNumber());
+                }
+            }
+            driverBean.setCarnumber(list);
+            driverBeans.add(driverBean);
+        }
+        return Body.newInstance(driverBeans);
     }
 
     @Override
-    public Body insertDriver(String driverName, String driverMobile, String driverCardNo, String driverReviewTime,
-                             String driverStatus, String driverFile, String driverSex, String driverAddress,
-                             String files, String carId, String userid, String deptid) {
-        String url = null;
-        String url1 = null;
-        if (!StringUtils.isEmpty(files)) {
-            MultipartFile file = FileUploadUtils.base64Convert(files);
+    public Body insertDriver(DriverInfo driverInfo, String userid) {
+        String url;
+        String url1;
+        if (!StringUtils.isEmpty(driverInfo.getLicenseUrl())) {
+            MultipartFile file = FileUploadUtils.base64Convert(driverInfo.getLicenseUrl());
             url = FileUploadUtils.fileUpload(file, "img");
+            driverInfo.setLicenseUrl(url);
         }
-        if (!StringUtils.isEmpty(driverFile)) {
-            MultipartFile file1 = FileUploadUtils.base64Convert(driverFile);
+        if (!StringUtils.isEmpty(driverInfo.getDriverPhotoUrl())) {
+            MultipartFile file1 = FileUploadUtils.base64Convert(driverInfo.getDriverPhotoUrl());
             url1 = FileUploadUtils.fileUpload(file1, "img");
+            driverInfo.setLicenseUrl(url1);
         }
-        DriverInfo driverInfo = new DriverInfo(null, driverName, driverMobile, driverCardNo, driverReviewTime,
-                driverStatus, url1, driverSex, driverAddress, url, carId, deptid, null, null, null,null);
         driverInfoMapper.insertDriver(driverInfo);
-        DriverHistorical driverHistorical = new DriverHistorical(null, carId, driverInfo.getDriverId().toString(),
+        DriverHistorical driverHistorical = new DriverHistorical(null, driverInfo.getCarId(), driverInfo.getDriverId().toString(),
                 DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN), null);
         driverInfoMapper.insertDriverHistorical(driverHistorical);
-        OperationLog operationLog = new OperationLog(null, carId, "添加", "添加驾驶员", DateUtil.getDateFormat(new Date(),
+        OperationLog operationLog = new OperationLog(null, driverInfo.getCarId(), "添加", "添加驾驶员", DateUtil.getDateFormat(new Date(),
                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
         operationLogMapper.insertLog(operationLog);
         return Body.newInstance(driverInfo);
     }
 
     @Override
-    public Body updateDriver(Integer driverId, String driverName, String driverMobile, String driverCardNo,
-                             String driverReviewTime, String driverStatus,
-                             String driverFile, String driverSex, String driverAddress, String files, String carId,
-                             String userid, String deptid) {
-        String url = null;
-        String url1 = null;
-        if (!StringUtils.isEmpty(files)) {
-            MultipartFile file = FileUploadUtils.base64Convert(files);
+    public Body updateDriver(DriverInfo driverInfo, String userid) {
+        String url;
+        String url1;
+        if (!StringUtils.isEmpty(driverInfo.getLicenseUrl())) {
+            MultipartFile file = FileUploadUtils.base64Convert(driverInfo.getLicenseUrl());
             url = FileUploadUtils.fileUpload(file, "img");
+            driverInfo.setLicenseUrl(url);
         }
-        if (!StringUtils.isEmpty(driverFile)) {
-            MultipartFile file1 = FileUploadUtils.base64Convert(driverFile);
+        if (!StringUtils.isEmpty(driverInfo.getDriverPhotoUrl())) {
+            MultipartFile file1 = FileUploadUtils.base64Convert(driverInfo.getDriverPhotoUrl());
             url1 = FileUploadUtils.fileUpload(file1, "img");
+            driverInfo.setDriverPhotoUrl(url1);
         }
-        DriverInfo driverInfo = new DriverInfo(driverId, driverName, driverMobile, driverCardNo, driverReviewTime,null,
-                url1, driverSex, driverAddress, url, carId, deptid, null, null, null,null);
+        if (!StringUtils.isEmpty(driverInfo.getDriverCardNo1())) {
+            MultipartFile file1 = FileUploadUtils.base64Convert(driverInfo.getDriverCardNo1());
+            driverInfo.setDriverCardNo1( FileUploadUtils.fileUpload(file1, "img"));
+        }
+        if (!StringUtils.isEmpty(driverInfo.getDriverCardNo2())) {
+            MultipartFile file1 = FileUploadUtils.base64Convert(driverInfo.getDriverCardNo2());
+            driverInfo.setDriverCardNo2(FileUploadUtils.fileUpload(file1, "img"));
+        }
         driverInfoMapper.updateDriver(driverInfo);
-        OperationLog operationLog = new OperationLog(null, carId, "修改", "修改驾驶员信息", DateUtil.getDateFormat(new Date(),
+        OperationLog operationLog = new OperationLog(null, driverInfo.getCarId(), "修改", "修改驾驶员信息", DateUtil.getDateFormat(new Date(),
                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
         operationLogMapper.insertLog(operationLog);
         return Body.newInstance(driverInfo);
@@ -117,30 +135,27 @@ public class DriverInfoServiceImpl implements DriverInfoService {
     }
 
     @Override
-    public Body insertDrivers(String driverName, String driverMobile, String driverCardNo, String driverReviewTime,
-                               String driverFile, String driverSex, String driverAddress,
-                              String carNumber, String userid, String deptid) {
-        String url = null;
-        if (!StringUtils.isEmpty(driverFile)) {
-            MultipartFile file = FileUploadUtils.base64Convert(driverFile);
+    public Body insertDrivers(DriverInfo driverInfo, String carNumber, String userid) {
+        String url;
+        if (!StringUtils.isEmpty(driverInfo.getLicenseUrl())) {
+            MultipartFile file = FileUploadUtils.base64Convert(driverInfo.getLicenseUrl());
             url = FileUploadUtils.fileUpload(file, "img");
+            driverInfo.setLicenseUrl(url);
         }
         List<String> list = CutString.divide(carNumber);
         for (String s : list) {
-            if (driverInfoMapper.selectDriverInfo(null,null,s, driverCardNo).size()>0){
+            if (driverInfoMapper.selectDriverInfo(null,null,s, driverInfo.getDriverCardNo()).size()>0){
                 return Body.newInstance(201,"车辆已经有驾驶员了");
             }
-            if (m03Mapper.selectM03(s, null, null, null).size() > 0) {
-                DriverInfo driverInfo = new DriverInfo(null, driverName, driverMobile, driverCardNo, driverReviewTime,
-                        null, null, driverSex, driverAddress, url, m03Mapper.selectM03(s, null, null,
-                        deptid).get(0).getRecId(), deptid, null, null, null,null);
+            List<M03>m03s=m03Mapper.selectM03(s, null, null, null);
+            if (m03s.size() > 0) {
+                driverInfo.setCarId(m03s.get(0).getRecId());
                 driverInfoMapper.insertDriver(driverInfo);
-                DriverHistorical driverHistorical = new DriverHistorical(null, m03Mapper.selectM03(s, null, null,
-                        deptid).get(0).getRecId(), driverInfo.getDriverId().toString(),
+                DriverHistorical driverHistorical = new DriverHistorical(null,m03s.get(0).getRecId(), driverInfo.getDriverId().toString(),
                         DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN), null);
                 driverInfoMapper.insertDriverHistorical(driverHistorical);
                 OperationLog operationLog = new OperationLog(null,
-                        m03Mapper.selectM03(s, null, null, deptid).get(0).getRecId(), "添加", "添加驾驶员",
+                        m03s.get(0).getRecId(), "添加", "添加驾驶员",
                         DateUtil.getDateFormat(new Date(),
                                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
                 operationLogMapper.insertLog(operationLog);
@@ -164,7 +179,7 @@ public class DriverInfoServiceImpl implements DriverInfoService {
         for (M03 m03 : m03s) {
             DriverInfo driverInfo = new DriverInfo(null, m03.getM0308(), m03.getM0310(), m03.getM0309(),
                     m03.getM0334(), "0", null, null, null, null,
-                    m03.getRecId(), m03.getMustId(), null, null, null,null);
+                    m03.getRecId(), m03.getMustId(), null, null,null,null, null,null);
             driverInfoMapper.insertDriver(driverInfo);
             DriverHistorical driverHistorical=new DriverHistorical(null,m03.getRecId(),driverInfo.getDriverId().toString(),null,null);
             driverInfoMapper.insertDriverHistorical(driverHistorical);

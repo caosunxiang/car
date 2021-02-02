@@ -59,8 +59,11 @@ public class TerminalInfoController {
      * @ Date: 2021/1/5 14:20
      */
     @RequestMapping("selectTerminal")
-    public Body selectTerminal(String deptid, String carId, String carNumber) {
-        return terminalInfoService.selectTerminal(deptid, carId, carNumber);
+    public Body selectTerminal(String deptid, String carId, String carNumber, String type) {
+        if (StringUtils.isEmpty(type)) {
+            return Body.BODY_451;
+        }
+        return terminalInfoService.selectTerminal(deptid, carId, carNumber, type);
     }
 
 

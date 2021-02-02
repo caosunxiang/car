@@ -8,7 +8,28 @@
         #{isDelete},#{modifyDate},#{modifyUser},#{carNumber})
     </insert>
     <select id="selectTerminal" resultType="com.example.car.entity.TerminalInfo">
-        select t.* ,tt.typename from terminal_info t left join settings_device_type tt ON t.terminalType=tt.id where 1=1
+        SELECT
+        t.modifyUser ,
+        t.modifyDate,
+        t.isDelete,
+        t.installtime,
+        t.installstatus,
+        t.deptid,
+        t.carId,
+        t.createUser,
+        t.createDate,
+        t.terminalType,
+        t.terminal,
+        t.terminalId,
+        tt.typename ,
+        m.m0331 carNumber
+        FROM
+        M03 m
+        LEFT JOIN terminal_info t ON m.RecId= t.carId
+        LEFT JOIN settings_device_type tt ON t.terminalType= tt.id
+        WHERE
+        1 =1
+
         <if test="deptid !=null and deptid!=''">
             and t.deptid=#{deptid}
         </if>

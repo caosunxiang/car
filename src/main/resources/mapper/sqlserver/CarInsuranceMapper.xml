@@ -23,7 +23,7 @@
             AND m03.MustId=#{MustId}
         </if>
         <if test="name!=null and name!=''">
-            AND m03.M0331 like #{name}+'%'
+            AND m03.M0331 like '%'+#{name}+'%'
         </if>
         <if test="carid !=null and carid !=''">
             and i.carId =#{carid}
