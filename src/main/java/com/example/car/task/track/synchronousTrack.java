@@ -93,7 +93,7 @@ public class synchronousTrack {
      * @ Author: 冷酷的苹果
      * @ Date: 2020/9/21 8:38
      */
-    @Scheduled(cron = " 0 0 3 * * ? ")
+    @Scheduled(cron = " 0 0 0,12 * * ? ")
     public void delhistoricalRoute() {
         this.historicalRouteMapper.delHistoricalRoute(DateUtil.severalDaysAgo(DateUtil.FULL_TIME_SPLIT_PATTERN, 15));
     }

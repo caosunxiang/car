@@ -31,12 +31,13 @@ import java.util.List;
 public class CarStatus {
     private String recId;
     private String M0331;
-    private String certificationTime;
+    private String M0108;
     private String certificationStatus;
-    private String EndTime;
+    private String M0109;
     private String stopTransport;
     private String stopNumber;
     private String stopRemark;
+    private String isDelete;
     private String stopEndTime;
     @TableField(exist = false)
     private String status;

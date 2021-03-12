@@ -18,8 +18,11 @@ import com.example.car.common.utils.entity.*;
 import com.example.car.common.utils.json.Body;
 import com.example.car.entity.*;
 import com.example.car.mapper.mysql.*;
+import com.example.car.mapper.sqlserver.M01Mapper;
+import com.example.car.mapper.sqlserver.M03Mapper;
 import com.example.car.mapper.sqlserver.MuckMapper;
 import com.example.car.mapper.sqlserver.OperationLogMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +46,7 @@ import java.util.*;
 @RequestMapping("Api")
 @Slf4j
 @CrossOrigin
+@RequiredArgsConstructor
 @RestController
 public class APIManage {
     private static final Logger logger = LoggerFactory.getLogger(APIManage.class);
@@ -52,28 +56,32 @@ public class APIManage {
     private final static String tradeno = "20180908180001";
     private final static String url = "http://101.132.236.6:8088/";
     private static Integer AlarmCount;
-    @Autowired
-    private CarInfoMapper carInfoMapper;
-    @Autowired
-    private SysAuthDeptMapper sysAuthDeptMapper;
-    @Autowired
-    private DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
-    @Autowired
-    private DeviceAlarmMapper deviceAlarmMapper;
-    @Autowired
-    private AreaSelect areaSelect;
-    @Autowired
-    private DeviceLaspositionMapper deviceLaspositionMapper;
-    @Autowired
-    private DeviceOnlineRecordMapper deviceOnlineRecordMapper;
-    @Autowired
-    private CarStatusChangeRecordMapper carStatusChangeRecordMapper;
-    @Autowired
-    private PlaceMapper placeMapper;
-    @Autowired
-    private MuckMapper muckMapper;
-    @Autowired
-    private OperationLogMapper operationLogMapper;
+
+    private final CarInfoMapper carInfoMapper;
+
+    private final SysAuthDeptMapper sysAuthDeptMapper;
+
+    private final DeviceAlarmSeverityMapper deviceAlarmSeverityMapper;
+
+    private final DeviceAlarmMapper deviceAlarmMapper;
+
+    private final AreaSelect areaSelect;
+
+    private final DeviceLaspositionMapper deviceLaspositionMapper;
+
+    private final DeviceOnlineRecordMapper deviceOnlineRecordMapper;
+
+    private final CarStatusChangeRecordMapper carStatusChangeRecordMapper;
+
+    private final PlaceMapper placeMapper;
+
+    private final MuckMapper muckMapper;
+
+    private final OperationLogMapper operationLogMapper;
+
+    private final M03Mapper m03Mapper;
+
+    private final M01Mapper m01Mapper;
 
 
     /**
@@ -140,8 +148,12 @@ public class APIManage {
             // list.sort((o1, o2) -> Integer.compare(o1.get("createtime").toString().compareTo(o2.get("createtime")
             // .toString()), 0));
             return Body.newInstance(list1);
+        } else {
+            DeviceLasposition deviceLasposition = deviceLaspositionMapper.selectLaspositionByCarNo(carnumber);
+            List<DeviceLasposition> list1 = new ArrayList<>();
+            list1.add(deviceLasposition);
+            return Body.newInstance(list1);
         }
-        return Body.newInstance(list);
     }
 
     /**
@@ -833,28 +845,51 @@ public class APIManage {
      * @ Date: 2020/11/13 16:55
      */
     @RequestMapping("LocationBean")
-    public Body LocationBean() {
+    public Body LocationBean(String deptId) {
         List<LocationBean> locationBeans = new ArrayList<>();
-        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
-        for (SysAuthDept sysAuthDept : deptList) {
-            List<DeviceLasposition> deviceLasposition =
-                    deviceLaspositionMapper.selectLasposition(sysAuthDept.getDeptid().toString());
-            for (DeviceLasposition lasposition : deviceLasposition) {
-                if (sysAuthDept.getDeptid().toString().equals(lasposition.getDeptid())) {
-                    LocationBean locationBean = new LocationBean();
-                    Map<String, String> map = new HashMap<>();
-                    map.put("lat", lasposition.getLat().toString());
-                    map.put("lng", lasposition.getLng().toString());
-                    map.put("deptid", lasposition.getDeptid());
-                    map.put("direction", lasposition.getDirection());
-                    map.put("time", lasposition.getGpstime());
-                    map.put("speed", lasposition.getSpeed());
-                    map.put("status", lasposition.getCarstatus().toString());
-                    locationBean.setName(lasposition.getCarnumber());
-                    locationBean.setType(1);
-                    locationBean.setArea(map);
-                    locationBeans.add(locationBean);
+        if (StringUtils.isEmpty(deptId)) {
+            List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
+            for (SysAuthDept sysAuthDept : deptList) {
+                List<DeviceLasposition> deviceLasposition =
+                        deviceLaspositionMapper.selectLasposition(sysAuthDept.getDeptid().toString());
+                for (DeviceLasposition lasposition : deviceLasposition) {
+                    if (sysAuthDept.getDeptid().toString().equals(lasposition.getDeptid())) {
+                        LocationBean locationBean = new LocationBean();
+                        Map<String, String> map = new HashMap<>();
+                        map.put("lat", lasposition.getLat().toString());
+                        map.put("lng", lasposition.getLng().toString());
+                        map.put("deptid", lasposition.getDeptid());
+                        map.put("direction", lasposition.getDirection());
+                        map.put("time", lasposition.getGpstime());
+                        map.put("speed", lasposition.getSpeed());
+                        map.put("status", lasposition.getCarstatus().toString());
+                        locationBean.setName(lasposition.getCarnumber());
+                        locationBean.setType(1);
+                        locationBean.setArea(map);
+                        locationBeans.add(locationBean);
+                    }
                 }
+            }
+        } else {
+            List<M03> m03s = m03Mapper.selectM03Usable(null, null, null, deptId);
+            for (M03 m03 : m03s) {
+                DeviceLasposition deviceLasposition = deviceLaspositionMapper.selectLaspositionByCarNo(m03.getM0331());
+                if (StringUtils.isEmpty(deviceLasposition)){
+                    continue;
+                }
+                LocationBean locationBean = new LocationBean();
+                Map<String, String> map = new HashMap<>();
+                map.put("lat", deviceLasposition.getLat().toString());
+                map.put("lng", deviceLasposition.getLng().toString());
+                map.put("deptid", deviceLasposition.getDeptid());
+                map.put("direction", deviceLasposition.getDirection());
+                map.put("time", deviceLasposition.getGpstime());
+                map.put("speed", deviceLasposition.getSpeed());
+                map.put("status", deviceLasposition.getCarstatus().toString());
+                locationBean.setName(deviceLasposition.getCarnumber());
+                locationBean.setType(1);
+                locationBean.setArea(map);
+                locationBeans.add(locationBean);
             }
         }
         List<Place> places = placeMapper.selectAll(null, 1, 1000);
@@ -864,6 +899,7 @@ public class APIManage {
             map.put("lat", place.getLat());
             map.put("lng", place.getLng());
             map.put("area", place.getArea());
+            map.put("id", place.getId().toString());
             locationBean.setName(place.getName());
             locationBean.setType(2);
             locationBean.setArea(map);
@@ -910,33 +946,67 @@ public class APIManage {
      * @ Date: 2020/11/17 17:52
      */
     @RequestMapping("SysAuthDeptDetail")
-    public Body SysAuthDeptDetail(Long deptid, String name) {
+    public Body SysAuthDeptDetail(String deptid, String name) {
+        if (!StringUtils.isEmpty(deptid)) {
+            M01 m01 = m01Mapper.selectM01(deptid, null, null);
+            deptid = m01.getCareyeid();
+        } else {
+            deptid = "722445496500748288";
+        }
         if (StringUtils.isEmpty(name)) {
-            List<DeptDetail> deptDetails = new ArrayList<>();
-            List<SysAuthDept> sysAuthDept = sysAuthDeptMapper.selectSysAuthDeptByParent(deptid);
-            for (SysAuthDept authDept : sysAuthDept) {
+            if(deptid.equals("722445496500748288")){
+                List<DeptDetail> deptDetails = new ArrayList<>();
+                List<SysAuthDept> sysAuthDept = sysAuthDeptMapper.selectSysAuthDeptByParent(Long.valueOf(deptid));
+                for (SysAuthDept authDept : sysAuthDept) {
+                    List<DeptDetailChild> deptDetailChildren = new ArrayList<>();
+                    DeptDetail deptDetail = new DeptDetail();
+                    deptDetail.setId(authDept.getDeptid().toString());
+                    deptDetail.setName(authDept.getDeptname());
+                    deptDetail.setPid(authDept.getParentid().toString());
+                    List<DeviceLasposition> deviceLaspositions = deviceLaspositionMapper.
+                            selectLasposition(deptDetail.getId());
+                    for (DeviceLasposition deviceLasposition : deviceLaspositions) {
+                        DeptDetailChild deptDetailChild = new DeptDetailChild();
+                        deptDetailChild.setId(deviceLasposition.getId().toString());
+                        deptDetailChild.setName(deviceLasposition.getCarnumber());
+                        deptDetailChild.setPid(deviceLasposition.getDeptid());
+                        deptDetailChild.setStatus(deviceLasposition.getCarstatus().toString());
+                        deptDetailChildren.add(deptDetailChild);
+                        deptDetail.setSysAuthDepts(deptDetailChildren);
+                    }
+                    deptDetails.add(deptDetail);
+                }
+                return Body.newInstance(deptDetails);
+            }else {
+                List<DeptDetail> deptDetails = new ArrayList<>();
                 List<DeptDetailChild> deptDetailChildren = new ArrayList<>();
+                SysAuthDept authDept=sysAuthDeptMapper.selectSysAuthDeptById(Long.valueOf(deptid));
                 DeptDetail deptDetail = new DeptDetail();
                 deptDetail.setId(authDept.getDeptid().toString());
                 deptDetail.setName(authDept.getDeptname());
                 deptDetail.setPid(authDept.getParentid().toString());
                 List<DeviceLasposition> deviceLaspositions = deviceLaspositionMapper.
-                        selectLasposition(deptDetail.getId());
+                        selectLasposition(deptid);
                 for (DeviceLasposition deviceLasposition : deviceLaspositions) {
                     DeptDetailChild deptDetailChild = new DeptDetailChild();
                     deptDetailChild.setId(deviceLasposition.getId().toString());
                     deptDetailChild.setName(deviceLasposition.getCarnumber());
-                    deptDetailChild.setPid(deviceLasposition.getDeptid().toString());
+                    deptDetailChild.setPid(deviceLasposition.getDeptid());
                     deptDetailChild.setStatus(deviceLasposition.getCarstatus().toString());
                     deptDetailChildren.add(deptDetailChild);
                     deptDetail.setSysAuthDepts(deptDetailChildren);
                 }
                 deptDetails.add(deptDetail);
+                return Body.newInstance(deptDetails);
             }
-            return Body.newInstance(deptDetails);
         } else {
-            List<DeviceLasposition> deviceLasposition = deviceLaspositionMapper.selectLaspositionForTree(name);
-            return Body.newInstance(deviceLasposition);
+            if (deptid.equals("722445496500748288")){
+                List<DeviceLasposition> deviceLasposition = deviceLaspositionMapper.selectLaspositionForTree(name);
+                return Body.newInstance(deviceLasposition);
+            }else {
+                List<DeviceLasposition> deviceLasposition = deviceLaspositionMapper.selectposition(deptid,name);
+                return Body.newInstance(deviceLasposition);
+            }
         }
     }
 
@@ -948,7 +1018,7 @@ public class APIManage {
      * @ Date: 2020/11/18 16:20
      */
     @RequestMapping("selectLaspositionInCarNo")
-    public Body selectLaspositionInCarNo(String name) {
+    public Body selectLaspositionInCarNo(String name, String deptid) {
         List<String> list = CutString.divide(name);
         List<DeviceLasposition> laspositions = deviceLaspositionMapper.selectLaspositionInCarNo(list);
         for (DeviceLasposition lasposition : laspositions) {

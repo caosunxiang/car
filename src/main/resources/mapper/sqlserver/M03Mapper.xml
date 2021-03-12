@@ -49,6 +49,9 @@
         <if test="DLicenseImage!=null and DLicenseImage!=''">
             ,DLicenseImage=#{DLicenseImage}
         </if>
+        <if test="isDelete!=null and isDelete!=''">
+            ,isDelete=#{isDelete}
+        </if>
         where
         RecId=#{RecId}
     </update>
@@ -67,7 +70,6 @@
         </if>
         <if test="MustId !=null and MustId!=''">
             and MustId =#{MustId}
-
         </if>
     </select>
     <update id="updateStopTransport">
@@ -79,7 +81,6 @@
         </if>
         <if test="MustId !=null and MustId!=''">
             MustId =#{MustId}
-
         </if>
     </update>
 
@@ -87,15 +88,19 @@
         SELECT
         ISNULL( m.RecId,NULL) recId,
         ISNULL( m.M0331,NULL) M0331,
-        ISNULL( c.certificationTime,NULL) certificationTime,
+        ISNULL( m01.M0108,NULL) M0108,
+        ISNULL( m01.M0109,NULL) M0109,
         ISNULL( c.certificationStatus,NULL) certificationStatus,
         ISNULL( m.stopTransport,NULL) stopTransport,
         ISNULL( m.stopNumber,NULL) stopNumber,
         ISNULL( m.stopRemark,NULL) stopRemark,
+        ISNULL( m.isDelete,NULL) isDelete,
         ISNULL( m.stopEndTime,NULL) stopEndTime
         FROM
         m03 m
         LEFT JOIN car_certification c ON c.carId= m.RecId
+        LEFT JOIN terminal_info t ON m.RecId= t.carId
+        left join m01 m01 on m01.MustId=m.MustId
         WHERE
         1=1
         <if test="MustId !=null and MustId!=''">
@@ -104,6 +109,7 @@
         <if test="name !=null and name!=''">
             and m.M0331 like '%'+#{name}+'%'
         </if>
+        and t.terminal <![CDATA[ <> ]]> ''
     </select>
     <insert id="insertM03">
         insert into M03 (RecId,Creator,MustId,M0302,M0331,M0325) values (#{RecId},#{Creator},#{MustId},#{M0302},#{M0331},#{M0325})
@@ -145,9 +151,9 @@ select * from M03 where stopTransport='1' and datediff( dd, stopEndTime, GETDATE
 update  M03 set stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndTime=#{stopEndTime}
 ,stopRemark=#{stopRemark} where datediff( dd, stopEndTime, GETDATE( ) ) <![CDATA[ >= ]]> 0
     </update>
-    <select id="selectM03Usable" resultType="com.example.car.entity.M03">
-
-        SELECT * FROM (SELECT
+    <select id="selectM03Unable" resultType="com.example.car.entity.M03">
+        SELECT * FROM (
+        SELECT
         m03.* ,
         t.terminal
         FROM
@@ -168,25 +174,55 @@ update  M03 set stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndT
         <if test="MustId !=null and MustId!=''">
             and MustId =#{MustId}
 
-        </if>) a WHERE a.terminal <![CDATA[ <> ]]> ''
+        </if>) a WHERE a.terminal is
+        NULL
     </select>
 
-    <select id="selectM03StatusUsable" resultType="com.example.car.common.utils.entity.CarStatus">
+
+    <select id="selectM03Usable" resultType="com.example.car.entity.M03">
+        SELECT
+        m03.* ,
+        t.terminal
+        FROM
+        M03
+        LEFT JOIN terminal_info t ON m03.RecId= t.carId
+        WHERE
+        1=1
+        <if test="carNumber != null and carNumber!=''">
+            and M0331 LIKE '%'+ #{carNumber}+'%'
+        </if>
+        <if test="recId !=null and recId !=''">
+
+            and RecId=#{recId}
+        </if>
+        <if test="phone !=null and phone!=''">
+            and M0310 = #{phone}
+        </if>
+        <if test="MustId !=null and MustId!=''">
+            and MustId =#{MustId}
+        </if>
+        and t.terminal <![CDATA[ <> ]]> ''
+    </select>
+
+    <select id="selectM03StatusUnable" resultType="com.example.car.common.utils.entity.CarStatus">
         select * from (
         SELECT
         ISNULL( m.RecId, NULL ) recId,
         ISNULL( m.M0331, NULL ) M0331,
-        ISNULL( c.certificationTime, NULL ) certificationTime,
+        ISNULL( m01.M0108,NULL) M0108,
+        ISNULL( m01.M0109,NULL) M0109,
         ISNULL( c.certificationStatus, NULL ) certificationStatus,
         ISNULL( m.stopTransport, NULL ) stopTransport,
         ISNULL( m.stopNumber, NULL ) stopNumber,
         ISNULL( m.stopRemark, NULL ) stopRemark,
+        ISNULL( m.isDelete,NULL) isDelete,
         ISNULL( m.stopEndTime, NULL ) stopEndTime,
         ISNULL( t.terminal, NULL ) terminal
         FROM
         m03 m
         LEFT JOIN car_certification c ON c.carId= m.RecId
         LEFT JOIN terminal_info t ON m.RecId= t.carId
+        left join m01 m01 on m01.MustId=m.MustId
         WHERE
         1=1
         <if test="MustId !=null and MustId!=''">
@@ -194,7 +230,8 @@ update  M03 set stopTransport=#{stopTransport},stopNumber=#{stopNumber},stopEndT
         </if>
         <if test="name !=null and name!=''">
             and m.M0331 like '%'+#{name}+'%'
-        </if>) a where a.terminal <![CDATA[ <> ]]> ''
+        </if>) a where a.terminal is
+        NULL
     </select>
 </mapper>
 

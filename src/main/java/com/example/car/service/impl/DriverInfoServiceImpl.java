@@ -31,9 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 〈一句话功能简述〉<br>
@@ -58,19 +56,40 @@ public class DriverInfoServiceImpl implements DriverInfoService {
 
     @Override
     public Body selectDriverInfo(String driverId, String MustId, String name, String driverCardNo) {
-        List<DriverInfo> driverInfos = driverInfoMapper.selectDriverInfo(driverId, MustId, name,driverCardNo);
-        List<DriverBean>driverBeans = new ArrayList<>();
-        for (int i = 0; i <driverInfos.size() ; i++) {
-            List<String> list=new ArrayList<>();
-            DriverBean driverBean=new DriverBean();
-            driverBean.setDriver(driverInfos.get(i));
-            for (DriverInfo driverInfo : driverInfos) {
-                if (driverInfo.getDriverId().equals(driverInfos.get(i).getDriverId())) {
-                    list.add(driverInfo.getCarNumber());
+        List<DriverInfo> driverInfos = driverInfoMapper.selectDriverInfo(driverId, MustId, name, driverCardNo);
+        Set<DriverBean> driverBeans = new HashSet<>();
+        for (int i = 0; i < driverInfos.size(); i++) {
+            List<String> list = new ArrayList<>();
+            DriverBean driverBean = new DriverBean();
+            if (i == 0 && !StringUtils.isEmpty(driverInfos.get(i).getDriverCardNo())) {
+                driverBean.setDriver(driverInfos.get(i));
+            } else {
+                boolean isAdd = true;
+                for (DriverBean bean : driverBeans) {
+                    if (!StringUtils.isEmpty(driverInfos.get(i).getDriverCardNo())) {
+                        if (driverInfos.get(i).getDriverCardNo().equals(bean.getDriver().getDriverCardNo())) {
+                            isAdd = false;
+                            break;
+                        }
+                    }
+                }
+                if (isAdd) {
+                    driverBean.setDriver(driverInfos.get(i));
+                } else {
+                    continue;
                 }
             }
-            driverBean.setCarnumber(list);
-            driverBeans.add(driverBean);
+            for (DriverInfo driverInfo : driverInfos) {
+                if (!StringUtils.isEmpty(driverInfo.getDriverCardNo())) {
+                    if (driverInfo.getDriverCardNo().equals(driverInfos.get(i).getDriverCardNo())) {
+                        list.add(driverInfo.getCarNumber());
+                    }
+                }
+            }
+            if (!StringUtils.isEmpty(driverBean.getDriver().getDriverCardNo())) {
+                driverBean.setCarnumber(list);
+                driverBeans.add(driverBean);
+            }
         }
         return Body.newInstance(driverBeans);
     }
@@ -90,10 +109,12 @@ public class DriverInfoServiceImpl implements DriverInfoService {
             driverInfo.setLicenseUrl(url1);
         }
         driverInfoMapper.insertDriver(driverInfo);
-        DriverHistorical driverHistorical = new DriverHistorical(null, driverInfo.getCarId(), driverInfo.getDriverId().toString(),
+        DriverHistorical driverHistorical = new DriverHistorical(null, driverInfo.getCarId(),
+                driverInfo.getDriverId().toString(),
                 DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN), null);
         driverInfoMapper.insertDriverHistorical(driverHistorical);
-        OperationLog operationLog = new OperationLog(null, driverInfo.getCarId(), "添加", "添加驾驶员", DateUtil.getDateFormat(new Date(),
+        OperationLog operationLog = new OperationLog(null, driverInfo.getCarId(), "添加", "添加驾驶员",
+                DateUtil.getDateFormat(new Date(),
                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
         operationLogMapper.insertLog(operationLog);
         return Body.newInstance(driverInfo);
@@ -115,14 +136,15 @@ public class DriverInfoServiceImpl implements DriverInfoService {
         }
         if (!StringUtils.isEmpty(driverInfo.getDriverCardNo1())) {
             MultipartFile file1 = FileUploadUtils.base64Convert(driverInfo.getDriverCardNo1());
-            driverInfo.setDriverCardNo1( FileUploadUtils.fileUpload(file1, "img"));
+            driverInfo.setDriverCardNo1(FileUploadUtils.fileUpload(file1, "img"));
         }
         if (!StringUtils.isEmpty(driverInfo.getDriverCardNo2())) {
             MultipartFile file1 = FileUploadUtils.base64Convert(driverInfo.getDriverCardNo2());
             driverInfo.setDriverCardNo2(FileUploadUtils.fileUpload(file1, "img"));
         }
         driverInfoMapper.updateDriver(driverInfo);
-        OperationLog operationLog = new OperationLog(null, driverInfo.getCarId(), "修改", "修改驾驶员信息", DateUtil.getDateFormat(new Date(),
+        OperationLog operationLog = new OperationLog(null, driverInfo.getCarId(), "修改", "修改驾驶员信息",
+                DateUtil.getDateFormat(new Date(),
                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
         operationLogMapper.insertLog(operationLog);
         return Body.newInstance(driverInfo);
@@ -144,14 +166,15 @@ public class DriverInfoServiceImpl implements DriverInfoService {
         }
         List<String> list = CutString.divide(carNumber);
         for (String s : list) {
-            if (driverInfoMapper.selectDriverInfo(null,null,s, driverInfo.getDriverCardNo()).size()>0){
-                return Body.newInstance(201,"车辆已经有驾驶员了");
+            if (driverInfoMapper.selectDriverInfo(null, null, s, driverInfo.getDriverCardNo()).size() > 0) {
+                return Body.newInstance(201, "车辆已经有驾驶员了");
             }
-            List<M03>m03s=m03Mapper.selectM03(s, null, null, null);
+            List<M03> m03s = m03Mapper.selectM03(s, null, null, null);
             if (m03s.size() > 0) {
                 driverInfo.setCarId(m03s.get(0).getRecId());
                 driverInfoMapper.insertDriver(driverInfo);
-                DriverHistorical driverHistorical = new DriverHistorical(null,m03s.get(0).getRecId(), driverInfo.getDriverId().toString(),
+                DriverHistorical driverHistorical = new DriverHistorical(null, m03s.get(0).getRecId(),
+                        driverInfo.getDriverId().toString(),
                         DateUtil.getDateFormat(new Date(), DateUtil.FULL_TIME_SPLIT_PATTERN), null);
                 driverInfoMapper.insertDriverHistorical(driverHistorical);
                 OperationLog operationLog = new OperationLog(null,
@@ -159,8 +182,8 @@ public class DriverInfoServiceImpl implements DriverInfoService {
                         DateUtil.getDateFormat(new Date(),
                                 DateUtil.FULL_TIME_SPLIT_PATTERN), userid, null, null);
                 operationLogMapper.insertLog(operationLog);
-            }else {
-                return Body.newInstance(201,"没有找到这辆车");
+            } else {
+                return Body.newInstance(201, "没有找到这辆车");
             }
         }
         return Body.BODY_200;
@@ -179,9 +202,10 @@ public class DriverInfoServiceImpl implements DriverInfoService {
         for (M03 m03 : m03s) {
             DriverInfo driverInfo = new DriverInfo(null, m03.getM0308(), m03.getM0310(), m03.getM0309(),
                     m03.getM0334(), "0", null, null, null, null,
-                    m03.getRecId(), m03.getMustId(), null, null,null,null, null,null);
+                    m03.getRecId(), m03.getMustId(), null, null, null, null, null, null);
             driverInfoMapper.insertDriver(driverInfo);
-            DriverHistorical driverHistorical=new DriverHistorical(null,m03.getRecId(),driverInfo.getDriverId().toString(),null,null);
+            DriverHistorical driverHistorical = new DriverHistorical(null, m03.getRecId(),
+                    driverInfo.getDriverId().toString(), null, null);
             driverInfoMapper.insertDriverHistorical(driverHistorical);
         }
         return Body.BODY_200;
@@ -189,7 +213,13 @@ public class DriverInfoServiceImpl implements DriverInfoService {
 
     @Override
     public Body selectDriverCount(String driverStatus, String deptid) {
-        return Body.newInstance(driverInfoMapper.selectDriverCount(driverStatus,deptid));
+        return Body.newInstance(driverInfoMapper.selectDriverCount(driverStatus, deptid));
+    }
+
+    @Override
+    public Body selectDriver(String driverId, String MustId, String name, String driverCardNo) {
+        List<DriverInfo> driverInfos = driverInfoMapper.selectDriverInfo(driverId, MustId, name, driverCardNo);
+        return Body.newInstance(driverInfos);
     }
 }
 

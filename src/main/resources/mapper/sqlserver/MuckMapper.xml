@@ -180,6 +180,7 @@
         ISNULL(t.carRestrict,'')carRestrict,
         ISNULL(t.useRestrict,'')useRestrict,
         ISNULL(t.examinant,'')examinant,
+        ISNULL(t.auditStatus,'')auditStatus,
         ISNULL(t.verificationTime,'')verificationTime
         FROM
         View_TruckInfo t
@@ -263,7 +264,7 @@
     </select>
 
     <select id="selectConstructionSite" resultType="com.example.car.entity.M04">
-        SELECT TOP
+       select * from (SELECT TOP
         ${size} a.*
         FROM
         (
@@ -330,10 +331,13 @@
         </if>
         AND datediff( MM, M0418, GETDATE( ) ) <![CDATA[ < ]]> 12
         ORDER BY
-        recid DESC
+        M0418 DESC
         ) AS a
         ORDER BY
-        a.recid ASC;
+        a.M0418 ASC
+        	) AS b
+        ORDER BY
+        b.M0418 DESC;
     </select>
     <select id="selectCarInfoCount" resultType="java.lang.Integer">
         SELECT
@@ -595,9 +599,16 @@ FROM
         <if test="name !=null and name !=''">
             AND p.CompanyName LIKE '%' + #{ name }+ '%'
         </if>
+        <if test="pname !=null and pname !=''">
+            AND p.ProjectName LIKE '%' + #{ pname }+ '%'
+        </if>
         <if test="BeginTime !=null and BeginTime !=''">
             AND
-            CONVERT(nvarchar(10), p.EndTime,112 ) = #{BeginTime}
+            p.EndTime = #{BeginTime}
+        </if>
+        <if test="time1 !=null and time1 !=''  and time2 !=null and time2 !='' " >
+            AND
+            p.EndTime between  #{time1} and #{time2}
         </if>
         <if test="type !=null and type !='' and type == 'A'.toString()">
             AND
@@ -613,15 +624,21 @@ FROM
         SELECT count (1)
         FROM
         View_PermitInfo p
-        LEFT JOIN View_PermitTruck t ON t.PermitNo= p.PermitNo
         WHERE
         1 = 1
         <if test="name !=null and name !=''">
             AND p.CompanyName LIKE '%' + #{ name }+ '%'
         </if>
+        <if test="pname !=null and pname !=''">
+            AND p.ProjectName LIKE '%' + #{ pname }+ '%'
+        </if>
         <if test="BeginTime !=null and BeginTime !=''">
             AND
-            CONVERT(nvarchar(10), p.EndTime,112 ) = #{BeginTime}
+             p.EndTime = #{BeginTime}
+        </if>
+        <if test="time1 !=null and time1 !=''  and time2 !=null and time2 !='' " >
+            AND
+            p.EndTime between  #{time1} and #{time2}
         </if>
         <if test="type !=null and type !='' and type == 'A'.toString()">
             AND
@@ -668,7 +685,7 @@ FROM
         </if>
         <if test="BeginTime !=null and BeginTime !=''">
             AND
-            CONVERT(nvarchar(10), p.EndTime,112 ) = #{BeginTime}
+            p.EndTime = #{BeginTime}
         </if>
         <if test="type !=null and type !='' and type == 'A'.toString()">
             AND
@@ -695,7 +712,7 @@ FROM
         </if>
         <if test="BeginTime !=null and BeginTime !=''">
             AND
-            CONVERT(nvarchar(10), p.EndTime,112 ) = #{BeginTime}
+            p.EndTime = #{BeginTime}
         </if>
         <if test="type !=null and type !='' and type == 'A'.toString()">
             AND
@@ -749,15 +766,13 @@ where Owner = #{userid} or OperId in (
     <select id="selectPendingApply" resultType="java.lang.Integer">
 select count(ID)
 from OS_CURRENTSTEP
-where Owner LIKE '%'+#{userid}+'%'
+where Owner LIKE '%,'+#{userid}+',%'
 
     </select>
     <select id="selectIngApply" resultType="java.lang.Integer">
 select count(ENTRY_ID)
 from OS_WFENTRY
 where creator = #{userid} AND STATE = 1
-
-
     </select>
     <select id="selectOverApply" resultType="java.lang.Integer">
 select count(ENTRY_ID)
@@ -781,5 +796,182 @@ select MAX(userid) from users
 
     <select id="selectUserName" resultType="java.lang.Integer">
 select count(1) from users where UserName=#{UserName}
+    </select>
+
+    <select id="selectMuckadvanced1" resultType="java.util.Map">
+        SELECT TOP
+        ${size} a.*
+        FROM
+        (
+        SELECT TOP
+        ${total} 	ISNULL( View_PermitInfo.BeginTime, '' ) BeginTime,
+        ISNULL( View_PermitInfo.EndTime, '' ) EndTime,
+        ISNULL( View_PermitInfo.LineName, '' ) LineName,
+        ISNULL( View_PermitInfo.PermitNo, '' ) PermitNo,
+        ISNULL( View_PermitInfo.CompanyName, '' ) CompanyName,
+        ISNULL( View_PermitInfo.ProjectName , '' ) ProjectName,
+        ISNULL( View_PermitInfo.Absorption, '' ) Absorption,
+        ISNULL( View_PermitInfo.place, '' ) place,
+        ISNULL( View_PermitInfo.mucktype, '' ) mucktype,
+        ISNULL( View_PermitInfo.approvetime, '' ) approvetime,
+        ISNULL( View_PermitInfo.permittype, '' ) permittype
+        FROM
+        View_PermitInfo
+        LEFT JOIN M06 ON View_PermitInfo.OperObjId=M06.M0601
+        WHERE
+        1 = 1
+        <if test="name !=null and name !=''">
+            AND View_PermitInfo.CompanyName LIKE '%' + #{ name }+ '%'
+        </if>
+        <if test="pname !=null and pname !=''">
+            AND View_PermitInfo.ProjectName LIKE '%' + #{ pname }+ '%'
+        </if>
+        <if test="BeginTime !=null and BeginTime !=''">
+            AND
+            CONVERT(nvarchar(10), View_PermitInfo.EndTime,112 ) = #{BeginTime}
+        </if>
+        <if test="time1 !=null and time1 !=''  and time2 !=null and time2 !='' " >
+            AND
+            View_PermitInfo.EndTime between  #{time1} and #{time2}
+        </if>
+        <if test="car !=null and car !=''">
+            AND  m06.m0602 = #{ car }
+        </if>
+        <if test="type !=null and type !='' and type == 'A'.toString()">
+            AND
+            CONVERT(nvarchar(10), View_PermitInfo.EndTime,102 ) <![CDATA[ < ]]> CONVERT(nvarchar(10),GETDATE(),121)
+        </if>
+        ORDER BY
+        View_PermitInfo.EndTime DESC
+        ) a
+        ORDER BY
+        a.EndTime ASC
+    </select>
+    <select id="selectMuckadvancedCount1" resultType="java.lang.Integer">
+        SELECT count (1)
+        from
+        View_PermitInfo
+        LEFT JOIN M06 ON View_PermitInfo.OperObjId=M06.M0601
+        WHERE
+        1 = 1
+        <if test="name !=null and name !=''">
+            AND View_PermitInfo.CompanyName LIKE '%' + #{ name }+ '%'
+        </if>
+        <if test="pname !=null and pname !=''">
+            AND View_PermitInfo.ProjectName LIKE '%' + #{ pname }+ '%'
+        </if>
+        <if test="BeginTime !=null and BeginTime !=''">
+            AND
+            CONVERT(nvarchar(10), View_PermitInfo.EndTime,112 ) = #{BeginTime}
+        </if>
+        <if test="time1 !=null and time1 !=''  and time2 !=null and time2 !='' " >
+            AND
+            View_PermitInfo.EndTime between  #{time1} and #{time2}
+        </if>
+        <if test="car !=null and car !=''">
+            AND  m06.m0602 = #{ car }
+        </if>
+        <if test="type !=null and type !='' and type == 'A'.toString()">
+            AND
+            CONVERT(nvarchar(10), View_PermitInfo.EndTime,102 ) <![CDATA[ < ]]> CONVERT(nvarchar(10),GETDATE(),121)
+        </if>
+    </select>
+
+
+    <select id="selectMuckExcel" resultType="com.example.car.common.utils.excel.entity.MuckExcel">
+        SELECT TOP
+        ${size} a.*
+        FROM
+        (
+        SELECT TOP
+        ${total}
+        ISNULL( p.PermitNo, '' ) PermitNo,
+        ISNULL( p.approvetime, '' ) approvetime,
+        ISNULL( p.permittype, '' ) permittype,
+        ISNULL( p.CompanyName, '' ) CompanyName,
+        ISNULL( p.ProjectName , '' ) ProjectName,
+        ISNULL( p.place, '' ) place,
+        ISNULL( p.Absorption, '' ) Absorption,
+        ISNULL( p.mucktype, '' ) mucktype,
+        ISNULL( p.BeginTime, '' ) BeginTime,
+        ISNULL( p.EndTime, '' ) EndTime,
+        ISNULL( p.LineName, '' ) LineName
+        FROM
+        View_PermitInfo p
+        WHERE
+        1 = 1
+        <if test="name !=null and name !=''">
+            AND p.CompanyName LIKE '%' + #{ name }+ '%'
+        </if>
+        <if test="pname !=null and pname !=''">
+            AND p.ProjectName LIKE '%' + #{ pname }+ '%'
+        </if>
+        <if test="BeginTime !=null and BeginTime !=''">
+            AND
+            p.EndTime = #{BeginTime}
+        </if>
+        <if test="time1 !=null and time1 !=''  and time2 !=null and time2 !='' " >
+            AND
+            p.EndTime between  #{time1} and #{time2}
+        </if>
+        <if test="type !=null and type !='' and type == 'A'.toString()">
+            AND
+            CONVERT(nvarchar(10), p.EndTime,102 ) <![CDATA[ < ]]> CONVERT(nvarchar(10),GETDATE(),121)
+        </if>
+        ORDER BY
+        p.EndTime DESC
+        ) a
+        ORDER BY
+        a.EndTime ASC
+    </select>
+
+    <select id="selectMuckExcel1" resultType="com.example.car.common.utils.excel.entity.MuckExcel">
+        SELECT TOP
+        ${size} a.*
+        FROM
+        (
+        SELECT TOP
+        ${total} 	ISNULL( View_PermitInfo.BeginTime, '' ) BeginTime,
+        ISNULL( View_PermitInfo.EndTime, '' ) EndTime,
+        ISNULL( View_PermitInfo.LineName, '' ) LineName,
+        ISNULL( View_PermitInfo.PermitNo, '' ) PermitNo,
+        ISNULL( View_PermitInfo.CompanyName, '' ) CompanyName,
+        ISNULL( View_PermitInfo.ProjectName , '' ) ProjectName,
+        ISNULL( View_PermitInfo.Absorption, '' ) Absorption,
+        ISNULL( View_PermitInfo.place, '' ) place,
+        ISNULL( View_PermitInfo.mucktype, '' ) mucktype,
+        ISNULL( View_PermitInfo.approvetime, '' ) approvetime,
+        ISNULL( View_PermitInfo.permittype, '' ) permittype
+        FROM
+        View_PermitInfo
+        LEFT JOIN M06 ON View_PermitInfo.OperObjId=M06.M0601
+        WHERE
+        1 = 1
+        <if test="name !=null and name !=''">
+            AND View_PermitInfo.CompanyName LIKE '%' + #{ name }+ '%'
+        </if>
+        <if test="pname !=null and pname !=''">
+            AND View_PermitInfo.ProjectName LIKE '%' + #{ pname }+ '%'
+        </if>
+        <if test="BeginTime !=null and BeginTime !=''">
+            AND
+            CONVERT(nvarchar(10), View_PermitInfo.EndTime,112 ) = #{BeginTime}
+        </if>
+        <if test="time1 !=null and time1 !=''  and time2 !=null and time2 !='' " >
+            AND
+            View_PermitInfo.EndTime between  #{time1} and #{time2}
+        </if>
+        <if test="car !=null and car !=''">
+            AND  m06.m0602 = #{ car }
+        </if>
+        <if test="type !=null and type !='' and type == 'A'.toString()">
+            AND
+            CONVERT(nvarchar(10), View_PermitInfo.EndTime,102 ) <![CDATA[ < ]]> CONVERT(nvarchar(10),GETDATE(),121)
+        </if>
+        ORDER BY
+        View_PermitInfo.EndTime DESC
+        ) a
+        ORDER BY
+        a.EndTime ASC
     </select>
 </mapper>

@@ -253,44 +253,44 @@ public class MuckController {
         return this.muckService.selectCountByMuck(time);
     }
 
-    /** 
-    * @ Description: 分页高级查询准运证
-    * @ Param: [name, size, index, CarNo, BeginTime, type]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2020/11/20 14:16
-    */
+    /**
+     * @ Description: 分页高级查询准运证
+     * @ Param: [name, size, index, CarNo, BeginTime, type]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/11/20 14:16
+     */
     @RequestMapping("selectMuckAdvanced")
-    public Body selectMuckAdvanced(String name, Integer size, Integer index,  String BeginTime,
-                                   String type) {
+    public Body selectMuckAdvanced(String name, Integer size, Integer index, String BeginTime, String type,
+                                   String time1, String time2, String car, String pname) {
         if (StringUtils.isEmpty(index) || StringUtils.isEmpty(size)) {
             return Body.BODY_451;
         }
-        return this.muckService.selectMuckAdvanced(name, size, index,  BeginTime, type);
+        return this.muckService.selectMuckAdvanced(name, size, index, BeginTime, type, time1, time2, car, pname);
     }
 
-    /** 
-    * @ Description: 准运证查询
-    * @ Param: [name, size, index, BeginTime, type]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2020/12/15 14:26
-    */
+    /**
+     * @ Description: 准运证查询
+     * @ Param: [name, size, index, BeginTime, type]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/12/15 14:26
+     */
     @RequestMapping("selectMuckPage")
     public Body selectMuckPage(String name, Integer size, Integer index, String BeginTime, String type) {
         if (StringUtils.isEmpty(index) || StringUtils.isEmpty(size)) {
             return Body.BODY_451;
         }
-        return this.muckService.selectMuckPage(name, size, index,  BeginTime, type);
+        return this.muckService.selectMuckPage(name, size, index, BeginTime, type);
     }
 
-    /** 
-    * @ Description: 验证用户是不是管理员
-    * @ Param: [userid]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2020/12/21 15:20
-    */
+    /**
+     * @ Description: 验证用户是不是管理员
+     * @ Param: [userid]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2020/12/21 15:20
+     */
     @RequestMapping("PowerControl")
     public Body PowerControl(String userid) {
         if (StringUtils.isEmpty(userid)) {
@@ -300,71 +300,72 @@ public class MuckController {
     }
 
 
-    /** 
-    * @ Description: 修改工地视频地址
-    * @ Param: [VideoUrl, videoName, videoPassword, recId]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2021/1/6 14:05
-    */
+    /**
+     * @ Description: 修改工地视频地址
+     * @ Param: [VideoUrl, videoName, videoPassword, recId]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/6 14:05
+     */
     @RequestMapping("updateM04VideoUrl")
-    public Body updateM04VideoUrl(String VideoUrl, String videoName, String videoPassword,String recId) {
+    public Body updateM04VideoUrl(String VideoUrl, String videoName, String videoPassword, String recId) {
         if (StringUtils.isEmpty(recId)) {
             return Body.BODY_451;
         }
         return this.muckService.updateM04VideoUrl(VideoUrl, videoName, videoPassword, recId);
     }
 
-    /** 
-    * @ Description: 停用工地
-    * @ Param: [valid, RecId]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2021/1/7 16:42
-    */
+    /**
+     * @ Description: 停用工地
+     * @ Param: [valid, RecId]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/7 16:42
+     */
     @RequestMapping("validM04")
     public Body validM04(Integer valid, String RecId) {
-        if (StringUtils.isEmpty(RecId)||StringUtils.isEmpty(valid)) {
+        if (StringUtils.isEmpty(RecId) || StringUtils.isEmpty(valid)) {
             return Body.BODY_451;
         }
         return this.muckService.validM04(valid, RecId);
     }
 
-    /** 
-    * @ Description: 停用消纳场所
-    * @ Param: [valid, RecId]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2021/1/7 17:29
-    */
+    /**
+     * @ Description: 停用消纳场所
+     * @ Param: [valid, RecId]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/7 17:29
+     */
     @RequestMapping("validM07")
     public Body validM07(Integer valid, String RecId) {
-        if (StringUtils.isEmpty(RecId)||StringUtils.isEmpty(valid)) {
+        if (StringUtils.isEmpty(RecId) || StringUtils.isEmpty(valid)) {
             return Body.BODY_451;
         }
         return this.muckService.validM07(valid, RecId);
     }
 
-    
-    /** 
-    * @ Description: 判断用户身份
-    * @ Param: [UserId]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2021/1/11 8:54
-    */
+
+    /**
+     * @ Description: 判断用户身份
+     * @ Param: [UserId]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/11 8:54
+     */
     @RequestMapping("selectUserRole")
-    public Body selectUserRole(String UserId,String RoleId) {
-        return this.muckService.selectUserRole(UserId,RoleId);
+    public Body selectUserRole(String UserId, String RoleId) {
+
+        return this.muckService.selectUserRole(UserId, RoleId);
     }
 
-    /** 
-    * @ Description: 工单数量
-    * @ Param: [userid]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2021/1/11 9:24
-    */
+    /**
+     * @ Description: 工单数量
+     * @ Param: [userid]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/11 9:24
+     */
     @RequestMapping("selectApply")
     public Body selectApply(String userid) {
         if (StringUtils.isEmpty(userid)) {

@@ -1,0 +1,4 @@
+2021-02-18 16:16:25 ERROR https-jsse-nio-8081-exec-6 com.example.car.common.utils.FileUploadUtils http://101.132.236.6:8081/upload/1613636185504240241.jpeg
+2021-02-18 16:17:46 ERROR https-jsse-nio-8081-exec-1 com.example.car.common.utils.FileUploadUtils http://101.132.236.6:8081/upload/1613636266143625405.jpeg
+2021-02-18 16:18:58 ERROR https-jsse-nio-8081-exec-6 com.example.car.common.utils.FileUploadUtils https://101.132.236.6:8081/upload/1613636338962673954.jpeg
+2021-02-18 16:25:07 ERROR http-nio-8081-exec-2 com.example.car.common.utils.FileUploadUtils http://47.99.155.20:8081/upload/1613636707148227680.jpeg

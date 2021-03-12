@@ -45,19 +45,20 @@ public interface MuckService {
 
     Body selectCountByMuck(String time);
 
-    Body selectMuckAdvanced(String name, Integer size,Integer index, String BeginTime, String type);
+    Body selectMuckAdvanced(String name, Integer size, Integer index, String BeginTime, String type, String time1,
+                            String time2, String car, String pname);
 
-    Body selectMuckPage(String name, Integer size,Integer index, String BeginTime, String type);
+    Body selectMuckPage(String name, Integer size, Integer index, String BeginTime, String type);
 
     Body PowerControl(String userid);
 
-    Body updateM04VideoUrl(String videoUrl,String videoName,String videoPassword,String recId);
+    Body updateM04VideoUrl(String videoUrl, String videoName, String videoPassword, String recId);
 
-    Body validM04(Integer valid,String RecId);
+    Body validM04(Integer valid, String RecId);
 
-    Body validM07(Integer valid,String RecId);
+    Body validM07(Integer valid, String RecId);
 
-    Body selectUserRole(String UserId,String RoleId);
+    Body selectUserRole(String UserId, String RoleId);
 
     Body selectApply(String userid);
 }

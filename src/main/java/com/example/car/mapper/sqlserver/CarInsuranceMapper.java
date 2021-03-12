@@ -20,4 +20,6 @@ public interface CarInsuranceMapper {
     void deleteVerification(@Param("insuranceId")Integer insuranceId);
 
     Integer selectInsuranceCount(@Param("auditStatus")String auditStatus,@Param("MustId")String MustId);
+
+    List<CarInsurance>selectInsuranceUsable(List<String> list);
 }

@@ -2,6 +2,7 @@ package com.example.car.mapper.sqlserver;
 
 
 import com.example.car.common.utils.entity.EChatBean7;
+import com.example.car.common.utils.excel.entity.MuckExcel;
 import com.example.car.entity.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -71,53 +72,78 @@ public interface MuckMapper {
 
     List<Notice> selectNotice();
 
-    List<M01> selectM01(@Param("name")String name);
+    List<M01> selectM01(@Param("name") String name);
 
     List<EChatBean7> selectCountByMuck(@Param("time") String time);
 
     List<Map<String, Object>> selectMuckadvanced(@Param("name") String name, @Param("size") Integer size,
-                                                 @Param("total") Integer total,
-                                                 @Param("BeginTime") String BeginTime, @Param("type") String type);
+                                                 @Param("total") Integer total,@Param("pname")String pname,
+                                                 @Param("BeginTime") String BeginTime, @Param("time1") String time1,
+                                                 @Param("time2") String time2, @Param("type") String type);
 
-    Integer selectMuckadvancedCount(@Param("name") String name,
-                                    @Param("BeginTime") String BeginTime, @Param("type") String type);
+    Integer selectMuckadvancedCount(@Param("name") String name,@Param("pname")String pname,
+                                    @Param("BeginTime") String BeginTime, @Param("time1") String time1,
+                                    @Param("time2") String time2, @Param("type") String type);
 
-    List<String> selectCarByPermitNo(@Param("PermitNo")String PermitNo);
+    List<String> selectCarByPermitNo(@Param("PermitNo") String PermitNo);
 
-    Integer uploadImg(@Param("img")String img ,@Param("carNo")String carNo);
+    Integer uploadImg(@Param("img") String img, @Param("carNo") String carNo);
 
     List<Map<String, Object>> selectMuckPage(@Param("name") String name, @Param("size") Integer size,
-                                                 @Param("total") Integer total,
-                                                 @Param("BeginTime") String BeginTime, @Param("type") String type);
+                                             @Param("total") Integer total,
+                                             @Param("BeginTime") String BeginTime, @Param("type") String type);
 
 
     Integer selectMuckPageCount(@Param("name") String name,
-                                    @Param("BeginTime") String BeginTime, @Param("type") String type);
+                                @Param("BeginTime") String BeginTime, @Param("type") String type);
 
-    List<Map<String, Object>> PowerControl(@Param("userid")String userid);
+    List<Map<String, Object>> PowerControl(@Param("userid") String userid);
 
     void updateM04VideoUrl(M04 m04);
 
-    void validM04(@Param("valid")Integer valid,@Param("RecId")String RecId);
+    void validM04(@Param("valid") Integer valid, @Param("RecId") String RecId);
 
-    void validM07(@Param("valid")Integer valid,@Param("RecId")String RecId);
+    void validM07(@Param("valid") Integer valid, @Param("RecId") String RecId);
 
-    List<Map<String, Object>> selectUserRole(@Param("UserId")String UserId,@Param("RoleId")String RoleId);
+    List<Map<String, Object>> selectUserRole(@Param("UserId") String UserId, @Param("RoleId") String RoleId);
 
-    Integer selectNewApply(@Param("userid")String userid);
+    Integer selectNewApply(@Param("userid") String userid);
 
-    Integer selectPendingApply(@Param("userid")String userid);
+    Integer selectPendingApply(@Param("userid") String userid);
 
-    Integer selectIngApply(@Param("userid")String userid);
+    Integer selectIngApply(@Param("userid") String userid);
 
-    Integer selectOverApply(@Param("userid")String userid);
+    Integer selectOverApply(@Param("userid") String userid);
 
-    Integer insertUser(@Param("UserId") Integer UserId,@Param("UserName")String UserName,@Param("UserPwd")String UserPwd,
-                       @Param("name")String name);
+    Integer insertUser(@Param("UserId") Integer UserId, @Param("UserName") String UserName,
+                       @Param("UserPwd") String UserPwd,
+                       @Param("name") String name);
 
     Integer selectUserId();
 
     void insertUserRole(@Param("userid") Integer UserId);
 
-    Integer selectUserName(@Param("UserName")String UserName);
+    Integer selectUserName(@Param("UserName") String UserName);
+
+    List<Map<String, Object>> selectMuckadvanced1(@Param("name") String name, @Param("size") Integer size,
+                                                  @Param("total") Integer total,
+                                                  @Param("BeginTime") String BeginTime, @Param("type") String type,
+                                                  @Param("time1") String time1,@Param("pname")String pname,
+                                                  @Param("time2") String time2, @Param("car") String car);
+
+    Integer selectMuckadvancedCount1(@Param("name") String name,
+                                     @Param("BeginTime") String BeginTime, @Param("type") String type,
+                                     @Param("time1") String time1,@Param("pname")String pname,
+                                     @Param("time2") String time2, @Param("car") String car);
+
+    List<MuckExcel> selectMuckExcel(@Param("name") String name, @Param("size") Integer size,
+                                    @Param("total") Integer total,@Param("pname")String pname,
+                                    @Param("BeginTime") String BeginTime, @Param("time1") String time1,
+                                    @Param("time2") String time2, @Param("type") String type);
+
+    List<MuckExcel> selectMuckExcel1(@Param("name") String name, @Param("size") Integer size,
+                                     @Param("total") Integer total,@Param("pname")String pname,
+                                     @Param("BeginTime") String BeginTime, @Param("type") String type,
+                                     @Param("time1") String time1,
+                                     @Param("time2") String time2, @Param("car") String car);
 }

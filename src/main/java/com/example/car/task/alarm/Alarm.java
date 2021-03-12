@@ -10,9 +10,8 @@
 // */
 //package com.example.car.task.alarm;
 //
-//import com.alibaba.fastjson.JSON;
-//import com.alibaba.fastjson.JSONObject;
-//import com.example.car.common.utils.*;
+//import com.example.car.common.utils.DateUtil;
+//import com.example.car.common.utils.ListUtils;
 //import com.example.car.common.utils.entity.EChatBean3;
 //import com.example.car.entity.*;
 //import com.example.car.mapper.mysql.*;
@@ -26,9 +25,10 @@
 //import org.springframework.stereotype.Component;
 //import org.springframework.util.StringUtils;
 //
-//import java.io.IOException;
-//import java.text.SimpleDateFormat;
-//import java.util.*;
+//import java.util.ArrayList;
+//import java.util.Date;
+//import java.util.List;
+//import java.util.Map;
 //
 ///**
 // * 〈一句话功能简述〉<br>
@@ -72,7 +72,7 @@
 //
 //
 //    @Scheduled(cron = " * 0/5 * * * ? ")//无证运输存数据库
-//    public void noMuckIn() throws IOException {
+//    public void noMuckIn() {
 //        System.out.println("开始查询无证运输");
 //        List<CarTarget> carTargets = carTargetMapper.selectCarTarget();
 //        for (CarTarget carTarget : carTargets) {
@@ -118,7 +118,7 @@
 //
 //
 //    @Scheduled(cron = " * 0/5 * * * ? ")
-//    public void GPSDownIn() throws IOException {//gps不在线报警存数据库
+//    public void GPSDownIn() {//gps不在线报警存数据库
 //        System.out.println("开始查询不在线");
 //        List<SysAuthDept> deptList = sysAuthDeptMapper.selectSysAuthDeptByParent(new Long("722445496500748288"));
 //        List<DeviceLasposition> deviceLaspositions = new ArrayList<>();

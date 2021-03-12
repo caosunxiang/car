@@ -11,6 +11,7 @@
 package com.example.car.controller;
 
 import com.example.car.common.utils.json.Body;
+import com.example.car.entity.M01;
 import com.example.car.service.M01Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,16 +61,11 @@ public class M01Controller {
      * @ Date: 2020/12/30 17:22
      */
     @RequestMapping("updateM01")
-    public Body updateM01(String Status, String ShortSpell, String M0109, String M0104, String M0108, String M0105,
-                          String M0107, String M0106, String M0102, String M0103, String M0101, String representative,
-                          String registeredCapital, String dateEstablishment, String address, String MustId,
-                          String QRCode, String businessScope, String license) {
-        if (StringUtils.isEmpty(Status)) {
+    public Body updateM01(M01 m01) {
+        if (StringUtils.isEmpty(m01.getStatus())) {
             return Body.newInstance(201, "Status字段不能为空");
         }
-        return m01Service.updateM01(Status, ShortSpell, M0109, M0104, M0108, M0105, M0107, M0106, M0102, M0103, M0101
-                , representative, registeredCapital, dateEstablishment, address, MustId, QRCode, businessScope,
-                license);
+        return m01Service.updateM01(m01);
     }
 
 

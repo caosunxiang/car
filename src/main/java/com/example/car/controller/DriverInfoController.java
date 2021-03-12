@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * 〈一句话功能简述〉<br>
  * 〈〉
@@ -100,8 +102,8 @@ public class DriverInfoController {
      * @ Date: 2021/1/14 16:29
      */
     @RequestMapping("insertDrivers")
-    public Body insertDrivers(DriverInfo driverInfo,String carNumber, String userid) {
-        return driverInfoService.insertDrivers(driverInfo,carNumber, userid);
+    public Body insertDrivers(DriverInfo driverInfo, String carNumber, String userid) {
+        return driverInfoService.insertDrivers(driverInfo, carNumber, userid);
     }
 
     /**
@@ -138,5 +140,17 @@ public class DriverInfoController {
     @RequestMapping("selectDriverCount")
     public Body selectDriverCount(String driverStatus, String deptid) {
         return this.driverInfoService.selectDriverCount(driverStatus, deptid);
+    }
+
+    /**
+     * @ Description: 查询驾驶员详情
+     * @ Param: [driverId, MustId, name, driverCardNo]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/2/23 9:27
+     */
+    @RequestMapping("selectDriver")
+    public Body selectDriver(String driverId, String MustId, String name, String driverCardNo) {
+        return driverInfoService.selectDriver(driverId, MustId, name, driverCardNo);
     }
 }

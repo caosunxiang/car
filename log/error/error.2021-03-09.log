@@ -1,0 +1,18 @@
+2021-03-09 15:00:18 ERROR main org.springframework.boot.diagnostics.LoggingFailureAnalysisReporter 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field wxMpService in com.example.car.wechat.LoginController required a bean of type 'com.example.car.wechat.WxConfig' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'com.example.car.wechat.WxConfig' in your configuration.
+

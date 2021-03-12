@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -92,7 +93,8 @@ public class MuckServiceImpl implements MuckService {
         PageUtils pageUtils = new PageUtils();
         pageUtils.setIndex(index);
         pageUtils.setSize(size);
-        pageUtils.setTotal( this.muckMapper.selectCarInfoCount(carNo, CompanyName, DriverName, EngineNo, CarframeNo, CarType));
+        pageUtils.setTotal(this.muckMapper.selectCarInfoCount(carNo, CompanyName, DriverName, EngineNo, CarframeNo,
+                CarType));
         pageUtils.setList(list);
         return Body.newInstance(pageUtils);
     }
@@ -105,7 +107,7 @@ public class MuckServiceImpl implements MuckService {
         pageUtils.setIndex(index);
         pageUtils.setSize(size);
         pageUtils.setTotal(muckMapper.selectGivenPlaceCount(name, M0702, M0707, M0708, M0703, M0704, M0709, M0710));
-        pageUtils.setList(this.muckMapper.selectGivenPlace(name, size, index  * size, M0702, M0707, M0708, M0703,
+        pageUtils.setList(this.muckMapper.selectGivenPlace(name, size, index * size, M0702, M0707, M0708, M0703,
                 M0704, M0709, M0710));
         return Body.newInstance(pageUtils);
     }
@@ -121,7 +123,7 @@ public class MuckServiceImpl implements MuckService {
         pageUtils.setSize(size);
         pageUtils.setTotal(muckMapper.selectConstructionSiteCount(name, M0417, M0419, M0402, M0403, M0414, M0420,
                 M0425, M0426));
-        pageUtils.setList(this.muckMapper.selectConstructionSite(name, size, index  * size, M0417, M0419, M0402, M0403
+        pageUtils.setList(this.muckMapper.selectConstructionSite(name, size, index * size, M0417, M0419, M0402, M0403
                 , M0414, M0420, M0425, M0426));
         return Body.newInstance(pageUtils);
     }
@@ -165,9 +167,9 @@ public class MuckServiceImpl implements MuckService {
 
     @Override
     public Body selectM01(String name) {
-        List<M01>list=this.muckMapper.selectM01(name);
+        List<M01> list = this.muckMapper.selectM01(name);
         for (M01 m01 : list) {
-            Double score=appraiseMapper.selectAppraiseAMG(m01.getMustId());
+            Double score = appraiseMapper.selectAppraiseAMG(m01.getMustId());
             m01.setScore(score);
         }
         return Body.newInstance(list);
@@ -180,17 +182,33 @@ public class MuckServiceImpl implements MuckService {
 
     @Override
     public Body selectMuckAdvanced(String name, Integer size, Integer index, String BeginTime,
-                                   String type) {
+                                   String type, String time1, String time2, String car, String pname) {
         PageUtils pageUtils = new PageUtils();
-        pageUtils.setIndex(index);
-        pageUtils.setSize(size);
-        List<Map<String, Object>> list = this.muckMapper.selectMuckadvanced(name, size, index  * size, BeginTime, type);
-        for (Map<String, Object> objectMap : list) {
-            List<String> strings = muckMapper.selectCarByPermitNo(objectMap.get("PermitNo").toString());
-            objectMap.put("car", strings);
+        if (StringUtils.isEmpty(car)) {
+            pageUtils.setIndex(index);
+            pageUtils.setSize(size);
+            List<Map<String, Object>> list = this.muckMapper.selectMuckadvanced(name, size, index * size, pname,
+                    BeginTime, time1, time2, type);
+            for (Map<String, Object> objectMap : list) {
+                List<String> strings = muckMapper.selectCarByPermitNo(objectMap.get("PermitNo").toString());
+                objectMap.put("car", strings);
+            }
+            pageUtils.setList(list);
+            pageUtils.setTotal(this.muckMapper.selectMuckadvancedCount(name, pname, BeginTime, time1, time2, type));
+        } else {
+            pageUtils.setIndex(index);
+            pageUtils.setSize(size);
+            List<Map<String, Object>> list = this.muckMapper.selectMuckadvanced1(name, size, index * size, BeginTime,
+                    type, time1, pname, time2, car);
+            List<String> strings = new ArrayList<>();
+            strings.add(car);
+            for (Map<String, Object> objectMap : list) {
+                objectMap.put("car", strings);
+            }
+            pageUtils.setList(list);
+            pageUtils.setTotal(this.muckMapper.selectMuckadvancedCount1(name, BeginTime, type, time1, pname, time2,
+                    car));
         }
-        pageUtils.setList(list);
-        pageUtils.setTotal(this.muckMapper.selectMuckadvancedCount(name, BeginTime, type));
         return Body.newInstance(pageUtils);
     }
 
@@ -200,19 +218,19 @@ public class MuckServiceImpl implements MuckService {
         pageUtils.setIndex(index);
         pageUtils.setSize(size);
         pageUtils.setTotal(muckMapper.selectMuckPageCount(name, BeginTime, type));
-        pageUtils.setList(this.muckMapper.selectMuckPage(name, size, index  * size, BeginTime, type));
+        pageUtils.setList(this.muckMapper.selectMuckPage(name, size, index * size, BeginTime, type));
         return Body.newInstance(pageUtils);
     }
 
     @Override
     public Body PowerControl(String userid) {
-        List<Map<String,Object>> lists=muckMapper.PowerControl(userid);
+        List<Map<String, Object>> lists = muckMapper.PowerControl(userid);
         return Body.newInstance(lists);
     }
 
     @Override
-    public Body updateM04VideoUrl(String VideoUrl, String videoName, String videoPassword,String recId) {
-        M04 m04=new M04();
+    public Body updateM04VideoUrl(String VideoUrl, String videoName, String videoPassword, String recId) {
+        M04 m04 = new M04();
         m04.setVideoUrl(VideoUrl);
         m04.setVideoName(videoName);
         m04.setVideoPassword(videoPassword);
@@ -223,7 +241,7 @@ public class MuckServiceImpl implements MuckService {
 
     @Override
     public Body validM04(Integer valid, String RecId) {
-        muckMapper.validM04(valid,RecId);
+        muckMapper.validM04(valid, RecId);
         return Body.BODY_200;
     }
 
@@ -234,18 +252,18 @@ public class MuckServiceImpl implements MuckService {
     }
 
     @Override
-    public Body selectUserRole(String UserId,String RoleId) {
-        List<Map<String,Object>> strings=muckMapper.selectUserRole(UserId,RoleId);
+    public Body selectUserRole(String UserId, String RoleId) {
+        List<Map<String, Object>> strings = muckMapper.selectUserRole(UserId, RoleId);
         return Body.newInstance(strings);
     }
 
     @Override
     public Body selectApply(String userid) {
-        Integer newApply=muckMapper.selectNewApply(userid);
-        Integer pendingApply=muckMapper.selectPendingApply(userid);
-        Integer ingApply=muckMapper.selectIngApply(userid);
-        Integer overApply=muckMapper.selectOverApply(userid);
-        Apply apply=new Apply(newApply,pendingApply, ingApply, overApply);
+        Integer newApply = muckMapper.selectNewApply(userid);
+        Integer pendingApply = muckMapper.selectPendingApply(userid);
+        Integer ingApply = muckMapper.selectIngApply(userid);
+        Integer overApply = muckMapper.selectOverApply(userid);
+        Apply apply = new Apply(newApply, pendingApply, ingApply, overApply);
         return Body.newInstance(apply);
     }
 

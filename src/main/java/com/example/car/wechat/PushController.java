@@ -13,16 +13,13 @@ package com.example.car.wechat;
 import com.example.car.common.utils.DateUtil;
 import com.example.car.common.utils.ListUtils;
 import com.example.car.common.utils.redis.RedisCacheConfiguration;
-import com.example.car.common.utils.redis.RedisConfigure;
 import com.example.car.mapper.mysql.DeviceAlarmMapper;
 import com.example.car.mapper.mysql.DeviceAlarmSeverityMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.chanjar.weixin.common.error.WxErrorException;
-import me.chanjar.weixin.mp.api.*;
+import me.chanjar.weixin.mp.api.WxMpInRedisConfigStorage;
+import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
-import me.chanjar.weixin.mp.api.impl.WxMpUserServiceImpl;
-import me.chanjar.weixin.mp.bean.result.WxMpUserList;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +27,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import redis.clients.jedis.JedisPool;
 
 import java.util.Date;
 import java.util.List;
@@ -60,34 +56,37 @@ public class PushController {
      * 微信测试账号推送
      * */
     @GetMapping("/push")
-    public void push() {
+    public void push(String openid) {
         //1，配置
 
         WxMpService wxMpService = new WxMpServiceImpl();
         WxMpInRedisConfigStorage redisConfigStorage=new WxMpInRedisConfigStorage(redisConfigure.redisPoolFactory());
-        redisConfigStorage.setAppId("wx1bff2ac95b861a25");
-        redisConfigStorage.setSecret("ce705f5ed49c031e25250c36b7b35939");
+        redisConfigStorage.setAppId("wxbf9ff145d7917743");
+        redisConfigStorage.setSecret("d4005b80ab69c312bbd6ce123d5636f5");
         wxMpService.setWxMpConfigStorage(redisConfigStorage);
         Integer count = deviceAlarmSeverityMapper.selectAlarmNowCount();
         count+=deviceAlarmMapper.selectAlarmNowCount(2);
         //2.获取关注着列表
-        WxMpUserService wxMpUserService=new WxMpUserServiceImpl(wxMpService);
-        WxMpUserList wxMpUserList=null;
-        try {
-            wxMpUserList= wxMpUserService.userList(null);
-        } catch (WxErrorException e) {
-            e.printStackTrace();
-        }
-        assert wxMpUserList != null;
-        List<String>list=wxMpUserList.getOpenids();
+//        WxMpUserService wxMpUserService=new WxMpUserServiceImpl(wxMpService);
+//        WxMpUserList wxMpUserList=null;
+//        try {
+//            wxMpUserList= wxMpUserService.userList(null);
+//        } catch (WxErrorException e) {
+//            e.printStackTrace();
+//        }
+//        assert wxMpUserList != null;
         List<String> list1=deviceAlarmSeverityMapper.selectAlarmName();
         String carName=ListUtils.listToString5(list1, ',');
-        for (String s : list) {
+        WxMpTemplateMessage.MiniProgram miniProgram=new WxMpTemplateMessage.MiniProgram();
+        miniProgram.setAppid("wx4a465771395f2f04");
+        miniProgram.setUsePath(true);
+        miniProgram.setPagePath("/pages/index/index");
             //3,推送消息
             WxMpTemplateMessage templateMessage = WxMpTemplateMessage.builder()
-                    .toUser(s)//要推送的用户openid
-                    .templateId("rDaZtba4I9NW-Xb_grHjMK3qA55wfRPmtvAuuTvAJws")//模版id
+                    .toUser(openid)//要推送的用户openid
+                    .templateId("nNPXZf9vrJXOR64BbiAKbonCwufMr50qDxOsVYZKS28")//模版id
                     .url("https://www.merbang.cn/MerSlag/report.html")//点击模版消息要访问的网址
+                    .miniProgram(miniProgram)
                     .build();
             //4,如果是正式版发送模版消息，这里需要配置你的信息
             templateMessage.addData(new WxMpTemplateData(
@@ -103,7 +102,5 @@ public class PushController {
                 System.out.println("推送失败：" + e.getMessage());
                 e.printStackTrace();
             }
-        }
     }
-
 }

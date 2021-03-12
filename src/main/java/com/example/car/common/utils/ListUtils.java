@@ -12,6 +12,7 @@ package com.example.car.common.utils;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,12 +124,21 @@ public class ListUtils {
 
 
     public static void main(String[] args) {
-        List<String> list1=new ArrayList<>();
-        list1.add("c");
-        list1.add("e");
-        list1.add("a");
-        String carName=ListUtils.listToString5(list1, ',');
-        System.out.println(carName);
+        ClassLoader classLoader = org.apache.poi.poifs.filesystem.POIFSFileSystem.class.getClassLoader();
+        URL res = classLoader.getResource("org/apache/poi/poifs/filesystem/POIFSFileSystem.class");
+        String path = res.getPath();
+        System.out.println("POI Core came from : " + path);
+
+        classLoader = org.apache.poi.POIXMLDocument.class.getClassLoader();
+        res = classLoader.getResource("org/apache/poi/POIXMLDocument.class");
+        path = res.getPath();
+        System.out.println("POI OOXML came from : " + path);
+
+		/*classLoader = org.apache.poi.hslf.HSLFSlideShow.class.getClassLoader();
+		res = classLoader.getResource("org/apache/poi/hslf/HSLFSlideShow.class");
+		path = res.getPath();
+		System.out.println("POI Scratchpad came from : " + path);*/
+
     }
 
 

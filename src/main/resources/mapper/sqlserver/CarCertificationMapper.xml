@@ -15,6 +15,6 @@ order by createTime
     </insert>
     <update id="updateCarCertification">
         update car_certification set certificationStatus=#{certificationStatus},certificationTime=#{certificationTime},
-        updateUser=#{updateUser} where id=#{id}
+        updateUser=#{updateUser} where carId=#{carId}
     </update>
 </mapper>

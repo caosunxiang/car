@@ -146,4 +146,7 @@ public class M03 {
     private String registration;
 
     private String auditStatus;
+
+    private String isDelete;
+
 }

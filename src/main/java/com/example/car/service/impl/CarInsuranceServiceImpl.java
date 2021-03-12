@@ -92,25 +92,44 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
     }
 
     @Override
-    public Body selectInsuranceByCarId(String carid, String MustId, String verificationTime, String name) {
-        List<CarInsurance> carInsurances = carInsuranceMapper.selectInsuranceByCarId(carid, MustId, verificationTime,
-                name);
+    public Body selectInsuranceByCarId(String carid, String MustId, String verificationTime, String name, String type) {
+        List<CarInsurance> carInsurances=new ArrayList<>();
+        List<String> list1 = new ArrayList<>();
+        if (type.equals("1")) {
+            List<M03> m03s = m03Mapper.selectM03Unable(name, carid, null, MustId);
+            for (M03 m03 : m03s) {
+                list1.add(m03.getRecId());
+            }
+            if(list1.size()>0){
+                carInsurances = carInsuranceMapper.selectInsuranceUsable(list1);
+            }
+        } else {
+            List<M03> m03s = m03Mapper.selectM03Usable(name, carid, null, MustId);
+            for (M03 m03 : m03s) {
+                list1.add(m03.getRecId());
+            }
+            if(list1.size()>0){
+                carInsurances = carInsuranceMapper.selectInsuranceUsable(list1);
+            }
+        }
         List<CarInsurance> list = new ArrayList<>();
-        for (CarInsurance carInsurance : carInsurances) {
-            if (!StringUtils.isEmpty(carInsurance.getVerificationTime())) {
-                carInsurance.setVerificationTime(DateUtil.changeTime(carInsurance.getVerificationTime(),
-                        "yyyy年MM月dd日"));
-            }
-            if (!StringUtils.isEmpty(carInsurance.getJqxTime())) {
-                carInsurance.setJqxTime(DateUtil.changeTime(carInsurance.getJqxTime(),
-                        "yyyy年MM月dd日"));
-            }
-            if (!StringUtils.isEmpty(carInsurance.getSyxTime())) {
-                carInsurance.setSyxTime(DateUtil.changeTime(carInsurance.getSyxTime(),
-                        "yyyy年MM月dd日"));
-            }
-            if (!StringUtils.isEmpty(carInsurance.getCarId())) {
-                list.add(carInsurance);
+        if (carInsurances.size()>0){
+            for (CarInsurance carInsurance : carInsurances) {
+                if (!StringUtils.isEmpty(carInsurance.getVerificationTime())) {
+                    carInsurance.setVerificationTime(DateUtil.changeTime(carInsurance.getVerificationTime(),
+                            "yyyy年MM月dd日"));
+                }
+                if (!StringUtils.isEmpty(carInsurance.getJqxTime())) {
+                    carInsurance.setJqxTime(DateUtil.changeTime(carInsurance.getJqxTime(),
+                            "yyyy年MM月dd日"));
+                }
+                if (!StringUtils.isEmpty(carInsurance.getSyxTime())) {
+                    carInsurance.setSyxTime(DateUtil.changeTime(carInsurance.getSyxTime(),
+                            "yyyy年MM月dd日"));
+                }
+                if (!StringUtils.isEmpty(carInsurance.getCarId())) {
+                    list.add(carInsurance);
+                }
             }
         }
         return Body.newInstance(list);
@@ -137,7 +156,7 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
         for (String s : list) {
             if (!StringUtils.isEmpty(s) && !s.equals("1") && !s.equals("0")) {
                 System.out.println(s);
-                strings.add(DateUtil.changeTime(s,"yyyy年MM月dd日"));
+                strings.add(DateUtil.changeTime(s, "yyyy年MM月dd日"));
             }
         }
         return Body.newInstance(strings);
@@ -161,7 +180,7 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
             CarInsurance carInsurance = new CarInsurance(null, null, m03.getM0315(), m03.getM0332(), m03.getM0333(),
                     null, m03.getM0319(), m03.getM0317(), m03.getM0318(), m03.getM0316(), m03.getM0307(),
                     m03.getM0330(), m03.getM0329(), m03.getM0328(), m03.getRecId(), m03.getM0313(), m03.getM0314(),
-                    null, null, null, null, "0",null);
+                    null, null, null, null, "0", null);
             this.carInsuranceMapper.insertInsurance(carInsurance);
         }
         return Body.BODY_200;
@@ -175,7 +194,31 @@ public class CarInsuranceServiceImpl implements CarInsuranceService {
 
     @Override
     public Body selectInsuranceCount(String auditStatus, String MustId) {
-        return Body.newInstance(this.carInsuranceMapper.selectInsuranceCount(auditStatus,MustId));
+        return Body.newInstance(this.carInsuranceMapper.selectInsuranceCount(auditStatus, MustId));
+    }
+
+    @Override
+    public Body selectInsuranceByCarId(String carid) {
+        List<CarInsurance> carInsurances = this.carInsuranceMapper.selectInsuranceByCarId(carid, null, null, null);
+        List<CarInsurance> list = new ArrayList<>();
+        for (CarInsurance carInsurance : carInsurances) {
+            if (!StringUtils.isEmpty(carInsurance.getVerificationTime())) {
+                carInsurance.setVerificationTime(DateUtil.changeTime(carInsurance.getVerificationTime(),
+                        "yyyy年MM月dd日"));
+            }
+            if (!StringUtils.isEmpty(carInsurance.getJqxTime())) {
+                carInsurance.setJqxTime(DateUtil.changeTime(carInsurance.getJqxTime(),
+                        "yyyy年MM月dd日"));
+            }
+            if (!StringUtils.isEmpty(carInsurance.getSyxTime())) {
+                carInsurance.setSyxTime(DateUtil.changeTime(carInsurance.getSyxTime(),
+                        "yyyy年MM月dd日"));
+            }
+            if (!StringUtils.isEmpty(carInsurance.getCarId())) {
+                list.add(carInsurance);
+            }
+        }
+        return Body.newInstance(list);
     }
 
 }

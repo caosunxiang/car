@@ -31,7 +31,7 @@
         1 =1
 
         <if test="deptid !=null and deptid!=''">
-            and t.deptid=#{deptid}
+            and m.MustId=#{deptid}
         </if>
         <if test="carId !=null and carId!=''">
             and t.carId=#{carId}

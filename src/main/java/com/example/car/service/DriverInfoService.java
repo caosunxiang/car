@@ -20,4 +20,6 @@ public interface DriverInfoService {
     Body synDriver();
 
     Body selectDriverCount(String driverStatus, String deptid);
+
+    Body selectDriver(String driverId,String MustId,String name, String driverCardNo);
 }

@@ -18,6 +18,7 @@ import com.example.car.entity.M03;
 import com.example.car.entity.OperationLog;
 import com.example.car.entity.TerminalInfo;
 import com.example.car.mapper.mysql.DeviceLaspositionMapper;
+
 import com.example.car.mapper.sqlserver.M03Mapper;
 import com.example.car.mapper.sqlserver.OperationLogMapper;
 import com.example.car.mapper.sqlserver.TerminalInfoMapper;
@@ -28,7 +29,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -60,9 +60,9 @@ public class M03ServiceImpl implements M03Service {
     public Body selectM03(String carNumber, String recId, String phone, String MustId,String type) {
         List<M03> m03s;
       if (type.equals("1")){
-          m03s = m03Mapper.selectM03Usable(carNumber, recId, phone, MustId);
+          m03s = m03Mapper.selectM03Unable(carNumber, recId, phone, MustId);
       }else {
-          m03s=m03Mapper.selectM03(carNumber, recId, phone, MustId);
+          m03s=m03Mapper.selectM03Usable(carNumber, recId, phone, MustId);
       }
         for (M03 m03 : m03s) {
             if (!StringUtils.isEmpty(m03.getIssuanceDate())) {
@@ -110,24 +110,19 @@ public class M03ServiceImpl implements M03Service {
 
     @Override
     public Body selectM03Status(String MustId, String name,String type) {
-
         List<CarStatus> m03s;
         if (type.equals("1")){
-            m03s= m03Mapper.selectM03StatusUsable(MustId, name);
+            m03s= m03Mapper.selectM03StatusUnable(MustId, name);
         }else {
             m03s= m03Mapper.selectM03Status(MustId, name);
         }
-
         if (m03s.size() > 0) {
             for (CarStatus m03 : m03s) {
-                if (!StringUtils.isEmpty(m03.getCertificationTime())) {
-                    m03.setCertificationTime(DateUtil.changeTime(m03.getCertificationTime(), "yyyy年MM月dd日"));
+                if (!StringUtils.isEmpty(m03.getM0108())) {
+                    m03.setM0108(DateUtil.changeTime(m03.getM0108(), "yyyy年MM月dd日"));
                 }
-                if (!StringUtils.isEmpty(m03.getEndTime())) {
-                    m03.setEndTime(DateUtil.changeTime(m03.getEndTime(), "yyyy年MM月dd日"));
-                }
-                if (!StringUtils.isEmpty(m03.getStopEndTime())) {
-                    m03.setStopEndTime(DateUtil.changeTime(m03.getStopEndTime(), "yyyy年MM月dd日"));
+                if (!StringUtils.isEmpty(m03.getM0109())) {
+                    m03.setM0109(DateUtil.changeTime(m03.getM0109(), "yyyy年MM月dd日"));
                 }
                 DeviceLasposition deviceLasposition = deviceLaspositionMapper.selectLaspositionByCarNo(m03.getM0331());
                 if (StringUtils.isEmpty(deviceLasposition)) {

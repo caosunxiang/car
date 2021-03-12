@@ -31,4 +31,5 @@ public interface M01Mapper {
 
     void insertM01(M01 m01);
 
+    M01 selectM01(@Param("MustId")String MustId,@Param("name")String name,@Param("phone")String phone);
 }

@@ -16,6 +16,19 @@
     </select>
 
 
+    <select id="selectM01" resultType="com.example.car.entity.M01">
+        select * from M01 where 1=1
+        <if test="MustId !=null and MustId!=''">
+            and MustId =#{MustId}
+        </if>
+        <if test="name !=null and name !=''">
+            and m0101 like '%'+#{name}+'%'
+        </if>
+        <if test="phone !=null and phone !=''">
+            and m0107 =#{phone}
+        </if>
+    </select>
+
     <update id="updateM01">
         update M01 set Status=#{Status}
         <if test="ShortSpell !=null and ShortSpell!=''">
@@ -72,6 +85,9 @@
         <if test="businessScope!=null and businessScope!=''">
             ,businessScope=#{businessScope}
         </if>
+        <if test="openid!=null and openid!=''">
+            ,openid=#{openid}
+        </if>
         where MustId=#{MustId}
     </update>
 
@@ -80,6 +96,8 @@
      values
       (#{MustId},#{Creator},#{M0101},#{M0102},#{M0103},#{M0104},#{M0105},#{M0106},#{M0107},#{M0108},#{M0109},#{ShortSpell})
 </insert>
+
+
 
 </mapper>
 

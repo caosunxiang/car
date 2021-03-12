@@ -136,4 +136,16 @@
             and m03.MustId=#{MustId}
         </if>
     </select>
+    <select id="selectInsuranceUsable" resultType="com.example.car.entity.CarInsurance">
+        select i.*,
+        m03.M0331 AS carNumber  FROM
+        car_insurance i
+        RIGHT JOIN M03 m03 ON i.carId= m03.RecId
+        WHERE
+        1 =1
+        and i.carId in
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

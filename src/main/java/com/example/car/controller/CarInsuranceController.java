@@ -69,8 +69,11 @@ public class CarInsuranceController {
      * @ Date: 2020/12/16 10:10
      */
     @RequestMapping("selectInsuranceByCarId")
-    public Body selectInsuranceByCarId(String carid, String MustId, String verificationTime, String name) throws ParseException {
-        return carInsuranceService.selectInsuranceByCarId(carid, MustId, verificationTime, name);
+    public Body selectInsuranceByCarId(String carid, String MustId, String verificationTime, String name, String type) {
+        if (StringUtils.isEmpty(type)) {
+            return Body.BODY_451;
+        }
+        return carInsuranceService.selectInsuranceByCarId(carid, MustId, verificationTime, name, type);
     }
 
     /**
@@ -80,6 +83,7 @@ public class CarInsuranceController {
      * @ Author: 冷酷的苹果
      * @ Date: 2020/12/16 11:15
      */
+
     @RequestMapping("updateInsuranceUrl")
     public Body updateInsuranceUrl(String files, Integer insuranceId, String carid, String userid) {
         return carInsuranceService.updateInsuranceUrl(files, insuranceId, carid, userid);
@@ -137,16 +141,28 @@ public class CarInsuranceController {
         return this.carInsuranceService.deleteVerification(insuranceId);
     }
 
-    /** 
-    * @ Description: 查找不同状态的保险信息
-    * @ Param: [auditStatus, MustId]
-    * @ return: com.example.car.common.utils.json.Body
-    * @ Author: 冷酷的苹果
-    * @ Date: 2021/1/27 18:15
-    */
+    /**
+     * @ Description: 查找不同状态的保险信息
+     * @ Param: [auditStatus, MustId]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/1/27 18:15
+     */
     @RequestMapping("selectInsuranceCount")
     public Body selectInsuranceCount(String auditStatus, String MustId) {
-return this.carInsuranceService.selectInsuranceCount(auditStatus,MustId);
+        return this.carInsuranceService.selectInsuranceCount(auditStatus, MustId);
+    }
+
+    /**
+     * @ Description: 查询年审信息（唯一）
+     * @ Param: [carid]
+     * @ return: com.example.car.common.utils.json.Body
+     * @ Author: 冷酷的苹果
+     * @ Date: 2021/2/3 18:11
+     */
+    @RequestMapping("selectInsuranceByCarId1")
+    public Body selectInsuranceByCarId(String carid) {
+        return this.carInsuranceService.selectInsuranceByCarId(carid);
     }
 }
 
